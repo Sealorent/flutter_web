@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pesantren_flutter/ui/login/login_pesantren_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../preferences/pref_data.dart';
-import '../utils/screen_utils.dart';
-import '../widget/progress_loading.dart';
+import '../../preferences/pref_data.dart';
+import '../../utils/screen_utils.dart';
+import '../../widget/progress_loading.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isLoggedIn) {
         // ScreenUtils(context).navigateTo(LoginPage(), replaceScreen: true);
       } else {
-        // ScreenUtils(context).navigateTo(LoginPage(), replaceScreen: true);
+        ScreenUtils(context).navigateTo(LoginPesantrenScreen(), replaceScreen: true);
       }
     }
 
