@@ -19,7 +19,7 @@ class MyColors {
   static const Color grey_5 = Color(0xFFf2f2f2);
   static const Color grey_10 = Color(0xFFe6e6e6);
   static const Color grey_20 = Color(0xFFcccccc);
-  static const Color grey_40 = Color(0xFFF1F1F1);
+  static const Color grey_40 = Color(0xFFCBC9C9);
   static const Color grey_50 = Color(0xFFB1B0B0);
   static const Color grey_60 = Color(0xFF666666);
   static const Color grey_80 = Color(0xFF37474F);

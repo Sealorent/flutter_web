@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pesantren.pesantren_flutter">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
    <application
         android:label="pesantren_flutter"
         android:name="${applicationName}"

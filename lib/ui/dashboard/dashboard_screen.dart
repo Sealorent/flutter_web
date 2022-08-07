@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pesantren_flutter/ui/home/home_screen.dart';
+import 'package:pesantren_flutter/ui/transaction/transaction_screen.dart';
 
 import '../../res/my_colors.dart';
 
@@ -27,7 +28,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: IndexedStack(
         children: <Widget>[
           HomeScreen(),
-          Container(),
+          TransactionScreen(),
           Container(),
           Container(),
         ],
