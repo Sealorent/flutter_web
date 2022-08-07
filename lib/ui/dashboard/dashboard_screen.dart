@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pesantren_flutter/ui/account/account_screen.dart';
 import 'package:pesantren_flutter/ui/home/home_screen.dart';
 import 'package:pesantren_flutter/ui/transaction/transaction_screen.dart';
 
@@ -30,7 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           HomeScreen(),
           TransactionScreen(),
           Container(),
-          Container(),
+          AccountScreen(),
         ],
         index: _currentIndex,
       ),
