@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
+import 'package:pesantren_flutter/ui/payment/payment_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../preferences/pref_data.dart';
@@ -100,12 +101,17 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               children: [
                 Expanded(
-                  child: Column(
-                    children: [
-                      SvgPicture.asset("assets/ic_bayar.svg", width: 50,),
-                      SizedBox(height: 5,),
-                      Text("Bayar\n")
-                    ],
+                  child: InkWell(
+                    onTap: (){
+                      ScreenUtils(context).navigateTo(PaymentScreen());
+                    },
+                    child: Column(
+                      children: [
+                        SvgPicture.asset("assets/ic_bayar.svg", width: 50,),
+                        SizedBox(height: 5,),
+                        Text("Bayar\n")
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
