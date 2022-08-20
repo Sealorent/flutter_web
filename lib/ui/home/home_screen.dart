@@ -13,6 +13,7 @@ import 'package:pesantren_flutter/ui/home/home_bloc.dart';
 import 'package:pesantren_flutter/ui/home/home_event.dart';
 import 'package:pesantren_flutter/ui/home/home_state.dart';
 import 'package:pesantren_flutter/ui/payment/payment_screen.dart';
+import 'package:pesantren_flutter/ui/saving/saving_screen.dart';
 import 'package:pesantren_flutter/widget/progress_loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -236,12 +237,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Expanded(
-                    child: Column(
-                      children: [
-                        SvgPicture.asset("assets/ic_tabungan.svg", width: 50,),
-                        SizedBox(height: 5,),
-                        Text("Tabungan\n")
-                      ],
+                    child: InkWell(
+                      onTap: (){
+                        ScreenUtils(context).navigateTo(SavingScreen());
+                      },
+                      child: Column(
+                        children: [
+                          SvgPicture.asset("assets/ic_tabungan.svg", width: 50,),
+                          SizedBox(height: 5,),
+                          Text("Tabungan\n")
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(
