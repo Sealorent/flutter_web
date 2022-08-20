@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_pesantren_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,9 +21,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     Future<void> _getPrefData() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool isLoggedIn = prefs.containsKey(PrefData.accessToken);
+      bool isLoggedIn = prefs.containsKey(PrefData.student);
       if (isLoggedIn) {
-        // ScreenUtils(context).navigateTo(LoginPage(), replaceScreen: true);
+        ScreenUtils(context).navigateTo(DashboardScreen(), replaceScreen: true);
       } else {
         ScreenUtils(context).navigateTo(LoginPesantrenScreen(), replaceScreen: true);
       }

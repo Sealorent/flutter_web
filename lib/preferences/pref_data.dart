@@ -1,4 +1,5 @@
 class PrefData {
-  static const accessToken = "ACCESS_TOKEN";
+  static const student = "STUDENT";
+  static const pesantren = "PESANTREN";
   static const role = "ROLE";
 }

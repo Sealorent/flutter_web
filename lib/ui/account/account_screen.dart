@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/account/view_profile/view_profile_screen.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
+import 'package:pesantren_flutter/ui/login/login_pesantren_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../preferences/pref_data.dart';
@@ -80,7 +81,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             )
                         ),
                         onPressed: () async{
-
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          prefs.clear();
+                          ScreenUtils(context).navigateTo(LoginPesantrenScreen(), replaceScreen: true);
                         },
                         child:  Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),

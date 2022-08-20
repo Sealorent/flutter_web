@@ -8,7 +8,9 @@ class Constant {
   static const int readTimeout = 6000;
   static const int writeTimeout = 7000;
 
-  static const String baseUrl = "http://api.susumaktam.com";
-  static const String login = "/login";
+  static const String baseUrl = "http://ujipresensi.my.id/flutter/rest_api";
+  static const String loginPesantren = "/get_ponpes.php";
+  static const String loginStudent = "/get_student.php";
+  static const String information = "/informasi.php";
 
 }

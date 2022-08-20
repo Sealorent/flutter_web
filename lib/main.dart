@@ -1,8 +1,15 @@
 import 'package:alice_lightweight/alice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pesantren_flutter/network/repository/authentication_repository.dart';
+import 'package:pesantren_flutter/network/repository/main_repository.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
+import 'package:pesantren_flutter/ui/home/home_bloc.dart';
+import 'package:pesantren_flutter/ui/login/login_bloc.dart';
 import 'package:pesantren_flutter/ui/splashscreen/splash_screen.dart';
+
+import 'network/dio_client.dart';
 
 void main() {
   Alice alice = Alice();
@@ -11,7 +18,20 @@ void main() {
     statusBarBrightness: Brightness.light,
     statusBarIconBrightness: Brightness.light,
   ));
-  runApp(MyApp(alice));
+  runApp(
+      MultiBlocProvider(providers: [
+        BlocProvider<LoginBloc>(
+          create: (context) => LoginBloc(
+            AuthenticationRepositoryImpl(DioClient().init(alice,context)),
+          ),
+        ),
+        BlocProvider<HomeBloc>(
+          create: (context) => HomeBloc(
+            MainRepositoryImpl(DioClient().init(alice,context)),
+          ),
+        ),
+      ], child: MyApp(alice))
+  );
 }
 
 class MyApp extends StatelessWidget {

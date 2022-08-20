@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:alice_lightweight/alice.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pesantren_flutter/network/response/login_response.dart';
+import 'package:pesantren_flutter/network/response/pesantren_login_response.dart';
+import 'package:pesantren_flutter/network/response/student_login_response.dart';
 import 'package:pesantren_flutter/utils/screen_utils.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,14 +43,14 @@ class ApiInterceptors extends Interceptor {
 
   ApiInterceptors(this.context);
 
-  Future<String> _getToken() async {
+  void _savePesantrenInfo(PesantrenLoginResponse? pesantrenLoginResponse) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return "Bearer ${prefs.getString(PrefData.accessToken)}";
+    prefs.setString(PrefData.pesantren, jsonEncode(pesantrenLoginResponse?.toJson()));
   }
 
-  void _saveToken(String? token) async {
+  void _saveUserInfo(StudentLoginResponse? studentLoginResponse) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(PrefData.accessToken, token ?? "");
+    prefs.setString(PrefData.student, jsonEncode(studentLoginResponse?.toJson()));
   }
 
   void _clearToken() async {
@@ -54,21 +58,17 @@ class ApiInterceptors extends Interceptor {
     prefs.clear();
   }
 
-  @override
-  void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
-    options.headers = {
-      "Authorization": await _getToken(),
-    };
-    super.onRequest(options, handler);
-  }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     super.onResponse(response, handler);
     if (response.statusCode == Constant.successCode) {
-      if (response.realUri.path.contains(Constant.login)) {
-        _saveToken(LoginResponse.fromJson(response.data).token);
+      if (response.realUri.path.contains(Constant.loginPesantren)) {
+        _savePesantrenInfo(PesantrenLoginResponse.fromJson(response.data));
+      }
+
+      if (response.realUri.path.contains(Constant.loginStudent)) {
+        _saveUserInfo(StudentLoginResponse.fromJson(response.data));
       }
     }
   }
