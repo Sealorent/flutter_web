@@ -12,8 +12,11 @@ import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/home/home_bloc.dart';
 import 'package:pesantren_flutter/ui/home/home_event.dart';
 import 'package:pesantren_flutter/ui/home/home_state.dart';
+import 'package:pesantren_flutter/ui/konseling/konseling_screen.dart';
 import 'package:pesantren_flutter/ui/payment/payment_screen.dart';
+import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_screen.dart';
 import 'package:pesantren_flutter/ui/saving/saving_screen.dart';
+import 'package:pesantren_flutter/ui/tahfidz/tahfidz_screen.dart';
 import 'package:pesantren_flutter/widget/progress_loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -251,21 +254,31 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Expanded(
-                    child: Column(
-                      children: [
-                        SvgPicture.asset("assets/ic_tahfidz.svg", width: 50,),
-                        SizedBox(height: 5,),
-                        Text("Tafidz\n")
-                      ],
+                    child: InkWell(
+                      onTap: (){
+                        ScreenUtils(context).navigateTo(TahfidzScreen());
+                      },
+                      child: Column(
+                        children: [
+                          SvgPicture.asset("assets/ic_tahfidz.svg", width: 50,),
+                          SizedBox(height: 5,),
+                          Text("Tafidz\n")
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(
-                    child: Column(
-                      children: [
-                        SvgPicture.asset("assets/ic_rekam_medis.svg", width: 50,),
-                        SizedBox(height: 5,),
-                        Text("Rekam\nMedis")
-                      ],
+                    child: InkWell(
+                      onTap: (){
+                        ScreenUtils(context).navigateTo(RekamMedisScreen());
+                      },
+                      child: Column(
+                        children: [
+                          SvgPicture.asset("assets/ic_rekam_medis.svg", width: 50,),
+                          SizedBox(height: 5,),
+                          Text("Rekam\nMedis")
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -274,12 +287,17 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: Column(
-                      children: [
-                        SvgPicture.asset("assets/ic_conseling.svg", width: 50,),
-                        SizedBox(height: 5,),
-                        Text("Konseling")
-                      ],
+                    child: InkWell(
+                      onTap : (){
+                        ScreenUtils(context).navigateTo(KonselingScreen());
+                      },
+                      child: Column(
+                        children: [
+                          SvgPicture.asset("assets/ic_conseling.svg", width: 50,),
+                          SizedBox(height: 5,),
+                          Text("Konseling")
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(

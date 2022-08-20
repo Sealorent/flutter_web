@@ -13,4 +13,7 @@ class Constant {
   static const String loginStudent = "/get_student.php";
   static const String information = "/informasi.php";
   static const String saving = "/tabungan.php";
+  static const String tahfidz = "/tahfidz.php";
+  static const String rekamMedis = "/kesehatan.php";
+  static const String konseling = "/konseling.php";
 }

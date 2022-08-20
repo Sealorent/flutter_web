@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,8 @@ import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_pesantren_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../network/response/pesantren_login_response.dart';
+import '../../network/response/student_login_response.dart';
 import '../../preferences/pref_data.dart';
 import '../../utils/screen_utils.dart';
 
@@ -112,6 +115,35 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
+  late StudentLoginResponse _user;
+  late PesantrenLoginResponse _pesantren;
+
+  Future<void> _getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var student = prefs.getString(PrefData.student);
+    var objectStudent = StudentLoginResponse.fromJson(json.decode(student ?? ""));
+
+    setState(() {
+      _user = objectStudent;
+    });
+  }
+
+  Future<void> _getPesantren() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var pesantren = prefs.getString(PrefData.pesantren);
+    var objectpesantren = pesantrenLoginResponseFromJson(pesantren ?? "");
+    setState(() {
+      _pesantren = objectpesantren;
+    });
+  }
+
+  @override
+  void initState() {
+    _getPesantren();
+    _getUser();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -142,7 +174,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       color: const Color(0xff7c94b6),
                       image: DecorationImage(
                         image: NetworkImage(
-                            'https://preview.keenthemes.com/metronic-v4/theme_rtl/assets/pages/media/profile/profile_user.jpg'),
+                            _user.photo ?? ""),
                         fit: BoxFit.cover,
                       ),
                       borderRadius:
@@ -159,19 +191,19 @@ class _AccountScreenState extends State<AccountScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Mulya Lukman Lazuardi",
+                          _user.nama ?? "",
                           style: TextStyle(
                               fontSize: 20),
                         ),
                         SizedBox(height: 5,),
                         Text(
-                          "NIS : 112092",
+                          "NIS : ${_user.nis ?? ""}",
                           style: TextStyle(
                               color: Colors.black.withOpacity(0.6)),
                         ),
                         SizedBox(height: 5,),
                         Text(
-                          "Kelas Prapersiapan Putra 1",
+                          _user.kelas ?? "",
                           style: TextStyle(
                               color: Colors.black.withOpacity(0.6)),
                         ),

@@ -1,14 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/account/edit_profile/edit_profile_screen.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../network/response/pesantren_login_response.dart';
+import '../../../network/response/student_login_response.dart';
+import '../../../preferences/pref_data.dart';
 import '../../../utils/screen_utils.dart';
 
 class ViewProfileScreen extends StatefulWidget {
@@ -19,6 +24,36 @@ class ViewProfileScreen extends StatefulWidget {
 }
 
 class _ViewProfileScreenState extends State<ViewProfileScreen> {
+
+
+  late StudentLoginResponse _user;
+  late PesantrenLoginResponse _pesantren;
+
+  Future<void> _getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var student = prefs.getString(PrefData.student);
+    var objectStudent = StudentLoginResponse.fromJson(json.decode(student ?? ""));
+
+    setState(() {
+      _user = objectStudent;
+    });
+  }
+
+  Future<void> _getPesantren() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var pesantren = prefs.getString(PrefData.pesantren);
+    var objectpesantren = pesantrenLoginResponseFromJson(pesantren ?? "");
+    setState(() {
+      _pesantren = objectpesantren;
+    });
+  }
+
+  @override
+  void initState() {
+    _getPesantren();
+    _getUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +100,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                   color: const Color(0xff7c94b6),
                   image: DecorationImage(
                     image: NetworkImage(
-                        'https://preview.keenthemes.com/metronic-v4/theme_rtl/assets/pages/media/profile/profile_user.jpg'),
+                        _user.photo ?? ""),
                     fit: BoxFit.cover,
                   ),
                   borderRadius:
@@ -80,7 +115,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             SizedBox(height: 10,),
             Center(
               child: Text(
-                "Mulya Lukman Lazuardi",
+                _user.nama ?? "",
                 style: TextStyle(
                     fontSize: 20
                 ),
@@ -103,7 +138,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             SizedBox(height: 5,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("1362552", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(_user.nis ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
             ),
             SizedBox(height: 15,),
             Padding(
@@ -113,7 +148,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             SizedBox(height: 5,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("Prapersiapan Putera 1", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(_user.kelas ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
             ),
             SizedBox(height: 15,),
             Padding(
@@ -123,7 +158,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             SizedBox(height: 5,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("Ponpes Al-Hikmah Gresik", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(_pesantren.namaPesantren ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
             ),
             SizedBox(height: 15,),
             Padding(
@@ -133,7 +168,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             SizedBox(height: 5,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("Kamar 08", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text("-", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
             ),
             SizedBox(height: 20,),
             Container(
@@ -152,7 +187,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             SizedBox(height: 5,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("Kediri, 1 September 2001", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text("${_user.tempatlahir ?? ""}, ${DateFormat("dd MMM yyyy").format(_user.tanggallahir ?? DateTime.now()) }", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
             ),
             SizedBox(height: 15,),
             Padding(
@@ -162,7 +197,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             SizedBox(height: 5,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("Laki-laki", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(_user.gender == "L" ? "Laki-laki" : "Perempuan", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
             ),
             SizedBox(height: 15,),
             Padding(
@@ -172,7 +207,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             SizedBox(height: 5,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("Jl. Talang Ujung 40D, Kec. Kembangan Selatan, Kota Jakarta Barat, DKI Jakarta", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text("-", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
             ),
             SizedBox(height: 20,),
             Container(
@@ -191,7 +226,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             SizedBox(height: 5,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("Wadi Kuswoyo", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(_user.ayah ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
             ),
             SizedBox(height: 15,),
             Padding(
@@ -201,7 +236,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             SizedBox(height: 5,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("Gasti Prastuti", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(_user.ibu ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
             ),
             SizedBox(height: 15,),
             Padding(
@@ -211,7 +246,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             SizedBox(height: 5,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("+62 852 9061 9822", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(_user.phone ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
             ),
 
 

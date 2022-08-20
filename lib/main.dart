@@ -6,9 +6,12 @@ import 'package:pesantren_flutter/network/repository/authentication_repository.d
 import 'package:pesantren_flutter/network/repository/main_repository.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/home/home_bloc.dart';
+import 'package:pesantren_flutter/ui/konseling/konseling_bloc.dart';
 import 'package:pesantren_flutter/ui/login/login_bloc.dart';
+import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_bloc.dart';
 import 'package:pesantren_flutter/ui/saving/saving_bloc.dart';
 import 'package:pesantren_flutter/ui/splashscreen/splash_screen.dart';
+import 'package:pesantren_flutter/ui/tahfidz/tahfidz_bloc.dart';
 
 import 'network/dio_client.dart';
 
@@ -33,6 +36,21 @@ void main() {
         ),
         BlocProvider<SavingBloc>(
           create: (context) => SavingBloc(
+            MainRepositoryImpl(DioClient().init(alice,context)),
+          ),
+        ),
+        BlocProvider<TahfidzBloc>(
+          create: (context) => TahfidzBloc(
+            MainRepositoryImpl(DioClient().init(alice,context)),
+          ),
+        ),
+        BlocProvider<RekamMedisBloc>(
+          create: (context) => RekamMedisBloc(
+            MainRepositoryImpl(DioClient().init(alice,context)),
+          ),
+        ),
+        BlocProvider<KonselingBloc>(
+          create: (context) => KonselingBloc(
             MainRepositoryImpl(DioClient().init(alice,context)),
           ),
         ),

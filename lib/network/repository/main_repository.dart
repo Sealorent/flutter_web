@@ -3,8 +3,11 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:pesantren_flutter/network/response/information_response.dart';
+import 'package:pesantren_flutter/network/response/konseling_response.dart';
 import 'package:pesantren_flutter/network/response/pesantren_login_response.dart';
+import 'package:pesantren_flutter/network/response/rekam_medis_response.dart';
 import 'package:pesantren_flutter/network/response/student_login_response.dart';
+import 'package:pesantren_flutter/network/response/tahfidz_response.dart';
 import 'package:pesantren_flutter/preferences/pref_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +21,10 @@ import '../response/saving_response.dart';
 abstract class MainRepository {
   Future<InformationResponse?> getInformation();
   Future<SavingResponse?> getSavings();
+  Future<TahfidzResponse?> getTahfidz();
+  Future<RekamMedisResponse?> getRekamMedis();
+  Future<KonselingResponse?> getKonseling();
+
 }
 
 class MainRepositoryImpl extends MainRepository {
@@ -77,6 +84,81 @@ class MainRepositoryImpl extends MainRepository {
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
         return SavingResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<TahfidzResponse?> getTahfidz() async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.get(Constant.tahfidz, queryParameters: {
+        "kode_sekolah" : pesantren.kodeSekolah,
+        "nis": student.nis
+      });
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return TahfidzResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<RekamMedisResponse?> getRekamMedis() async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.get(Constant.rekamMedis, queryParameters: {
+        "kode_sekolah" : pesantren.kodeSekolah,
+        "nis": student.nis
+      });
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return RekamMedisResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<KonselingResponse?> getKonseling() async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.get(Constant.konseling, queryParameters: {
+        "kode_sekolah" : pesantren.kodeSekolah,
+        "nis": student.nis
+      });
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return KonselingResponse.fromJson(response.data);
       } else {
         throw ClientErrorException(statusMessage, statusCode);
       }
