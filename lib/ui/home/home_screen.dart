@@ -12,8 +12,10 @@ import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/home/home_bloc.dart';
 import 'package:pesantren_flutter/ui/home/home_event.dart';
 import 'package:pesantren_flutter/ui/home/home_state.dart';
+import 'package:pesantren_flutter/ui/home/information/information_detail.dart';
+import 'package:pesantren_flutter/ui/home/information/information_screen.dart';
 import 'package:pesantren_flutter/ui/konseling/konseling_screen.dart';
-import 'package:pesantren_flutter/ui/payment/payment_screen.dart';
+import 'package:pesantren_flutter/ui/payment/main/payment_screen.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_screen.dart';
 import 'package:pesantren_flutter/ui/saving/saving_screen.dart';
 import 'package:pesantren_flutter/ui/tahfidz/tahfidz_screen.dart';
@@ -102,41 +104,46 @@ class _HomeScreenState extends State<HomeScreen> {
     return _informationResponse?.informasi?.map((e) => Column(
       children: [
         SizedBox(height: 15,),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 100,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff7c94b6),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            e.detail?.image ?? ""),
-                        fit: BoxFit.cover,
+        InkWell(
+          onTap: (){
+            ScreenUtils(context).navigateTo(InformationDetailScreen(e));
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: const Color(0xff7c94b6),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              e.detail?.image ?? ""),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(8.0)),
                       ),
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(8.0)),
                     ),
-                  ),
-                  SizedBox(width: 10,),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(e.detail?.judulInfo ?? "", style: TextStyle( fontSize: 18),),
-                        SizedBox(height: 8,),
-                        Text(DateFormat('dd-MM-yyyy').format(e.tanggal ?? DateTime.now()), style: TextStyle(color: Colors.black.withOpacity(0.6)),),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(height: 10,),
-            ],
+                    SizedBox(width: 10,),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(e.detail?.judulInfo ?? "", style: TextStyle( fontSize: 18),),
+                          SizedBox(height: 8,),
+                          Text(DateFormat('dd-MM-yyyy').format(e.tanggal ?? DateTime.now()), style: TextStyle(color: Colors.black.withOpacity(0.6)),),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 10,),
+              ],
+            ),
           ),
         ),
       ],
@@ -338,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Spacer(),
                     InkWell(
                       onTap: (){
-
+                        ScreenUtils(context).navigateTo(InformationScreen());
                       },
                       child: Row(
                         children: [

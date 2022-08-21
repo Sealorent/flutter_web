@@ -9,6 +9,7 @@ import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/account/view_profile/view_profile_screen.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_pesantren_screen.dart';
+import 'package:pesantren_flutter/widget/social_media.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../network/response/pesantren_login_response.dart';
@@ -311,17 +312,7 @@ class _AccountScreenState extends State<AccountScreen> {
             SizedBox(height: 40,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  FaIcon(FontAwesomeIcons.firefox, color: MyColors.grey_60,),
-                  SizedBox(width: 15,),
-                  FaIcon(FontAwesomeIcons.instagram, color: Colors.red,),
-                  SizedBox(width: 15,),
-                  FaIcon(FontAwesomeIcons.facebook, color: Colors.blueAccent,),
-                  SizedBox(width: 15,),
-                  FaIcon(FontAwesomeIcons.youtube, color: Colors.red,),
-                ],
-              ),
+              child: SocialMedia(),
             )
           ],
         ),

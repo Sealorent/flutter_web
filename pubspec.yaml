@@ -19,7 +19,7 @@ dependencies:
   pretty_dio_logger: ^1.1.1
   flutter_bloc: ^7.3.0
   equatable: ^2.0.3
-  flutter_svg: ^1.0.3
+  flutter_svg: 0.22.0
   shimmer: ^2.0.0
   alice_lightweight: ^3.0.0
   flutter_inappwebview: ^5.3.2
@@ -28,6 +28,7 @@ dependencies:
   android_path_provider: ^0.3.0
   flutter_typeahead: ^4.0.0
   tree_view: ^0.0.6
+  flutter_html: ^2.2.1
 
 dev_dependencies:
   flutter_test:
