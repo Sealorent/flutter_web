@@ -271,7 +271,7 @@ class _KonselingScreenState extends State<KonselingScreen> {
             ),
             centerTitle: true,
             elevation: 0,
-            title: Text("Tahfidz", style: TextStyle(color: Colors.white),),
+            title: Text("Konseling", style: TextStyle(color: Colors.white),),
           ),
           backgroundColor: Colors.white,
           body: RefreshIndicator(
@@ -373,7 +373,6 @@ class _KonselingScreenState extends State<KonselingScreen> {
   List<Widget> generateList(){
     return _tahfidzResponse?.laporan?.where((element) {
       var date = element.tanggal;
-      print("gilang ${date}");
       if(selectedYear != null && date != null){
           return date.isAfter(selectedYear!.startYear) && date.isBefore(selectedYear!.endYear);
       }else{

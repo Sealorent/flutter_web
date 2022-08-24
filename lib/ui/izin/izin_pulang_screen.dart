@@ -7,15 +7,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/model/year_model.dart';
-import 'package:pesantren_flutter/network/response/rekam_medis_response.dart';
+import 'package:pesantren_flutter/network/response/pulang_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
+import 'package:pesantren_flutter/ui/izin/izin_bloc.dart';
+import 'package:pesantren_flutter/ui/izin/izin_event.dart';
+import 'package:pesantren_flutter/ui/izin/izin_state.dart';
 import 'package:pesantren_flutter/ui/payment/pay_bills_screen.dart';
-import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_bloc.dart';
-import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_event.dart';
-import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_state.dart';
 import 'package:pesantren_flutter/ui/saving/saving_bloc.dart';
-
 import 'package:pesantren_flutter/utils/number_utils.dart';
 import 'package:pesantren_flutter/utils/screen_utils.dart';
 import 'package:pesantren_flutter/utils/year_util.dart';
@@ -26,22 +25,18 @@ import 'package:tree_view/tree_view.dart';
 import '../../utils/my_snackbar.dart';
 import '../transaction/model/item_filter_model.dart';
 
-class RekamMedisScreen extends StatefulWidget {
-  const RekamMedisScreen({Key? key}) : super(key: key);
+class IzinPulangScreen extends StatefulWidget {
+  const IzinPulangScreen({Key? key}) : super(key: key);
 
   @override
-  State<RekamMedisScreen> createState() => _RekamMedisScreenState();
+  State<IzinPulangScreen> createState() => _IzinPulangScreenState();
 }
 
-class _RekamMedisScreenState extends State<RekamMedisScreen> {
+class _IzinPulangScreenState extends State<IzinPulangScreen> {
 
-  late RekamMedisBloc bloc;
+  late IzinBloc bloc;
   bool _isLoading = true;
-  RekamMedisResponse? _rekamMedisResponse;
-
-  final listFilter = <ItemFilter>[
-    ItemFilter(1, 'Semua Tahun', false),
-  ];
+  PulangResponse? _pulangResponse;
 
   YearModel? selectedYear;
   int? selectedButton;
@@ -49,12 +44,6 @@ class _RekamMedisScreenState extends State<RekamMedisScreen> {
   bool kostExpanded = true;
   bool otherExpanded = true;
 
-  final listTransactions = <String>[
-    "T1",
-    "T2",
-  ];
-
-  final listTransactionFilter = <String>[];
 
   void _modalBottomSheetMenu(){
     showModalBottomSheet(
@@ -164,16 +153,6 @@ class _RekamMedisScreenState extends State<RekamMedisScreen> {
               SizedBox(height: 20,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text("SAKIT", style: TextStyle(color: MyColors.grey_60),),
-              ),
-              SizedBox(height: 5,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(laporan.detail?.sakit ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
-              ),
-              SizedBox(height: 30,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text("TANGGAL", style: TextStyle(color: MyColors.grey_60),),
               ),
               SizedBox(height: 5,),
@@ -184,17 +163,17 @@ class _RekamMedisScreenState extends State<RekamMedisScreen> {
               SizedBox(height: 30,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text("TINDAKAN", style: TextStyle(color: MyColors.grey_60),),
+                child: Text("JAM", style: TextStyle(color: MyColors.grey_60),),
               ),
               SizedBox(height: 5,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(laporan.detail?.penanganan ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+                child: Text(laporan.detail?.waktu ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
               ),
               SizedBox(height: 30,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text("KETERANGAN", style: TextStyle(color: MyColors.grey_60),),
+                child: Text("KEPERLUAN", style: TextStyle(color: MyColors.grey_60),),
               ),
               SizedBox(height: 5,),
               Padding(
@@ -202,6 +181,16 @@ class _RekamMedisScreenState extends State<RekamMedisScreen> {
                 child: Text(laporan.detail?.catatan ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
               ),
               SizedBox(height: 30,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text("STATUS", style: TextStyle(color: MyColors.grey_60),),
+              ),
+              SizedBox(height: 5,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(laporan.detail?.disetujui ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              ),
+              SizedBox(height: 15,),
             ],
           );
         }
@@ -210,24 +199,24 @@ class _RekamMedisScreenState extends State<RekamMedisScreen> {
 
   @override
   void initState() {
-    bloc = BlocProvider.of<RekamMedisBloc>(context);
+    bloc = BlocProvider.of<IzinBloc>(context);
     getData();
     super.initState();
   }
 
   void getData(){
-    bloc.add(GetRekamMedis());
+    bloc.add(GetIzinPulang());
   }
 
-  void listener(BuildContext context, RekamMedisState state) async {
-    if (state is GetRekamMedisLoading) {
+  void listener(BuildContext context, IzinState state) async {
+    if (state is GetIzinLoading) {
       setState(() {
         _isLoading = true;
       });
-    } else if (state is GetRekamMedisSuccess) {
+    } else if (state is GetIzinPulangSuccess) {
       setState(() {
         _isLoading = false;
-        _rekamMedisResponse = state.response;
+        _pulangResponse = state.response;
       });
     } else if (state is FailedState) {
       setState(() {
@@ -247,23 +236,9 @@ class _RekamMedisScreenState extends State<RekamMedisScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return BlocListener<RekamMedisBloc, RekamMedisState>(
+    return BlocListener<IzinBloc, IzinState>(
         listener: listener,
         child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              ),
-            ),
-            centerTitle: true,
-            elevation: 0,
-            title: Text("Rekam Medis", style: TextStyle(color: Colors.white),),
-          ),
           backgroundColor: Colors.white,
           body: RefreshIndicator(
             onRefresh: () async {
@@ -285,9 +260,6 @@ class _RekamMedisScreenState extends State<RekamMedisScreen> {
                         ),
                         InkWell(
                           onTap: (){
-                            // setState(() {
-                            //   selectedYear = "2021/2022";
-                            // });
                             _modalBottomSheetMenu();
                           },
                           child: Padding(
@@ -339,12 +311,47 @@ class _RekamMedisScreenState extends State<RekamMedisScreen> {
               ],
             ),
           ),
+          bottomSheet: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 20),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0)
+                      )
+                  ),
+                backgroundColor: MaterialStateProperty.all(Color(0xffF9F9F9)),
+              ),
+
+              onPressed: () async{
+
+              },
+              child:  Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.add,color: MyColors.primary,),
+                    SizedBox(width: 10,),
+                    Text(
+                      "Izin Keluar",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          ?.apply(color: MyColors.primary),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
     );
   }
 
   List<Widget> generateList(){
-    return _rekamMedisResponse?.laporan?.where((element) {
+    return _pulangResponse?.laporan?.where((element) {
       var date = element.tanggal;
       if(selectedYear != null && date != null){
           return date.isAfter(selectedYear!.startYear) && date.isBefore(selectedYear!.endYear);
@@ -361,9 +368,16 @@ class _RekamMedisScreenState extends State<RekamMedisScreen> {
           SizedBox(height: 10,),
           Row(
             children: [
-              Text(e.detail?.sakit ?? "", style: TextStyle(fontSize: 16),),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if(e.waktu == "1") Text("${DateFormat("dd MMM").format(e.tanggal ?? DateTime.now())} (${e.detail?.waktu ?? "-"} Hari)", style: TextStyle(fontSize: 16),)
+                  else    Text("${DateFormat("dd MMM").format(e.tanggal ?? DateTime.now())}-${DateFormat("dd MMM").format(e.tanggal?.add(Duration(days: (int.tryParse(e.detail?.waktu ?? "0") ?? 0) - 1)) ?? DateTime.now())} (${e.detail?.waktu ?? "-"} Hari)", style: TextStyle(fontSize: 16),),
+                  Text("${e.detail?.catatan}", style: TextStyle(fontSize: 16),),
+                ],
+              ),
               Spacer(),
-              Text(DateFormat("dd MMM").format(e.tanggal ?? DateTime.now()), style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
+              Text(e.detail?.disetujui ?? "", style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
             ],
           ),
           SizedBox(height: 10,),
