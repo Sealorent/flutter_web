@@ -335,7 +335,7 @@ class _MudifScreenState extends State<MudifScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("${DateFormat("dd MMM").format(e.detail?.tanggal ?? DateTime.now())}, ${e.detail?.jam ?? "-"}", style: TextStyle(fontSize: 16),),
+                  Text("${DateFormat("dd MMM yyyy").format(e.detail?.tanggal ?? DateTime.now())}, ${e.detail?.jam ?? "-"}", style: TextStyle(fontSize: 16),),
                   Text("${e.detail?.pengunjung ?? ""}", style: TextStyle(fontSize: 16),),
                 ],
               ),

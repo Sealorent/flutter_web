@@ -8,14 +8,14 @@ import '../../../utils/year_util.dart';
 import '../../transaction/model/item_filter_model.dart';
 import '../pay_bills_screen.dart';
 
-class BulananScreen extends StatefulWidget {
-  const BulananScreen({Key? key}) : super(key: key);
+class BebasScreen extends StatefulWidget {
+  const BebasScreen({Key? key}) : super(key: key);
 
   @override
-  State<BulananScreen> createState() => _BulananScreenState();
+  State<BebasScreen> createState() => _BebasScreenState();
 }
 
-class _BulananScreenState extends State<BulananScreen> {
+class _BebasScreenState extends State<BebasScreen> {
 
   final listFilter = <ItemFilter>[
     ItemFilter(1, 'Semua Tahun', false),
@@ -197,7 +197,7 @@ class _BulananScreenState extends State<BulananScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("TAGIHAN PER 22 APR 2022", style: TextStyle(color: MyColors.grey_60),),
+                    Text("TAGIHAN BULANAN", style: TextStyle(color: MyColors.grey_60),),
                     SizedBox(height: 10,),
                     Text("Rp200.000", style: TextStyle(fontSize: 24),),
                     SizedBox(height: 10,),
@@ -251,92 +251,21 @@ class _BulananScreenState extends State<BulananScreen> {
           ),
           SizedBox(height: 20,),
           Divider(),
-          TreeViewChild(
-              startExpanded : true,
-              parent: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: Row(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InkWell(
-                        onTap: (){
-                          sppExpanded = !sppExpanded;
-                          setState(() {});
-                        },
-                        child: Text("SPP", style: TextStyle(fontSize: 18,color: MyColors.grey_80),)),
-                    Spacer(),
-                    InkWell(
-                        onTap: (){
-                          sppExpanded = !sppExpanded;
-                          setState(() {});
-                        },
-                        child: sppExpanded ? Icon(Icons.keyboard_arrow_down_sharp)
-                            : Icon(Icons.keyboard_arrow_right_sharp)
-                    )
+                    Text("Daftar Ulang", style: TextStyle(fontSize: 16),),
+                    Text("Rp.125.000 dibayar Rp.50.000",style: TextStyle(color: MyColors.grey_60),),
                   ],
                 ),
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Juli 2021", style: TextStyle(fontSize: 16),),
-                          Text("Rp.125.000",style: TextStyle(color: MyColors.grey_60),),
-                        ],
-                      ),
-                      Spacer(),
-                      Text("Lunas", style: TextStyle(color: MyColors.primary),),
-                    ],
-                  ),
-                ),
-              ]
-          ),
-          Divider(),
-          TreeViewChild(
-              startExpanded : true,
-              parent: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: Row(
-                  children: [
-                    InkWell(
-                        onTap: (){
-                          kostExpanded = !kostExpanded;
-                          setState(() {});
-                        },
-                        child: Text("Kos Ponpes", style: TextStyle(fontSize: 18,color: MyColors.grey_80),)),
-                    Spacer(),
-                    InkWell(
-                        onTap: (){
-                          kostExpanded = !kostExpanded;
-                          setState(() {});
-                        },
-                        child: kostExpanded ? Icon(Icons.keyboard_arrow_down_sharp)
-                            : Icon(Icons.keyboard_arrow_right_sharp)
-                    )
-                  ],
-                ),
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Juli 2021", style: TextStyle(fontSize: 16),),
-                          Text("Rp.125.000",style: TextStyle(color: MyColors.grey_60),),
-                        ],
-                      ),
-                      Spacer(),
-                      Text("Belum Lunas", style: TextStyle(color: Colors.red),),
-                    ],
-                  ),
-                ),
-              ]
+                Spacer(),
+                Text("Belum Lunas", style: TextStyle(color: Colors.red),),
+              ],
+            ),
           ),
           Divider(),
         ],

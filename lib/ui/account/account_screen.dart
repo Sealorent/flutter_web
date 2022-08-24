@@ -7,6 +7,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
+import 'package:pesantren_flutter/ui/account/change_password/change_password_screen.dart';
+import 'package:pesantren_flutter/ui/account/privacy_policy/privacy_policy.dart';
+import 'package:pesantren_flutter/ui/account/term_and_condition/term_and_condition.dart';
 import 'package:pesantren_flutter/ui/account/view_profile/view_profile_screen.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_pesantren_screen.dart';
@@ -231,7 +234,7 @@ class _AccountScreenState extends State<AccountScreen> {
             Divider(),
             InkWell(
               onTap: (){
-
+                ScreenUtils(context).navigateTo(ChangePasswordScreen());
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
@@ -247,7 +250,7 @@ class _AccountScreenState extends State<AccountScreen> {
             Divider(),
             InkWell(
               onTap: (){
-
+                ScreenUtils(context).navigateTo(TermAndConditionScreen());
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
@@ -263,7 +266,7 @@ class _AccountScreenState extends State<AccountScreen> {
             Divider(),
             InkWell(
               onTap: (){
-
+                ScreenUtils(context).navigateTo(PrivacyPolicyScreen());
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),

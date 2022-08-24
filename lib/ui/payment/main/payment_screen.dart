@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
+import 'package:pesantren_flutter/ui/payment/bebas/bebas_screen.dart';
 import 'package:pesantren_flutter/ui/payment/bulanan/bulanan_screen.dart';
 import 'package:pesantren_flutter/ui/payment/pay_bills_screen.dart';
 import 'package:pesantren_flutter/utils/screen_utils.dart';
@@ -55,7 +56,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
         body: TabBarView(
           children: [
             BulananScreen(),
-            Icon(Icons.directions_transit, size: 350),
+            BebasScreen()
           ],
         ),
       ),
