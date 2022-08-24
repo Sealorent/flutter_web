@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:pesantren_flutter/network/response/information_response.dart';
 import 'package:pesantren_flutter/network/response/izin_response.dart';
 import 'package:pesantren_flutter/network/response/konseling_response.dart';
+import 'package:pesantren_flutter/network/response/mudif_response.dart';
 import 'package:pesantren_flutter/network/response/pesantren_login_response.dart';
 import 'package:pesantren_flutter/network/response/pulang_response.dart';
 import 'package:pesantren_flutter/network/response/rekam_medis_response.dart';
@@ -28,6 +29,7 @@ abstract class MainRepository {
   Future<KonselingResponse?> getKonseling();
   Future<IzinResponse?> getIzinKeluar();
   Future<PulangResponse?> getIzinPulang();
+  Future<MudifResponse?> getMudif();
 }
 
 class MainRepositoryImpl extends MainRepository {
@@ -212,6 +214,31 @@ class MainRepositoryImpl extends MainRepository {
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
         return PulangResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<MudifResponse?> getMudif() async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.get(Constant.mudif, queryParameters: {
+        "kode_sekolah" : pesantren.kodeSekolah,
+        "nis": student.nis
+      });
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return MudifResponse.fromJson(response.data);
       } else {
         throw ClientErrorException(statusMessage, statusCode);
       }

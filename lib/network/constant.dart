@@ -19,4 +19,5 @@ class Constant {
   static const String konseling = "/konseling.php";
   static const String izinKeluar = "/izin.php";
   static const String izinPulang = "/pulang.php";
+  static const String mudif = "/mudif.php";
 }

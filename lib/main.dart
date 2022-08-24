@@ -9,6 +9,7 @@ import 'package:pesantren_flutter/ui/home/home_bloc.dart';
 import 'package:pesantren_flutter/ui/izin/izin_bloc.dart';
 import 'package:pesantren_flutter/ui/konseling/konseling_bloc.dart';
 import 'package:pesantren_flutter/ui/login/login_bloc.dart';
+import 'package:pesantren_flutter/ui/mudif/mudif_bloc.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_bloc.dart';
 import 'package:pesantren_flutter/ui/saving/saving_bloc.dart';
 import 'package:pesantren_flutter/ui/splashscreen/splash_screen.dart';
@@ -57,6 +58,11 @@ void main() {
         ),
         BlocProvider<IzinBloc>(
           create: (context) => IzinBloc(
+            MainRepositoryImpl(DioClient().init(alice,context)),
+          ),
+        ),
+        BlocProvider<MudifBloc>(
+          create: (context) => MudifBloc(
             MainRepositoryImpl(DioClient().init(alice,context)),
           ),
         ),

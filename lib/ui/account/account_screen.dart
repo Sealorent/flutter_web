@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/account/view_profile/view_profile_screen.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_pesantren_screen.dart';
+import 'package:pesantren_flutter/utils/my_snackbar.dart';
 import 'package:pesantren_flutter/widget/social_media.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -276,8 +278,14 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             Divider(),
             InkWell(
-              onTap: (){
+              onTap: () async {
+                final InAppReview inAppReview = InAppReview.instance;
 
+                if (await inAppReview.isAvailable()) {
+                  inAppReview.requestReview();
+                }else{
+                  MySnackbar(context).errorSnackbar("Aplikasi ini belum tersedia di playstore");
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
