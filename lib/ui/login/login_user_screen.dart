@@ -53,7 +53,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
     } else if (state is LoginSuccess) {
       setState(() {
         _isLoading = false;
-        ScreenUtils(context).navigateTo(DashboardScreen());
+        ScreenUtils(context).navigateTo(DashboardScreen(null));
       });
     } else if (state is FailedState) {
       setState(() {

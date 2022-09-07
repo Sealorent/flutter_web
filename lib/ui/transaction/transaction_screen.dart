@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
+import 'package:pesantren_flutter/ui/transaction/transaction_detail_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../preferences/pref_data.dart';
@@ -245,55 +246,60 @@ class _TransactionScreenState extends State<TransactionScreen> {
             SizedBox(height: 15,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      FaIcon(FontAwesomeIcons.moneyBill, color: MyColors.grey_50,),
-                      SizedBox(width: 20,),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Bayar tagihan", style: TextStyle(fontSize: 16),),
-                          Text("Menunggu pembayaran", style: TextStyle(color: Colors.red),),
-                        ],
-                      ),
-                      Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text("22 Apr 2021", style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
-                          Text("15:31", style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
+              child: InkWell(
+                onTap: (){
+                  ScreenUtils(context).navigateTo(TranscationDetailScreen());
+                },
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        FaIcon(FontAwesomeIcons.moneyBill, color: MyColors.grey_50,),
+                        SizedBox(width: 20,),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Bayar tagihan", style: TextStyle(fontSize: 16),),
+                            Text("Menunggu pembayaran", style: TextStyle(color: Colors.red),),
+                          ],
+                        ),
+                        Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text("22 Apr 2021", style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
+                            Text("15:31", style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
 
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Divider(),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      FaIcon(FontAwesomeIcons.wallet, color: MyColors.grey_50,),
-                      SizedBox(width: 20,),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Menabung", style: TextStyle(fontSize: 16),),
-                          Text("Selesai"),
-                        ],
-                      ),
-                      Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text("22 Apr 2021", style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
-                          Text("15:31", style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+                    Divider(),
+                    SizedBox(height: 10,),
+                    Row(
+                      children: [
+                        FaIcon(FontAwesomeIcons.wallet, color: MyColors.grey_50,),
+                        SizedBox(width: 20,),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Menabung", style: TextStyle(fontSize: 16),),
+                            Text("Selesai"),
+                          ],
+                        ),
+                        Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text("22 Apr 2021", style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
+                            Text("15:31", style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             )
           ],

@@ -10,6 +10,7 @@ import 'package:pesantren_flutter/model/year_model.dart';
 import 'package:pesantren_flutter/network/response/pulang_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
+import 'package:pesantren_flutter/ui/izin/add_izin_screen.dart';
 import 'package:pesantren_flutter/ui/izin/izin_bloc.dart';
 import 'package:pesantren_flutter/ui/izin/izin_event.dart';
 import 'package:pesantren_flutter/ui/izin/izin_state.dart';
@@ -223,8 +224,8 @@ class _IzinPulangScreenState extends State<IzinPulangScreen> {
         _isLoading = false;
       });
       if (state.code == 401 || state.code == 0) {
-        MySnackbar(context)
-            .errorSnackbar("Terjadi kesalahan");
+        // MySnackbar(context)
+        //     .errorSnackbar("Terjadi kesalahan");
         return;
       }
 
@@ -325,7 +326,9 @@ class _IzinPulangScreenState extends State<IzinPulangScreen> {
               ),
 
               onPressed: () async{
-
+                ScreenUtils(context).navigateTo(AddIzinScreen(false), listener: (code){
+                  if(code == 200) getData();
+                });
               },
               child:  Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
@@ -335,7 +338,7 @@ class _IzinPulangScreenState extends State<IzinPulangScreen> {
                     Icon(Icons.add,color: MyColors.primary,),
                     SizedBox(width: 10,),
                     Text(
-                      "Izin Keluar",
+                      "Izin Pulang",
                       style: Theme.of(context)
                           .textTheme
                           .bodyText2

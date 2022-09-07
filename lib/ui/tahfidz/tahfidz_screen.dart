@@ -243,8 +243,8 @@ class _TahfidzScreenState extends State<TahfidzScreen> {
         _isLoading = false;
       });
       if (state.code == 401 || state.code == 0) {
-        MySnackbar(context)
-            .errorSnackbar("Terjadi kesalahan");
+        // MySnackbar(context)
+        //     .errorSnackbar("Terjadi kesalahan");
         return;
       }
 
@@ -393,11 +393,12 @@ class _TahfidzScreenState extends State<TahfidzScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(e.detail?.murojaah ?? "", style: TextStyle(fontSize: 16),),
-                  Text("${e.detail?.jumlahHafalanBaru} Hafalan", style: TextStyle(fontSize: 16),),
+                  Text(DateFormat("dd MMM yyyy").format(e.tanggal ?? DateTime.now()), style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
+
                 ],
               ),
               Spacer(),
-              Text(DateFormat("dd MMM yyyy").format(e.tanggal ?? DateTime.now()), style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
+              Text("${e.detail?.jumlahHafalanBaru} Hafalan", style: TextStyle(fontSize: 16),),
             ],
           ),
           SizedBox(height: 10,),

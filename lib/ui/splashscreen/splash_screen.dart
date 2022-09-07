@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:alice_lightweight/alice.dart';
 import 'package:flutter/material.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_pesantren_screen.dart';
@@ -10,7 +11,10 @@ import '../../utils/screen_utils.dart';
 import '../../widget/progress_loading.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+
+  Alice? alice;
+
+  SplashScreen(this.alice);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -23,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool isLoggedIn = prefs.containsKey(PrefData.student);
       if (isLoggedIn) {
-        ScreenUtils(context).navigateTo(DashboardScreen(), replaceScreen: true);
+        ScreenUtils(context).navigateTo(DashboardScreen(widget.alice), replaceScreen: true);
       } else {
         ScreenUtils(context).navigateTo(LoginPesantrenScreen(), replaceScreen: true);
       }

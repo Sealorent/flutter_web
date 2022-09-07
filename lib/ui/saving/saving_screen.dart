@@ -204,15 +204,16 @@ class _SavingScreenState extends State<SavingScreen> {
                   Text("Debit", style: TextStyle(fontSize: 16),),
 
 
-                if(e.detail?.debit == "0")
-                  Text("-${NumberUtils.toRupiah(double.tryParse(e.detail?.kredit ?? "") ?? 0.0)}")
-                else
-                  Text("+${NumberUtils.toRupiah(double.tryParse(e.detail?.debit ?? "") ?? 0.0)}")
+                Text(DateFormat("dd MMM yyyy").format(e.tanggal ?? DateTime.now()), style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
+
 
               ],
             ),
             Spacer(),
-            Text(DateFormat("dd MMM yyyy").format(e.tanggal ?? DateTime.now()), style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
+            if(e.detail?.debit == "0")
+              Text("-${NumberUtils.toRupiah(double.tryParse(e.detail?.kredit ?? "") ?? 0.0)}")
+            else
+              Text("+${NumberUtils.toRupiah(double.tryParse(e.detail?.debit ?? "") ?? 0.0)}")
           ],
         ),
         SizedBox(height: 10,),

@@ -24,6 +24,7 @@ import 'package:tree_view/tree_view.dart';
 
 import '../../utils/my_snackbar.dart';
 import '../transaction/model/item_filter_model.dart';
+import 'add_izin_screen.dart';
 
 class IzinKeluarScreen extends StatefulWidget {
   const IzinKeluarScreen({Key? key}) : super(key: key);
@@ -223,8 +224,8 @@ class _IzinKeluarScreenState extends State<IzinKeluarScreen> {
         _isLoading = false;
       });
       if (state.code == 401 || state.code == 0) {
-        MySnackbar(context)
-            .errorSnackbar("Terjadi kesalahan");
+        // MySnackbar(context)
+        //     .errorSnackbar("Terjadi kesalahan");
         return;
       }
 
@@ -325,7 +326,9 @@ class _IzinKeluarScreenState extends State<IzinKeluarScreen> {
               ),
 
               onPressed: () async{
-
+                ScreenUtils(context).navigateTo(AddIzinScreen(true), listener: (code){
+                  if(code == 200) getData();
+                });
               },
               child:  Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),

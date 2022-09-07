@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:alice_lightweight/alice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,7 +24,9 @@ import '../../preferences/pref_data.dart';
 import '../../utils/screen_utils.dart';
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({Key? key}) : super(key: key);
+  Alice? alice;
+
+  AccountScreen(this.alice);
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -319,6 +322,24 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ),
             ),
+            // Divider(),
+            // InkWell(
+            //   onTap: (){
+            //     widget.alice?.showInspector();
+            //     print("alice ${widget.alice}");
+            //   },
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+            //     child: Row(
+            //       children: [
+            //         Text("Inspector"),
+            //         Spacer(),
+            //         Icon(Icons.deblur, size: 20,)
+            //       ],
+            //     ),
+            //   ),
+            // ),
+
             Divider(),
             SizedBox(height: 40,),
             Padding(

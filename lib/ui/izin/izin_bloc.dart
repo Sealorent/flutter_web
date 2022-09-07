@@ -30,6 +30,26 @@ class IzinBloc extends Bloc<IzinEvent, IzinState> {
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }
+
+    if (event is AddIzinKeluar) {
+      try {
+        yield AddIzinLoading();
+        await repository.postIzinKeluar(event.param);
+        yield AddIzinSuccess();
+      } catch (e) {
+        yield FailedState("Login gagal, silahkan coba lagi", 0);
+      }
+    }
+
+    if (event is AddIzinPulang) {
+      try {
+        yield AddIzinLoading();
+        await repository.postIzinPulang(event.param);
+        yield AddIzinSuccess();
+      } catch (e) {
+        yield FailedState("Login gagal, silahkan coba lagi", 0);
+      }
+    }
   }
 
 }

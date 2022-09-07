@@ -52,3 +52,20 @@ class GetIzinPulangSuccess extends IzinState {
   @override
   List<Object?> get props => [];
 }
+
+
+class AddIzinSuccess extends IzinState {
+
+  AddIzinSuccess();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class AddIzinLoading extends IzinState {
+
+  AddIzinLoading();
+
+  @override
+  List<Object?> get props => [];
+}

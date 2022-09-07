@@ -22,6 +22,16 @@ class RekamMedisBloc extends Bloc<RekamMedisEvent, RekamMedisState> {
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }
+
+    if (event is GetPresensi) {
+      try {
+        yield GetPresensiLoading();
+        var response = await repository.getPresensi(event.bulan);
+        yield GetPresensiSuccess(response);
+      } catch (e) {
+        yield FailedState("Login gagal, silahkan coba lagi", 0);
+      }
+    }
   }
 
 }

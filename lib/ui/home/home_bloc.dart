@@ -18,6 +18,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         var response = await repository.getInformation();
         yield GetInformationSuccess(response);
       } catch (e) {
+        print("informationerr ${e}");
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }

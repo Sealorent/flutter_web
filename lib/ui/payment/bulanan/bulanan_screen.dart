@@ -1,8 +1,18 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:pesantren_flutter/network/response/payment_response.dart';
+import 'package:pesantren_flutter/ui/payment/payment_bloc.dart';
+import 'package:pesantren_flutter/ui/payment/payment_event.dart';
+import 'package:pesantren_flutter/ui/payment/payment_state.dart';
+import 'package:pesantren_flutter/utils/number_utils.dart';
+import 'package:pesantren_flutter/widget/progress_loading.dart';
 import 'package:tree_view/tree_view.dart';
 
 import '../../../model/year_model.dart';
 import '../../../res/my_colors.dart';
+import '../../../utils/my_snackbar.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../utils/year_util.dart';
 import '../../transaction/model/item_filter_model.dart';
@@ -17,6 +27,12 @@ class BulananScreen extends StatefulWidget {
 
 class _BulananScreenState extends State<BulananScreen> {
 
+  late PaymentBloc bloc;
+  bool _isLoading = true;
+  PaymentResponse? _response;
+  
+  double total = 0.0;
+
   final listFilter = <ItemFilter>[
     ItemFilter(1, 'Semua Tahun', false),
     ItemFilter(2, 'Lunas', false),
@@ -24,8 +40,82 @@ class _BulananScreenState extends State<BulananScreen> {
   ];
 
   YearModel? selectedYear;
-  bool sppExpanded = true;
-  bool kostExpanded = true;
+
+
+  List<Widget> buildWidget(){
+    return _response?.detail?.where((element) {
+      var yearStart = int.tryParse(element.fromModel().startYear) ?? 0;
+      var yearEnd = int.tryParse(element.fromModel().endYear) ?? 0;
+
+      if(selectedYear != null && yearStart != 0 && yearEnd != 0){
+        return yearStart >= (selectedYear?.startYear.year ?? 0) && yearEnd <= (selectedYear?.endYear.year ?? 0);
+      }else{
+        return true;
+      }
+    }).map((e) {
+      bool sppExpanded = true;
+
+      var model = e.fromModel();
+      return Column(
+        children: [
+          TreeViewChild(
+              startExpanded : true,
+              parent: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: Row(
+                  children: [
+                    InkWell(
+                        onTap: (){
+                          sppExpanded = !sppExpanded;
+                          setState(() {});
+                        },
+                        child: Text(model.title, style: TextStyle(fontSize: 18,color: MyColors.grey_80),)),
+                    Spacer(),
+                    InkWell(
+                        onTap: (){
+                          sppExpanded = !sppExpanded;
+                          setState(() {});
+                        },
+                        child: sppExpanded ? Icon(Icons.keyboard_arrow_down_sharp)
+                            : Icon(Icons.keyboard_arrow_right_sharp)
+                    )
+                  ],
+                ),
+              ),
+              children: model.items
+                  .where((element) {
+                    if(listFilter[2].isFilterActive && !listFilter[1].isFilterActive){
+                      return element.status == "0";
+                    }else if(listFilter[1].isFilterActive && !listFilter[2].isFilterActive){
+                      return element.status == "1";
+                    }else{
+                      return true;
+                    }
+                  })
+                  .map((e) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("${e.month} ${e.year}", style: TextStyle(fontSize: 16),),
+                          Text(NumberUtils.toRupiah(double.tryParse(e.total) ?? 0.0),style: TextStyle(color: MyColors.grey_60),),
+                        ],
+                      ),
+                      Spacer(),
+                      Text(e.status == "1" ? "Lunas" : "Belum Lunas", style: TextStyle(color: e.status == "1" ? MyColors.primary : Colors.red),),
+                    ],
+                  ),
+                );
+              }).toList()
+          ),
+          Divider(),
+        ],
+      );
+    }).toList() ?? [];
+  }
 
 
   void _modalBottomSheetMenu(){
@@ -112,234 +202,213 @@ class _BulananScreenState extends State<BulananScreen> {
   }
 
   @override
+  void initState() {
+    bloc = BlocProvider.of<PaymentBloc>(context);
+    getData();
+    super.initState();
+  }
+
+  void getData(){
+    bloc.add(GetPayment());
+  }
+
+  void listener(BuildContext context, PaymentState state) async {
+    if (state is GetPaymentLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+    } else if (state is GetPaymentSuccess) {
+      setState(() {
+        _isLoading = false;
+        _response = state.response;
+      });
+
+
+      var data = _response?.detail?.map((e) {
+        var total = int.tryParse(e.fromModel().total) ?? 0;
+        var dibayar = int.tryParse(e.fromModel().dibayar) ?? 0;
+        return total - dibayar;
+      }).toList() ?? [];
+
+      setState(() {
+        total = data.reduce((a, b) => a + b).toDouble();
+      });
+
+
+    } else if (state is FailedState) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (state.code == 401 || state.code == 0) {
+        // MySnackbar(context)
+        //     .errorSnackbar("Terjadi kesalahan");
+        return;
+      }
+
+      MySnackbar(context)
+          .errorSnackbar(state.message + " : " + state.code.toString());
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-
-      },
-      child: TreeView(
-        startExpanded: false,
-        children: [
-          SizedBox(height: 15,),
-          SizedBox(
-            height: 32,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: listFilter.length,
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              itemBuilder: (context, index) {
-                var item = listFilter[index];
-                if(index == 0){
-                  return InkWell(
-                    onTap: (){
-                      // setState(() {
-                      //   selectedYear = "2021/2022";
-                      // });
-                      _modalBottomSheetMenu();
-                    },
-                    child: Padding(
+    return BlocListener<PaymentBloc, PaymentState>(
+      listener: listener,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          getData();
+        },
+        child: _isLoading ? ProgressLoading() : TreeView(
+          startExpanded: false,
+          children: [
+            SizedBox(height: 15,),
+            SizedBox(
+              height: 32,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: listFilter.length,
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                itemBuilder: (context, index) {
+                  var item = listFilter[index];
+                  if(index == 0){
+                    return InkWell(
+                      onTap: (){
+                        // setState(() {
+                        //   selectedYear = "2021/2022";
+                        // });
+                        _modalBottomSheetMenu();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: selectedYear != null ? MyColors.primary.withOpacity(0.3) :  Color(0xffEBF6F3),
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(16.0)),
+                            border: Border.all(
+                              color: MyColors.grey_20,
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Center(child: Row(
+                            children: [
+                              Visibility(
+                                visible: selectedYear != null,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.check, color: MyColors.primary,size: 18,),
+                                    SizedBox(width: 5,),
+                                  ],
+                                ),
+                              ),
+                              Text(selectedYear?.title ?? "Semua Tahun", style: TextStyle(color: MyColors.primary),),
+                            ],
+                          )),
+                        ),
+                      ),
+                    );
+                  }else{
+                    return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: selectedYear != null ? MyColors.primary.withOpacity(0.3) :  Color(0xffEBF6F3),
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(16.0)),
-                          border: Border.all(
-                            color: MyColors.grey_20,
-                            width: 1.5,
-                          ),
-                        ),
-                        child: Center(child: Row(
-                          children: [
-                            Visibility(
-                              visible: selectedYear != null,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.check, color: MyColors.primary,size: 18,),
-                                  SizedBox(width: 5,),
-                                ],
-                              ),
-                            ),
-                            Text(selectedYear?.title ?? "Semua Tahun", style: TextStyle(color: MyColors.primary),),
-                          ],
+                      child: FilterChip(
+                        label: Text(item.name, style: TextStyle(color: MyColors.primary),),
+                        selected: item.isFilterActive,
+                        backgroundColor: Color(0xffEBF6F3),
+                        shape: StadiumBorder(side: BorderSide(
+                            color: MyColors.grey_20
                         )),
-                      ),
-                    ),
-                  );
-                }else{
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    child: FilterChip(
-                      label: Text(item.name, style: TextStyle(color: MyColors.primary),),
-                      selected: item.isFilterActive,
-                      backgroundColor: Color(0xffEBF6F3),
-                      shape: StadiumBorder(side: BorderSide(
-                          color: MyColors.grey_20
-                      )),
-                      selectedColor: MyColors.primary.withOpacity(0.3),
-                      checkmarkColor: MyColors.primary,
-                      onSelected: (_) => setState(() => item.isFilterActive = !item.isFilterActive),
-                    ),
-                  );
-                }
+                        selectedColor: MyColors.primary.withOpacity(0.3),
+                        checkmarkColor: MyColors.primary,
+                        onSelected: (val) {
+                          setState(() => item.isFilterActive = !
+                              item.isFilterActive);
+                          listFilter;
 
-              },
+                          print("list filter : ${listFilter.map((e) => e.isFilterActive)}");
+                          setState(() {
+                          });
+                        },
+                      ),
+                    );
+                  }
+
+                },
+              ),
             ),
-          ),
-          SizedBox(height: 15,),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Card(
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("TAGIHAN PER 22 APR 2022", style: TextStyle(color: MyColors.grey_60),),
-                    SizedBox(height: 10,),
-                    Text("Rp200.000", style: TextStyle(fontSize: 24),),
-                    SizedBox(height: 10,),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(18.0)
-                                    )
-                                )
-                            ),
-                            onPressed: () async{
-                              ScreenUtils(context).navigateTo(PayBillsScreen());
-                            },
-                            child:  Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Bayar Tagihan",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText2
-                                        ?.apply(color: Colors.white),
-                                  ),
-                                ],
+            SizedBox(height: 15,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Card(
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("TAGIHAN PER ${DateFormat("dd MMM yyyy").format(DateTime.now()).toUpperCase()}", style: TextStyle(color: MyColors.grey_60),),
+                      SizedBox(height: 10,),
+                      Text(NumberUtils.toRupiah(total), style: TextStyle(fontSize: 24),),
+                      SizedBox(height: 10,),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(18.0)
+                                      )
+                                  )
+                              ),
+                              onPressed: () async{
+                                if(total == 0){
+                                  MySnackbar(context).successSnackbar("Tidak ada tagihan");
+                                  return;
+                                }
+                                ScreenUtils(context).navigateTo(PayBillsScreen());
+                              },
+                              child:  Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Bayar Tagihan",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          ?.apply(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(child: Center(
-                          child: Text(
-                            "Unduh Tagihan",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText2
-                                ?.apply(color: MyColors.primary),
+                          Expanded(child: Center(
+                            child: Text(
+                              "Unduh Tagihan",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.apply(color: MyColors.primary),
+                            ),
                           ),
-                        ),
-                        ),
-                      ],
-                    )
-                  ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 20,),
-          Divider(),
-          TreeViewChild(
-              startExpanded : true,
-              parent: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: Row(
-                  children: [
-                    InkWell(
-                        onTap: (){
-                          sppExpanded = !sppExpanded;
-                          setState(() {});
-                        },
-                        child: Text("SPP", style: TextStyle(fontSize: 18,color: MyColors.grey_80),)),
-                    Spacer(),
-                    InkWell(
-                        onTap: (){
-                          sppExpanded = !sppExpanded;
-                          setState(() {});
-                        },
-                        child: sppExpanded ? Icon(Icons.keyboard_arrow_down_sharp)
-                            : Icon(Icons.keyboard_arrow_right_sharp)
-                    )
-                  ],
-                ),
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Juli 2021", style: TextStyle(fontSize: 16),),
-                          Text("Rp.125.000",style: TextStyle(color: MyColors.grey_60),),
-                        ],
-                      ),
-                      Spacer(),
-                      Text("Lunas", style: TextStyle(color: MyColors.primary),),
-                    ],
-                  ),
-                ),
-              ]
-          ),
-          Divider(),
-          TreeViewChild(
-              startExpanded : true,
-              parent: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: Row(
-                  children: [
-                    InkWell(
-                        onTap: (){
-                          kostExpanded = !kostExpanded;
-                          setState(() {});
-                        },
-                        child: Text("Kos Ponpes", style: TextStyle(fontSize: 18,color: MyColors.grey_80),)),
-                    Spacer(),
-                    InkWell(
-                        onTap: (){
-                          kostExpanded = !kostExpanded;
-                          setState(() {});
-                        },
-                        child: kostExpanded ? Icon(Icons.keyboard_arrow_down_sharp)
-                            : Icon(Icons.keyboard_arrow_right_sharp)
-                    )
-                  ],
-                ),
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Juli 2021", style: TextStyle(fontSize: 16),),
-                          Text("Rp.125.000",style: TextStyle(color: MyColors.grey_60),),
-                        ],
-                      ),
-                      Spacer(),
-                      Text("Belum Lunas", style: TextStyle(color: Colors.red),),
-                    ],
-                  ),
-                ),
-              ]
-          ),
-          Divider(),
-        ],
+            SizedBox(height: 20,),
+            Divider(),
+            Column(
+              children: buildWidget(),
+            )
+          ],
+        ),
       ),
     );
   }

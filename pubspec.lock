@@ -616,6 +616,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.4.9"
+  time_range_picker:
+    dependency: "direct main"
+    description:
+      name: time_range_picker
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.2.0"
   tree_view:
     dependency: "direct main"
     description:

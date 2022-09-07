@@ -9,3 +9,13 @@ class GetRekamMedis extends RekamMedisEvent {
   GetRekamMedis();
 }
 
+class GetPresensi extends RekamMedisEvent {
+
+  int bulan;
+
+  @override
+  List<Object> get props => [];
+
+  GetPresensi(this.bulan);
+}
+

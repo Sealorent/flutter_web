@@ -35,7 +35,7 @@ class Informasi {
   Detail? detail;
 
   factory Informasi.fromJson(Map<String, dynamic> json) => Informasi(
-    tanggal: DateTime.parse(json["tanggal"]),
+    tanggal: DateTime.now(),
     detail: Detail.fromJson(json["detail"]),
   );
 

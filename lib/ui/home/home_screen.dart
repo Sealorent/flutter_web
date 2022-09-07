@@ -18,6 +18,7 @@ import 'package:pesantren_flutter/ui/izin/izin_screen.dart';
 import 'package:pesantren_flutter/ui/konseling/konseling_screen.dart';
 import 'package:pesantren_flutter/ui/mudif/mudif_screen.dart';
 import 'package:pesantren_flutter/ui/payment/main/payment_screen.dart';
+import 'package:pesantren_flutter/ui/presensi/presensi_screen.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_screen.dart';
 import 'package:pesantren_flutter/ui/saving/saving_screen.dart';
 import 'package:pesantren_flutter/ui/tahfidz/tahfidz_screen.dart';
@@ -70,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _isLoading = true;
       });
     } else if (state is GetInformationSuccess) {
+
       setState(() {
         _isLoading = false;
         _informationResponse = state.response;
@@ -338,12 +340,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Expanded(
-                    child: Column(
-                      children: [
-                        SvgPicture.asset("assets/ic_presensi.svg", width: 50,),
-                        SizedBox(height: 5,),
-                        Text("Presensi")
-                      ],
+                    child: InkWell(
+                      onTap: (){
+                        ScreenUtils(context).navigateTo(PresensiScreen());
+                      },
+                      child: Column(
+                        children: [
+                          SvgPicture.asset("assets/ic_presensi.svg", width: 50,),
+                          SizedBox(height: 5,),
+                          Text("Presensi")
+                        ],
+                      ),
                     ),
                   ),
                 ],

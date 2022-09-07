@@ -1,3 +1,4 @@
+import 'package:alice_lightweight/alice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,7 +10,10 @@ import 'package:pesantren_flutter/ui/transaction/transaction_screen.dart';
 import '../../res/my_colors.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+
+  Alice? alice;
+
+  DashboardScreen(this.alice);
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -37,7 +41,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           HomeScreen(),
           TransactionScreen(),
           BantuanScreen(),
-          AccountScreen(),
+          AccountScreen(widget.alice),
         ],
         index: _currentIndex,
       ),

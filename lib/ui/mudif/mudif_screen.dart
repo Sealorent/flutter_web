@@ -205,8 +205,8 @@ class _MudifScreenState extends State<MudifScreen> {
         _isLoading = false;
       });
       if (state.code == 401 || state.code == 0) {
-        MySnackbar(context)
-            .errorSnackbar("Terjadi kesalahan");
+        // MySnackbar(context)
+        //     .errorSnackbar("Terjadi kesalahan");
         return;
       }
 

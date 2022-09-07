@@ -30,6 +30,7 @@ dependencies:
   tree_view: ^0.0.6
   flutter_html: ^2.2.1
   in_app_review: ^2.0.4
+  time_range_picker: ^2.2.0
 
 dev_dependencies:
   flutter_test:

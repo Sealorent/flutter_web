@@ -42,6 +42,14 @@ class _IzinScreenState extends State<IzinScreen> with TickerProviderStateMixin {
           elevation: 0,
           title: Text("Izin", style: TextStyle(color: Colors.white),),
           bottom: const TabBar(
+            unselectedLabelColor: Colors.white,
+            labelColor: Colors.green,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicator: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),),
+                color: Colors.white),
             tabs: [
               Tab(text: "Keluar",),
               Tab(text: "Pulang",),

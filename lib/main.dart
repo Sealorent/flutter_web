@@ -10,6 +10,7 @@ import 'package:pesantren_flutter/ui/izin/izin_bloc.dart';
 import 'package:pesantren_flutter/ui/konseling/konseling_bloc.dart';
 import 'package:pesantren_flutter/ui/login/login_bloc.dart';
 import 'package:pesantren_flutter/ui/mudif/mudif_bloc.dart';
+import 'package:pesantren_flutter/ui/payment/payment_bloc.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_bloc.dart';
 import 'package:pesantren_flutter/ui/saving/saving_bloc.dart';
 import 'package:pesantren_flutter/ui/splashscreen/splash_screen.dart';
@@ -66,6 +67,11 @@ void main() {
             MainRepositoryImpl(DioClient().init(alice,context)),
           ),
         ),
+        BlocProvider<PaymentBloc>(
+          create: (context) => PaymentBloc(
+            MainRepositoryImpl(DioClient().init(alice,context)),
+          ),
+        ),
       ], child: MyApp(alice))
   );
 }
@@ -84,7 +90,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: MaterialColor(MyColors.materialPrimaryColorCode, MyColors.primaryColorCodes),
         primaryColor: Colors.red,
       ),
-      home: SplashScreen(),
+      home: SplashScreen(alice),
     );
   }
 }

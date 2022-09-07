@@ -243,8 +243,8 @@ class _KonselingScreenState extends State<KonselingScreen> {
         _isLoading = false;
       });
       if (state.code == 401 || state.code == 0) {
-        MySnackbar(context)
-            .errorSnackbar("Terjadi kesalahan");
+        // MySnackbar(context)
+        //     .errorSnackbar("Terjadi kesalahan");
         return;
       }
 
@@ -392,11 +392,12 @@ class _KonselingScreenState extends State<KonselingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(e.detail?.pelanggaran ?? "", style: TextStyle(fontSize: 16),),
-                  Text("${e.detail?.poin} Poin", style: TextStyle(fontSize: 16, color: Colors.red),),
+                  Text(DateFormat("dd MMM").format(e.tanggal ?? DateTime.now()), style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
+
                 ],
               ),
               Spacer(),
-              Text(DateFormat("dd MMM").format(e.tanggal ?? DateTime.now()), style: TextStyle(fontSize: 12,color: MyColors.grey_50),),
+              Text("${e.detail?.poin} Poin", style: TextStyle(fontSize: 16, color: Colors.red),),
             ],
           ),
           SizedBox(height: 10,),
