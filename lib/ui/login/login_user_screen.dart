@@ -40,6 +40,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
   PesantrenLoginResponse? _pesantrenLoginResponse;
   bool _passwordVisible = false;
   TextEditingController nisController = TextEditingController();
+  TextEditingController pesantrenController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   late LoginBloc bloc;
   bool _isLoading = false;
@@ -50,11 +51,18 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
         print("client:loading");
         _isLoading = true;
       });
+    }else if (state is LoginPesantrenLoading) {
+      setState(() {
+        print("client:loading");
+        _isLoading = true;
+      });
     } else if (state is LoginSuccess) {
       setState(() {
         _isLoading = false;
         ScreenUtils(context).navigateTo(DashboardScreen(null));
       });
+    } else if (state is LoginPesantrenSuccess) {
+      bloc.add(LoginStudent(nisController.text, passwordController.text));
     } else if (state is FailedState) {
       setState(() {
         _isLoading = false;
@@ -118,12 +126,23 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Assalamu’alaikum, selamat datang di"),
+                        Text("Assalamu’alaikum, selamat datang"),
                         SizedBox(height: 10,),
                         Text(_pesantrenLoginResponse?.namaPesantren ?? "", style: TextStyle(fontSize: 22),),
                       ],
                     ),
                     SizedBox(height: 40,),
+                    TextFormField(
+                      controller: pesantrenController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Kode Pesantren',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
                     TextFormField(
                       controller: nisController,
                       keyboardType: TextInputType.number,
@@ -171,7 +190,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                               )
                           )
                       ),
-                      onPressed: () async{
+                      onPressed: () async {
                         var nis = nisController.text;
                         var password = passwordController.text;
                         if(nis.isEmpty){
@@ -182,7 +201,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                           MySnackbar(context).errorSnackbar("Password tidak boleh kosong");
                           return;
                         }
-                        bloc.add(LoginStudent(nis, password));
+                        bloc.add(LoginPesantren(pesantrenController.text));
                       },
                       child:  Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),

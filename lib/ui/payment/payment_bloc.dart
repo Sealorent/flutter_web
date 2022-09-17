@@ -32,6 +32,26 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }
+
+    if (event is GetDetailPaymentBebas) {
+      try {
+        yield GetDetailBayarLoading();
+        var response = await repository.getBayarBebas();
+        yield GetDetailBayarSuccess(response);
+      } catch (e) {
+        yield FailedState("Login gagal, silahkan coba lagi", 0);
+      }
+    }
+
+    if (event is GetDetailPaymentBulanan) {
+      try {
+        yield GetDetailBayarLoading();
+        var response = await repository.getBayarBulanan();
+        yield GetDetailBayarSuccess(response);
+      } catch (e) {
+        yield FailedState("Login gagal, silahkan coba lagi", 0);
+      }
+    }
   }
 
 }

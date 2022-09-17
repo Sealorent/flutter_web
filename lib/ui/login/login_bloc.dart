@@ -15,9 +15,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is LoginPesantren) {
       try {
-        yield LoginLoading();
+        yield LoginPesantrenLoading();
         await repository.loginPesantren(event.code);
-        yield LoginSuccess();
+        yield LoginPesantrenSuccess();
       } catch (e) {
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }

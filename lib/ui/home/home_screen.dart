@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> buildInformations(){
-    return _informationResponse?.informasi?.map((e) {
+    return _informationResponse?.informasi?.take(3).map((e) {
       print(e.detail?.image);
       return Column(
         children: [
@@ -382,6 +382,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Column(
                 children: buildInformations(),
+              ),
+              SizedBox(height: 20,),
+              Center(
+                child: InkWell(
+                  onTap: (){
+                    ScreenUtils(context).navigateTo(InformationScreen());
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Lihat semua"),
+                      SizedBox(width: 5,),
+                    ],
+                  ),
+                ),
               ),
               SizedBox(height: 100,)
             ],

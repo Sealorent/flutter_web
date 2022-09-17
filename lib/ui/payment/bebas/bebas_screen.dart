@@ -319,11 +319,11 @@ class _BebasScreenState extends State<BebasScreen> {
                                     )
                                 ),
                                 onPressed: () async{
-                                  if(total == 0){
-                                    MySnackbar(context).successSnackbar("Tidak ada tagihan");
-                                    return;
-                                  }
-                                  ScreenUtils(context).navigateTo(PayBillsScreen());
+                                  // if(total == 0){
+                                  //   MySnackbar(context).successSnackbar("Tidak ada tagihan");
+                                  //   return;
+                                  // }
+                                  ScreenUtils(context).navigateTo(PayBillsScreen(true));
                                 },
                                 child:  Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 10),

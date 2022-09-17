@@ -109,7 +109,7 @@ class _LoginPesantrenScreenState extends State<LoginPesantrenScreen> {
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                               errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 16.0),
-                              hintText: 'Pilih Pesantren',
+                              hintText: 'Pesantren',
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
                         ),
                         suggestionsCallback: (pattern) {

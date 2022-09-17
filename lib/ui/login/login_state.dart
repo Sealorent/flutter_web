@@ -35,6 +35,20 @@ class LoginLoading extends LoginState {
   List<Object?> get props => [];
 }
 
+class LoginPesantrenSuccess extends LoginState {
+  LoginPesantrenSuccess();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class LoginPesantrenLoading extends LoginState {
+  LoginPesantrenLoading();
+
+  @override
+  List<Object?> get props => [];
+}
+
 class EditProfileSuccess extends LoginState {
   EditProfileSuccess();
 

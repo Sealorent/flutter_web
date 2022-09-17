@@ -23,6 +23,8 @@ import '../constant.dart';
 import '../network_exception.dart';
 import '../param/izin_keluar_param.dart';
 import '../param/login_param.dart';
+import '../response/bayar_bebas_response.dart';
+import '../response/bayar_bulanan_response.dart';
 import '../response/login_response.dart';
 import '../response/saving_response.dart';
 
@@ -41,6 +43,8 @@ abstract class MainRepository {
   Future<PaymentResponse> getPayments();
   Future<PresensiResponse> getPresensi(int bulan);
   Future<PaymentBebasResponse> getPaymentBebas();
+  Future<BayarBulananResponse> getBayarBulanan();
+  Future<BayarBebasResponse> getBayarBebas();
 }
 
 class MainRepositoryImpl extends MainRepository {
@@ -374,6 +378,56 @@ class MainRepositoryImpl extends MainRepository {
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
         return PaymentBebasResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<BayarBulananResponse> getBayarBulanan() async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.post(Constant.bayarBulanan, data: FormData.fromMap({
+        "kode_sekolah" : pesantren.kodeSekolah,
+        "student_nis": student.nis
+      }));
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return BayarBulananResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<BayarBebasResponse> getBayarBebas() async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.post(Constant.bayarBebas, data: FormData.fromMap({
+        "kode_sekolah" : pesantren.kodeSekolah,
+        "student_nis": student.nis
+      }));
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return BayarBebasResponse.fromJson(response.data);
       } else {
         throw ClientErrorException(statusMessage, statusCode);
       }

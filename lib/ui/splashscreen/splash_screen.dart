@@ -4,6 +4,7 @@ import 'package:alice_lightweight/alice.dart';
 import 'package:flutter/material.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_pesantren_screen.dart';
+import 'package:pesantren_flutter/ui/login/login_user_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../preferences/pref_data.dart';
@@ -29,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isLoggedIn) {
         ScreenUtils(context).navigateTo(DashboardScreen(widget.alice), replaceScreen: true);
       } else {
-        ScreenUtils(context).navigateTo(LoginPesantrenScreen(), replaceScreen: true);
+        ScreenUtils(context).navigateTo(LoginUserScreen(), replaceScreen: true);
       }
     }
 

@@ -14,6 +14,7 @@ import 'package:pesantren_flutter/ui/account/term_and_condition/term_and_conditi
 import 'package:pesantren_flutter/ui/account/view_profile/view_profile_screen.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_pesantren_screen.dart';
+import 'package:pesantren_flutter/ui/login/login_user_screen.dart';
 import 'package:pesantren_flutter/utils/my_snackbar.dart';
 import 'package:pesantren_flutter/widget/social_media.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,7 +96,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         onPressed: () async{
                           SharedPreferences prefs = await SharedPreferences.getInstance();
                           prefs.clear();
-                          ScreenUtils(context).navigateTo(LoginPesantrenScreen(), replaceScreen: true);
+                          ScreenUtils(context).navigateTo(LoginUserScreen(), replaceScreen: true);
                         },
                         child:  Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),

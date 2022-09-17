@@ -15,3 +15,17 @@ class GetPaymentBebas extends PaymentEvent {
 
   GetPaymentBebas();
 }
+
+class GetDetailPaymentBulanan extends PaymentEvent {
+  @override
+  List<Object> get props => [];
+
+  GetDetailPaymentBulanan();
+}
+
+class GetDetailPaymentBebas extends PaymentEvent {
+  @override
+  List<Object> get props => [];
+
+  GetDetailPaymentBebas();
+}

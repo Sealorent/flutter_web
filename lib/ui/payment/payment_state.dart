@@ -59,3 +59,19 @@ class GetPaymentBebasLoading extends PaymentState {
   @override
   List<Object?> get props => [];
 }
+
+class GetDetailBayarLoading extends PaymentState {
+  GetDetailBayarLoading();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GetDetailBayarSuccess extends PaymentState {
+  Object response;
+
+  GetDetailBayarSuccess(this.response);
+
+  @override
+  List<Object?> get props => [];
+}

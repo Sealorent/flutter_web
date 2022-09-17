@@ -366,7 +366,7 @@ class _BulananScreenState extends State<BulananScreen> {
                                   MySnackbar(context).successSnackbar("Tidak ada tagihan");
                                   return;
                                 }
-                                ScreenUtils(context).navigateTo(PayBillsScreen());
+                                ScreenUtils(context).navigateTo(PayBillsScreen(false));
                               },
                               child:  Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 10),
