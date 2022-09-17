@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../preferences/pref_data.dart';
 import '../constant.dart';
 import '../network_exception.dart';
+import '../param/edit_profile_param.dart';
 import '../param/login_param.dart';
 import '../response/login_response.dart';
 
@@ -17,9 +18,18 @@ abstract class AuthenticationRepository {
   Future<PesantrenLoginResponse?> loginPesantren(String code);
 
   Future<StudentLoginResponse?> loginStudent(String nis, String password);
+  Future<Object> editProfile(EditProfileParam param);
 }
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
+
+  Future<StudentLoginResponse> _getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var student = prefs.getString(PrefData.student);
+    var objectStudent = StudentLoginResponse.fromJson(json.decode(student ?? ""));
+    return objectStudent;
+  }
+
   final Dio _dioClient;
 
   Future<PesantrenLoginResponse> _getPesantren() async {
@@ -43,7 +53,12 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
-        return StudentLoginResponse.fromJson(response.data);
+        var data = StudentLoginResponse.fromJson(response.data);
+        if(data.isCorrect == true){
+          return data;
+        }else{
+          throw ClientErrorException(statusMessage, statusCode);
+        }
       } else {
         throw ClientErrorException(statusMessage, statusCode);
       }
@@ -66,7 +81,12 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
-        return PesantrenLoginResponse.fromJson(response.data);
+        var resp = PesantrenLoginResponse.fromJson(response.data);
+        if(resp.isCorrect == true){
+          return resp;
+        }else{
+          throw ClientErrorException("Wrong id", 12);
+        }
       } else {
         throw ClientErrorException(statusMessage, statusCode);
       }
@@ -75,6 +95,34 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       var statusMessage = ex.message;
       throw ClientErrorException(statusMessage, statusCode);
     } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+
+  @override
+  Future<Object> editProfile(EditProfileParam param) async{
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    param.student_nis = student.nis;
+    param.kode_sekolah = pesantren.kodeSekolah;
+    try {
+      var data = await param.toFormData();
+      final response = await _dioClient.post(Constant.editProfile, data: data);
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return true;
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      print("Gilang2 ${ex.message}");
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      print("Gilang1 ${e}");
       throw Exception(e);
     }
   }

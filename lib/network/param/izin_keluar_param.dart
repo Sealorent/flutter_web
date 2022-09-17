@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 class IzinKeluarParam {
   String? kodeSekolah;
   String? studentNis;
@@ -10,6 +12,7 @@ class IzinKeluarParam {
   IzinKeluarParam({this.kodeSekolah, this.studentNis, this.status, this.tanggalIzin,
       this.waktuIzin, this.keperluanIzin});
 
+
   Map<String, dynamic> toMap() {
     return {
       'kode_sekolah': kodeSekolah,
@@ -19,5 +22,16 @@ class IzinKeluarParam {
       'waktu_izin': waktuIzin,
       'keperluan_izin': keperluanIzin
     };
+  }
+
+  FormData? toFormData() {
+    return FormData.fromMap({
+      'kode_sekolah': kodeSekolah,
+      'student_nis': studentNis,
+      'status': "Diajukan",
+      'tanggal_izin': tanggalIzin,
+      'waktu_izin': waktuIzin,
+      'keperluan_izin': keperluanIzin
+    });
   }
 }

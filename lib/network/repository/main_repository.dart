@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:pesantren_flutter/network/param/edit_profile_param.dart';
 import 'package:pesantren_flutter/network/param/izin_pulang_param.dart';
 import 'package:pesantren_flutter/network/response/information_response.dart';
 import 'package:pesantren_flutter/network/response/izin_response.dart';
@@ -268,7 +269,7 @@ class MainRepositoryImpl extends MainRepository {
     param.studentNis = student.nis;
     param.kodeSekolah = pesantren.kodeSekolah;
     try {
-      final response = await _dioClient.post(Constant.addPulang, data: param.toMap());
+      final response = await _dioClient.post(Constant.addPulang, data: param.toFormData());
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
@@ -292,7 +293,7 @@ class MainRepositoryImpl extends MainRepository {
     param.studentNis = student.nis;
     param.kodeSekolah = pesantren.kodeSekolah;
     try {
-      final response = await _dioClient.post(Constant.addIzin, data: param.toMap());
+      final response = await _dioClient.post(Constant.addIzin, data: param.toFormData());
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
@@ -384,5 +385,6 @@ class MainRepositoryImpl extends MainRepository {
       throw Exception(e);
     }
   }
+
 
 }

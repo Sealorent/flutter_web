@@ -81,8 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _isLoading = false;
       });
       if (state.code == 401 || state.code == 0) {
-        MySnackbar(context)
-            .errorSnackbar("Terjadi kesalahan");
+        // MySnackbar(context)
+        //     .errorSnackbar("Terjadi kesalahan");
         return;
       }
 
@@ -105,53 +105,56 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> buildInformations(){
-    return _informationResponse?.informasi?.map((e) => Column(
-      children: [
-        SizedBox(height: 15,),
-        InkWell(
-          onTap: (){
-            ScreenUtils(context).navigateTo(InformationDetailScreen(e));
-          },
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff7c94b6),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                              e.detail?.image ?? ""),
-                          fit: BoxFit.cover,
+    return _informationResponse?.informasi?.map((e) {
+      print(e.detail?.image);
+      return Column(
+        children: [
+          SizedBox(height: 15,),
+          InkWell(
+            onTap: (){
+              ScreenUtils(context).navigateTo(InformationDetailScreen(e));
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff7c94b6),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                e.detail?.image ?? ""),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(8.0)),
                         ),
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(8.0)),
                       ),
-                    ),
-                    SizedBox(width: 10,),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(e.detail?.judulInfo ?? "", style: TextStyle( fontSize: 18),),
-                          SizedBox(height: 8,),
-                          Text(DateFormat('dd-MM-yyyy').format(e.tanggal ?? DateTime.now()), style: TextStyle(color: Colors.black.withOpacity(0.6)),),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(height: 10,),
-              ],
+                      SizedBox(width: 10,),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(e.detail?.judulInfo ?? "", style: TextStyle( fontSize: 18),),
+                            SizedBox(height: 8,),
+                            Text(DateFormat('dd-MM-yyyy').format(e.tanggal ?? DateTime.now()), style: TextStyle(color: Colors.black.withOpacity(0.6)),),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    )).toList() ?? [];
+        ],
+      );
+    }).toList() ?? [];
   }
 
   @override

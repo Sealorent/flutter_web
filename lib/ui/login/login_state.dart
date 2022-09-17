@@ -34,3 +34,17 @@ class LoginLoading extends LoginState {
   @override
   List<Object?> get props => [];
 }
+
+class EditProfileSuccess extends LoginState {
+  EditProfileSuccess();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class EditProfileLoading extends LoginState {
+  EditProfileLoading();
+
+  @override
+  List<Object?> get props => [];
+}

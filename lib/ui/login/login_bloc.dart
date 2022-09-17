@@ -32,6 +32,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }
+
+    if (event is EditProfile) {
+      try {
+        yield EditProfileLoading();
+        await repository.editProfile(event.param);
+        yield EditProfileSuccess();
+      } catch (e) {
+
+        yield FailedState("Login gagal, silahkan coba lagi", 0);
+      }
+    }
   }
 
 }

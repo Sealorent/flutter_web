@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/model/year_model.dart';
 import 'package:pesantren_flutter/network/param/izin_keluar_param.dart';
+import 'package:pesantren_flutter/network/param/izin_pulang_param.dart';
 import 'package:pesantren_flutter/network/response/izin_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
@@ -41,6 +42,7 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
   late IzinBloc bloc;
   bool _isLoading = false;
   DateTime _selectedDate = DateTime.now();
+  DateTimeRange? _selectedDateRange = null;
   TimeOfDay _selectedTimeStartTime = TimeOfDay.now();
   TimeOfDay _selectedTimeEndTime = TimeOfDay.now();
   late TextEditingController _dateController;
@@ -70,8 +72,8 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
         _isLoading = false;
       });
       if (state.code == 401 || state.code == 0) {
-        MySnackbar(context)
-            .errorSnackbar("Terjadi kesalahan");
+        // MySnackbar(context)
+        //     .errorSnackbar("Terjadi kesalahan");
         return;
       }
 
@@ -94,9 +96,51 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
     }
   }
 
+  Future<void> _selectDateRange(BuildContext context) async {
+    DateTimeRange? picked = await showDateRangePicker(
+        context: context,
+        firstDate: DateTime(DateTime.now().year - 5),
+        lastDate: DateTime(DateTime.now().year + 5),
+        // initialDateRange: DateTimeRange(
+        //   end: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 13),
+        //   start: DateTime.now(),
+        // ),
+        builder: (context, child) {
+          return Column(
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: 400.0,
+                ),
+                child: child,
+              )
+            ],
+          );
+        });
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDateRange = picked;
+      });
+      _dateController.text = "${DateFormat("dd MMM yyyy").format(_selectedDateRange?.start ?? DateTime.now())} - ${DateFormat("dd MMM yyyy").format(_selectedDateRange?.end ?? DateTime.now())}";
+    }
+  }
+
   void _selectTime() async {
     TimeRange result = await showTimeRangePicker(
       context: context,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: MyColors.primary,
+            accentColor: MyColors.primary,
+            colorScheme: ColorScheme.light(primary: MyColors.primary),
+            buttonTheme: ButtonThemeData(
+                textTheme: ButtonTextTheme.primary
+            ),
+          ),
+          child: child ?? Container(),
+        );
+      },
     );
 
     setState(() {
@@ -146,7 +190,11 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
                       readOnly: true,
                       onTap: (){
                         FocusScope.of(context).unfocus();
-                        _selectDate(context);
+                        if(widget.isIzinKeluar){
+                          _selectDate(context);
+                        }else{
+                          _selectDateRange(context);
+                        }
                       },
                       decoration: InputDecoration(
                         labelText: 'Pilih Tanggal',
@@ -212,7 +260,13 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
                             keperluanIzin: _keperluanController.text.toString()
                           );
                           bloc.add(AddIzinKeluar(izinParam));
-                          bloc.add(AddIzinKeluar(izinParam));
+                        }else{
+                          var izinPulang = IzinPulangParam(
+                            tanggalPulang: DateFormat("yyyy-MM-dd").format(_selectedDateRange?.start ?? DateTime.now()),
+                            hariPulang: _selectedDateRange?.start.difference(_selectedDateRange?.end ?? DateTime.now() ).inDays.toString().replaceAll("-", ""),
+                            keperluanPulang: _keperluanController.text.toString()
+                          );
+                          bloc.add(AddIzinPulang(izinPulang));
                         }
                       },
                       child:  Padding(

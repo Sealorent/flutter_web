@@ -50,7 +50,7 @@ class Laporan {
   factory Laporan.fromJson(Map<String, dynamic> json) => Laporan(
     tanggal: DateTime.parse(json["tanggal"]),
     waktu: json["waktu"],
-    catatan: json["catatan"],
+    catatan: json["note"],
     detail: Detail.fromJson(json["detail"]),
   );
 
@@ -69,7 +69,7 @@ class Detail {
 
   factory Detail.fromJson(Map<String, dynamic> json) => Detail(
     waktu: json["waktu"],
-    catatan: json["catatan"],
+    catatan: json["note"],
     disetujui: json["disetujui"],
   );
 

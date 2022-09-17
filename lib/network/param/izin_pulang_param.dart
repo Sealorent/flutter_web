@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 class IzinPulangParam {
   String? kodeSekolah;
   String? studentNis;
@@ -14,10 +16,21 @@ class IzinPulangParam {
     return {
       'kode_sekolah': kodeSekolah,
       'student_nis': studentNis,
-      'status': status,
+      'status': "Diajukan",
       'tanggal_pulang': tanggalPulang,
       'hari_pulang': hariPulang,
       'keperluan_pulang': keperluanPulang
     };
+  }
+
+  FormData? toFormData() {
+    return FormData.fromMap({
+      'kode_sekolah': kodeSekolah,
+      'student_nis': studentNis,
+      'status': status,
+      'tanggal_pulang': tanggalPulang,
+      'hari_pulang': hariPulang,
+      'keperluan_pulang': keperluanPulang
+    });
   }
 }

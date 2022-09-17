@@ -87,7 +87,8 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
       backgroundColor: Colors.white,
       body: RefreshIndicator(
         onRefresh: () async {
-
+          _getPesantren();
+          _getUser();
         },
         child: ListView(
           children: [

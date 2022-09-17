@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:pesantren_flutter/network/param/edit_profile_param.dart';
 
 abstract class LoginEvent extends Equatable {}
 
@@ -19,4 +20,13 @@ class LoginStudent extends LoginEvent {
   String password;
 
   LoginStudent(this.nis, this.password);
+}
+
+class EditProfile extends LoginEvent {
+  @override
+  List<Object> get props => [];
+
+  EditProfileParam param;
+
+  EditProfile(this.param);
 }

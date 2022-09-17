@@ -54,7 +54,7 @@ class Detail {
 
   factory Detail.fromJson(Map<String, dynamic> json) => Detail(
     judulInfo: json["judul_info"],
-    image: json["image"] == null ? null : json["image"],
+    image: json["foto"] == null ? null : json["foto"],
     detailInfo: json["detail_info"],
   );
 
