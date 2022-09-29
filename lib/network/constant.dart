@@ -31,4 +31,7 @@ class Constant {
   static const String editProfile = "/edit_profil.php";
   static const String bayarBebas = "/bayar_tagihan_bebas.php";
   static const String bayarBulanan = "/bayar_tagihan_bulan.php";
+  static const String history = "/history.php";
+  static const String bayar = "/bayar.php";
+  static const String ringkasan = "/ringkasan_pembayaran.php";
 }

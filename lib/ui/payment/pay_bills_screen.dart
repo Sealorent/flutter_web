@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pesantren_flutter/network/param/bayar_param.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/payment/payment_bloc.dart';
@@ -42,6 +43,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
 
   late PaymentBloc bloc;
   bool _isLoading = true;
+  bool _isBayarLoading = false;
   BayarBebasResponse? _bebasResponse;
   BayarBulananResponse? _bulananResponse;
 
@@ -53,7 +55,25 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
   }
 
   void listener(BuildContext context, PaymentState state) async {
-    if (state is GetDetailBayarLoading) {
+    if (state is BayarLoading) {
+      setState(() {
+        _isBayarLoading = true;
+      });
+    } else if (state is BayarSuccess) {
+      setState(() {
+        _isBayarLoading = false;
+      });
+
+      if(state.response.isCorrect == true){
+        ScreenUtils(context).navigateTo(PaymentDetailScreen(
+          state.response.noIpaymu
+        ));
+      }else{
+        MySnackbar(context)
+            .errorSnackbar("Proses pembayaran gagal");
+      }
+
+    }else if (state is GetDetailBayarLoading) {
       setState(() {
         _isLoading = true;
       });
@@ -213,7 +233,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                 ],
               ),
               SizedBox(height: 5,),
-              ElevatedButton(
+              _isBayarLoading ? ProgressLoading() : ElevatedButton(
                 style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -222,7 +242,39 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                     )
                 ),
                 onPressed: () async{
-                  ScreenUtils(context).navigateTo(PaymentDetailScreen());
+                  if(_bebasResponse != null){
+                    var selectedList = _bebasResponse?.detail?.where((element) => element.detailBulan?.processPaid == true).toList() ?? [];
+                    var bayarIds = selectedList.map((e) => int.tryParse(e.detailBulan?.bebasId ?? "") ?? 0).toList();
+                    bayarIds.removeWhere((element) => element == 0);
+
+                    var nominalIds = selectedList.map((e) => int.tryParse(e.detailBulan?.bebasBill ?? "") ?? 0).toList();
+                    nominalIds.removeWhere((element) => element == 0);
+
+                    var param = BayarParam(
+                      bebas_id: bayarIds,
+                      bebas_nominal: nominalIds
+                    );
+
+                    if(bayarIds.isEmpty){
+                      MySnackbar(context).errorSnackbar("Pilih yang ingin di bayar");
+                      return;
+                    }
+                    bloc.add(BayarTagihan(param));
+                  }else if(_isBayarLoading != null){
+                    var selectedList = _bulananResponse?.detail?.where((element) => element.detailBulan?.processPaid == true).toList() ?? [];
+                    var bayarIds = selectedList.map((e) => int.tryParse(e.detailBulan?.bulanId ?? "") ?? 0).toList();
+                    bayarIds.removeWhere((element) => element == 0);
+                    var param = BayarParam(
+                        bulan_id: bayarIds
+                    );
+
+                    if(bayarIds.isEmpty){
+                      MySnackbar(context).errorSnackbar("Pilih yang ingin di bayar");
+                      return;
+                    }
+
+                    bloc.add(BayarTagihan(param));
+                  }
                 },
                 child:  Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),

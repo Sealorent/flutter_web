@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:pesantren_flutter/network/param/bayar_param.dart';
 
 abstract class PaymentEvent extends Equatable {}
 
@@ -28,4 +29,30 @@ class GetDetailPaymentBebas extends PaymentEvent {
   List<Object> get props => [];
 
   GetDetailPaymentBebas();
+}
+
+class GetHistory extends PaymentEvent {
+  @override
+  List<Object> get props => [];
+
+  GetHistory();
+}
+
+class BayarTagihan extends PaymentEvent {
+  BayarParam param;
+
+  @override
+  List<Object> get props => [];
+
+  BayarTagihan(this.param);
+}
+
+
+class GetRingkasan extends PaymentEvent {
+  String noIpaymu;
+
+  @override
+  List<Object> get props => [];
+
+  GetRingkasan(this.noIpaymu);
 }

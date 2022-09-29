@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/payment_method/payment_method_screen.dart';
+import 'package:pesantren_flutter/utils/my_snackbar.dart';
 import 'package:pesantren_flutter/utils/screen_utils.dart';
+import 'package:pesantren_flutter/network/response/ringkasan_response.dart';
 
 class PaymentMethod extends StatelessWidget {
   BuildContext context;
+  List<Bayar> bayar;
+  Bayar? selectedPembayaran;
+  Function(Bayar) onSelectPayment;
 
-
-  PaymentMethod(this.context);
+  PaymentMethod(this.context, this.bayar, this.selectedPembayaran,this.onSelectPayment );
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -24,17 +29,19 @@ class PaymentMethod extends StatelessWidget {
           SizedBox(height: 10,),
           InkWell(
             onTap: (){
-              ScreenUtils(context).navigateTo(PaymentMethodScreen());
+              ScreenUtils(context).navigateTo(PaymentMethodScreen(bayar, (payment){
+                onSelectPayment(payment);
+              }));
             },
-            child: Row(
+            child: selectedPembayaran == null ? Text("Pilih pembayaran") : Row(
               children: [
-                Image.asset("assets/circle_logo.png", width: 50,),
+                Image.asset(selectedPembayaran?.detail?.metodeBankLogo ?? "", width: 50,),
                 SizedBox(width: 10,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("BAC", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),),
-                    Text("Virtual Account", style: TextStyle(color: MyColors.grey_60),),
+                    Text(selectedPembayaran?.detail?.kode ?? "", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),),
+                    Text(selectedPembayaran?.metodeBayar ?? "", style: TextStyle(color: MyColors.grey_60),),
                   ],
                 ),
                 Spacer(),
@@ -52,7 +59,7 @@ class PaymentMethod extends StatelessWidget {
                 )
             ),
             onPressed: () async{
-
+              MySnackbar(context).errorSnackbar("Proses development");
             },
             child:  Row(
               mainAxisAlignment: MainAxisAlignment.center,

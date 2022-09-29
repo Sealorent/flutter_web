@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:pesantren_flutter/network/param/bayar_param.dart';
 import 'package:pesantren_flutter/network/param/edit_profile_param.dart';
 import 'package:pesantren_flutter/network/param/izin_pulang_param.dart';
+import 'package:pesantren_flutter/network/response/bayar_response.dart';
+import 'package:pesantren_flutter/network/response/history_response.dart';
 import 'package:pesantren_flutter/network/response/information_response.dart';
 import 'package:pesantren_flutter/network/response/izin_response.dart';
 import 'package:pesantren_flutter/network/response/konseling_response.dart';
@@ -14,6 +17,7 @@ import 'package:pesantren_flutter/network/response/pesantren_login_response.dart
 import 'package:pesantren_flutter/network/response/presensi_response.dart';
 import 'package:pesantren_flutter/network/response/pulang_response.dart';
 import 'package:pesantren_flutter/network/response/rekam_medis_response.dart';
+import 'package:pesantren_flutter/network/response/ringkasan_response.dart';
 import 'package:pesantren_flutter/network/response/student_login_response.dart';
 import 'package:pesantren_flutter/network/response/tahfidz_response.dart';
 import 'package:pesantren_flutter/preferences/pref_data.dart';
@@ -45,6 +49,9 @@ abstract class MainRepository {
   Future<PaymentBebasResponse> getPaymentBebas();
   Future<BayarBulananResponse> getBayarBulanan();
   Future<BayarBebasResponse> getBayarBebas();
+  Future<HistoryResponse> getHistory();
+  Future<BayarResponse> bayar(BayarParam param);
+  Future<RingkasanResponse> getRingkasan(String noIpayMu);
 }
 
 class MainRepositoryImpl extends MainRepository {
@@ -440,5 +447,79 @@ class MainRepositoryImpl extends MainRepository {
     }
   }
 
+  @override
+  Future<HistoryResponse> getHistory() async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.get(Constant.history, queryParameters: {
+        "kode_sekolah" : pesantren.kodeSekolah,
+        "nis": student.nis
+      });
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return HistoryResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<BayarResponse> bayar(BayarParam param) async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    param.student_nis = student.nis;
+    param.kode_sekolah = pesantren.kodeSekolah;
+    try {
+      final response = await _dioClient.post(Constant.bayar, data: param.toMap());
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return BayarResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<RingkasanResponse> getRingkasan(String noIpayMu) async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.post(Constant.ringkasan, data: FormData.fromMap({
+        "kode_sekolah" : pesantren.kodeSekolah,
+        "student_nis": student.nis,
+        "ipaymu_no_trans": noIpayMu
+      }));
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return RingkasanResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 
 }

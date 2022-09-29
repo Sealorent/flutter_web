@@ -4,7 +4,7 @@ import 'package:pesantren_flutter/model/year_model.dart';
 class YearUtils {
   static List<YearModel> getYearModel(int startYear) {
     startYear = 2019;
-    var curYear = DateTime.now().year;
+    var curYear = DateTime.now().year + 1;
     var yrs = <YearModel>[];
     for(int i = startYear; i < curYear; i++){
       var fYear = DateTime(i,6,1);

@@ -52,6 +52,36 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }
+
+    if (event is GetHistory) {
+      try {
+        yield GetHistoryLoading();
+        var response = await repository.getHistory();
+        yield GetHistorySuccess(response);
+      } catch (e) {
+        yield FailedState("Login gagal, silahkan coba lagi", 0);
+      }
+    }
+
+    if (event is BayarTagihan) {
+      try {
+        yield BayarLoading();
+        var bayarResponse = await repository.bayar(event.param);
+        yield BayarSuccess(bayarResponse);
+      } catch (e) {
+        yield FailedState("Login gagal, silahkan coba lagi", 0);
+      }
+    }
+
+    if (event is GetRingkasan) {
+      try {
+        yield GetRingkasanLoading();
+        var response = await repository.getRingkasan(event.noIpaymu);
+        yield GetRingkasanSuccess(response);
+      } catch (e) {
+        yield FailedState("Login gagal, silahkan coba lagi", 0);
+      }
+    }
   }
 
 }

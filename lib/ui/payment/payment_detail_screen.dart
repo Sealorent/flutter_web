@@ -2,18 +2,28 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pesantren_flutter/network/response/ringkasan_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
+import 'package:pesantren_flutter/ui/payment/payment_bloc.dart';
+import 'package:pesantren_flutter/ui/payment/payment_event.dart';
+import 'package:pesantren_flutter/ui/payment/payment_state.dart';
+import 'package:pesantren_flutter/utils/number_utils.dart';
 import 'package:pesantren_flutter/widget/payment_method.dart';
+import 'package:pesantren_flutter/widget/progress_loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tree_view/tree_view.dart';
 
+import '../../utils/my_snackbar.dart';
 import '../transaction/model/item_filter_model.dart';
 
 class PaymentDetailScreen extends StatefulWidget {
-  const PaymentDetailScreen({Key? key}) : super(key: key);
+  String? noIpayMu;
+
+  PaymentDetailScreen(this.noIpayMu);
 
   @override
   State<PaymentDetailScreen> createState() => _PaymentDetailScreenState();
@@ -21,81 +31,151 @@ class PaymentDetailScreen extends StatefulWidget {
 
 class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
 
+  late PaymentBloc bloc;
+  bool _isLoading = true;
+  RingkasanResponse? _response;
+  Bayar? _selectedPayment;
+
+  @override
+  void initState() {
+    bloc = BlocProvider.of<PaymentBloc>(context);
+    getData();
+    super.initState();
+  }
+
+  void listener(BuildContext context, PaymentState state) async {
+    if (state is GetRingkasanLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+    } else if (state is GetRingkasanSuccess) {
+      setState(() {
+        _isLoading = false;
+        _response = state.response;
+      });
+
+    } else if (state is FailedState) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (state.code == 401 || state.code == 0) {
+        // MySnackbar(context)
+        //     .errorSnackbar("Terjadi kesalahan");
+        return;
+      }
+
+      MySnackbar(context)
+          .errorSnackbar(state.message + " : " + state.code.toString());
+    }
+  }
+
+  void getData(){
+    bloc.add(GetRingkasan(widget.noIpayMu ?? ""));
+  }
+
+  double getTotal(){
+    var totalBebas = (_response?.bebas?.map((e) => int.tryParse(e.nominal ?? "") ?? 0).toList() ?? []).reduce((a, b) => a + b);
+    var totalBulan = (_response?.bulan?.map((e) => int.tryParse(e.nominal ?? "") ?? 0).toList() ?? []).reduce((a, b) => a + b);
+
+    return totalBebas.toDouble() + totalBulan.toDouble();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
+    return BlocListener<PaymentBloc, PaymentState>(
+      listener: listener,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            ),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          title: Text("Ringkasan Pembayaran", style: TextStyle(color: Colors.white),),
+        ),
+        backgroundColor: Colors.white,
+        body: RefreshIndicator(
+          onRefresh: () async {
+
           },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.white,
+          child: _isLoading ? ProgressLoading() : ListView(
+            children: [
+              SizedBox(height: 20,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("No Ref"),
+                    SizedBox(height: 5,),
+                    Text(_response?.noref ?? "", style: TextStyle(fontSize: 18),),
+                    SizedBox(height: 20,),
+                    Row(
+                      children: [
+                        Text("ITEM (${(_response?.bulan?.length ?? 0) + (_response?.bebas?.length ?? 0)})", style: TextStyle(color: MyColors.grey_60, fontSize: 12)),
+                        Spacer(),
+                        Text("JUMLAH", style: TextStyle(color: MyColors.grey_60, fontSize: 12),),
+                      ],
+                    ),
+                    SizedBox(height: 20,),
+                    Column(
+                      children: _response?.bulan?.map((e) => Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(e.namaBayar ?? ""),
+                              Spacer(),
+                              Text(NumberUtils.toRupiah(double.tryParse(e.nominal ?? "") ?? 0.0)),
+                            ],
+                          ),
+                          SizedBox(height: 20,),
+                        ],
+                      )).toList() ?? [],
+                    ),
+                    Column(
+                      children: _response?.bebas?.map((e) => Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(e.namaBayar ?? ""),
+                              Spacer(),
+                              Text(NumberUtils.toRupiah(double.tryParse(e.nominal ?? "") ?? 0.0)),
+                            ],
+                          ),
+                          SizedBox(height: 20,),
+                        ],
+                      )).toList() ?? [],
+                    ),
+
+                    SizedBox(height: 10,),
+                    Divider(),
+                    SizedBox(height: 10,),
+                    Row(
+                      children: [
+                        Text("TOTAL"),
+                        Spacer(),
+                        Text(NumberUtils.toRupiah(getTotal()), style: TextStyle(fontSize: 18),),
+                      ],
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
-        centerTitle: true,
-        elevation: 0,
-        title: Text("Ringkasan Pembayaran", style: TextStyle(color: Colors.white),),
+        bottomSheet: PaymentMethod(context,_response?.bayar ?? [],_selectedPayment, (selected){
+          setState(() {
+            _selectedPayment = selected;
+          });
+        }),
       ),
-      backgroundColor: Colors.white,
-      body: RefreshIndicator(
-        onRefresh: () async {
-
-        },
-        child: ListView(
-          children: [
-            SizedBox(height: 20,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("No Ref"),
-                  SizedBox(height: 5,),
-                  Text("SP10621002512072201", style: TextStyle(fontSize: 18),),
-                  SizedBox(height: 20,),
-                  Row(
-                    children: [
-                      Text("ITEM (3)", style: TextStyle(color: MyColors.grey_60, fontSize: 12)),
-                      Spacer(),
-                      Text("JUMLAH", style: TextStyle(color: MyColors.grey_60, fontSize: 12),),
-                    ],
-                  ),
-                  SizedBox(height: 20,),
-                  Row(
-                    children: [
-                      Text("SPP April 2022"),
-                      Spacer(),
-                      Text("Rp120.000"),
-                    ],
-                  ),
-                  SizedBox(height: 20,),
-                  Row(
-                    children: [
-                      Text("Kost Pon Pres"),
-                      Spacer(),
-                      Text("Rp120.000"),
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Divider(),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      Text("TOTAL"),
-                      Spacer(),
-                      Text("Rp120.000", style: TextStyle(fontSize: 18),),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-      bottomSheet: PaymentMethod(context),
     );
   }
 }
