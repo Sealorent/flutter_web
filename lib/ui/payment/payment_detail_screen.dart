@@ -5,13 +5,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pesantren_flutter/network/param/ipaymu_param.dart';
 import 'package:pesantren_flutter/network/response/ringkasan_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
+import 'package:pesantren_flutter/ui/payment/cara_pembayaran_screen.dart';
 import 'package:pesantren_flutter/ui/payment/payment_bloc.dart';
 import 'package:pesantren_flutter/ui/payment/payment_event.dart';
 import 'package:pesantren_flutter/ui/payment/payment_state.dart';
 import 'package:pesantren_flutter/utils/number_utils.dart';
+import 'package:pesantren_flutter/utils/screen_utils.dart';
 import 'package:pesantren_flutter/widget/payment_method.dart';
 import 'package:pesantren_flutter/widget/progress_loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +38,8 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
   bool _isLoading = true;
   RingkasanResponse? _response;
   Bayar? _selectedPayment;
+  bool _insertIsLoading = false;
+  IpaymuParam? _ipaymuParam;
 
   @override
   void initState() {
@@ -54,13 +59,24 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
         _response = state.response;
       });
 
+    }else if (state is InsertIpaymuLoading) {
+      setState(() {
+        _insertIsLoading = true;
+      });
+      ScreenUtils(context).navigateTo(CaraPembayaranScreen(_ipaymuParam, _selectedPayment));
+    } else if (state is InsertIpaymuSuccess) {
+      setState(() {
+        _insertIsLoading = false;
+      });
+
     } else if (state is FailedState) {
       setState(() {
         _isLoading = false;
+        _insertIsLoading = false;
       });
       if (state.code == 401 || state.code == 0) {
-        // MySnackbar(context)
-        //     .errorSnackbar("Terjadi kesalahan");
+        MySnackbar(context)
+            .errorSnackbar("Terjadi kesalahan, respon API tidak dapat terbaca.");
         return;
       }
 
@@ -174,7 +190,23 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
           setState(() {
             _selectedPayment = selected;
           });
-        }),
+        }, (){
+          var param = IpaymuParam(
+            noref: _response?.noref,
+            ipaymu_no_trans: widget.noIpayMu,
+            nominal: getTotal().toInt().toString(),
+            payment_channel: _selectedPayment?.detail?.metodeChannel,
+          );
+
+          if(param.isValid()){
+            _ipaymuParam = param;
+            bloc.add(InsertIpaymu(param));
+          }else{
+            MySnackbar(context).errorSnackbar("Data tidak valid, pilih metode pembayaran atau cek data lainnya.");
+          }
+        },
+          _insertIsLoading
+         ),
       ),
     );
   }

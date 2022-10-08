@@ -29,9 +29,14 @@ class Constant {
   static const String presensi = "/presensi.php";
   static const String paymentBebas = "/pembayaran_bebas.php";
   static const String editProfile = "/edit_profil.php";
+  static const String changePassword = "/edit_password.php";
   static const String bayarBebas = "/bayar_tagihan_bebas.php";
   static const String bayarBulanan = "/bayar_tagihan_bulan.php";
   static const String history = "/history.php";
   static const String bayar = "/bayar.php";
+  static const String setting = "/setting.php";
   static const String ringkasan = "/ringkasan_pembayaran.php";
+  static const String ipaymu = "/insert_ipaymu.php";
+  static const String caraBayar = "/cara_pembayaran.php";
+  static const String topupTabungan = "/top_up_tabungan.php";
 }

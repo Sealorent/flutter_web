@@ -4,10 +4,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
    <application
-        android:label="pesantren_flutter"
+        android:label="ePesantren"
         android:name="${applicationName}"
        android:usesCleartextTraffic="true"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -34,5 +34,16 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       <provider
+           android:name="androidx.core.content.FileProvider"
+           android:authorities="${applicationId}.provider"
+           android:exported="false"
+           android:grantUriPermissions="true">
+           <meta-data
+               android:name="android.support.FILE_PROVIDER_PATHS"
+               android:resource="@xml/provider_paths"/>
+       </provider>
+
+
     </application>
 </manifest>

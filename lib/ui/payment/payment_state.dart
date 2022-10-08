@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:pesantren_flutter/network/response/cara_pembayaran_response.dart';
 import 'package:pesantren_flutter/network/response/history_response.dart';
 import 'package:pesantren_flutter/network/response/mudif_response.dart';
 import 'package:pesantren_flutter/network/response/payment_bebas_response.dart';
@@ -7,7 +8,9 @@ import 'package:pesantren_flutter/network/response/payment_response.dart';
 import 'package:pesantren_flutter/network/response/ringkasan_response.dart';
 import 'package:pesantren_flutter/network/response/saving_response.dart';
 import 'package:pesantren_flutter/network/response/tahfidz_response.dart';
+import 'package:pesantren_flutter/network/response/top_up_tabungan_response.dart';
 
+import '../../network/param/ipaymu_param.dart';
 import '../../network/response/bayar_response.dart';
 import '../../network/response/information_response.dart';
 
@@ -127,6 +130,57 @@ class GetRingkasanSuccess extends PaymentState {
   RingkasanResponse response;
 
   GetRingkasanSuccess(this.response);
+
+  @override
+  List<Object?> get props => [];
+}
+
+class InsertIpaymuLoading extends PaymentState {
+  InsertIpaymuLoading();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class InsertIpaymuSuccess extends PaymentState {
+
+
+  InsertIpaymuSuccess();
+
+  @override
+  List<Object?> get props => [];
+}
+
+
+class GetCaraPembayaranLoading extends PaymentState {
+  GetCaraPembayaranLoading();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GetCaraPembayaranSuccess extends PaymentState {
+
+  CaraPembayaranResponse response;
+
+  GetCaraPembayaranSuccess(this.response);
+
+  @override
+  List<Object?> get props => [];
+}
+
+class TopUpTabunganLoading extends PaymentState {
+  TopUpTabunganLoading();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class TopUpTabunganSuccess extends PaymentState {
+
+  TopUpTabunganResponse response;
+
+  TopUpTabunganSuccess(this.response);
 
   @override
   List<Object?> get props => [];

@@ -43,6 +43,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }
+
+    if(event is ChangePassword){
+      try {
+        yield ChangePasswordLoading();
+        await repository.changePassword(event.newPass,event.confirmNewPass,event.oldPass);
+        yield ChangePasswordSuccess();
+      } catch (e) {
+
+        yield FailedState("Login gagal, silahkan coba lagi", 0);
+      }
+    }
   }
 
 }

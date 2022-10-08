@@ -15,6 +15,7 @@ import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_bloc.dart';
 import 'package:pesantren_flutter/ui/saving/saving_bloc.dart';
 import 'package:pesantren_flutter/ui/splashscreen/splash_screen.dart';
 import 'package:pesantren_flutter/ui/tahfidz/tahfidz_bloc.dart';
+import 'package:shake/shake.dart';
 
 import 'network/dio_client.dart';
 
@@ -85,6 +86,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: alice?.getNavigatorKey(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: MaterialColor(MyColors.materialPrimaryColorCode, MyColors.primaryColorCodes),

@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pesantren_flutter/network/response/login_response.dart';
 import 'package:pesantren_flutter/network/response/pesantren_login_response.dart';
+import 'package:pesantren_flutter/network/response/setting_response.dart';
 import 'package:pesantren_flutter/network/response/student_login_response.dart';
 import 'package:pesantren_flutter/utils/screen_utils.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -53,6 +54,11 @@ class ApiInterceptors extends Interceptor {
     prefs.setString(PrefData.student, jsonEncode(studentLoginResponse?.toJson()));
   }
 
+  void _saveSettingInfo(SettingResponse? settingResponse) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(PrefData.setting, jsonEncode(settingResponse?.toJson()));
+  }
+
   void _clearToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
@@ -69,6 +75,10 @@ class ApiInterceptors extends Interceptor {
 
       if (response.realUri.path.contains(Constant.loginStudent)) {
         _saveUserInfo(StudentLoginResponse.fromJson(response.data));
+      }
+
+      if (response.realUri.path.contains(Constant.setting)) {
+        _saveSettingInfo(SettingResponse.fromJson(response.data));
       }
     }
   }

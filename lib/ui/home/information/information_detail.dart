@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_share/flutter_share.dart';
+// import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/network/response/information_response.dart';
@@ -34,7 +36,14 @@ class InformationDetailScreen extends StatefulWidget {
 }
 
 class _InformationDetailScreenState extends State<InformationDetailScreen> {
-
+  Future<void> share() async {
+    await FlutterShare.share(
+        title: widget.informationResponse?.judulInfo ?? "",
+        text: widget.informationResponse?.judulInfo ?? "",
+        linkUrl: widget.informationResponse?.foto ?? "",
+        chooserTitle: widget.informationResponse?.judulInfo ?? ""
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -56,7 +65,7 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
         ),
         actions: [
           IconButton(onPressed: (){
-
+            share();
           }, icon: Icon(Icons.share, color: Colors.black54,))
         ],
         centerTitle: true,
@@ -76,7 +85,7 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
                 color: const Color(0xff7c94b6),
                 image: DecorationImage(
                   image: NetworkImage(
-                      widget.informationResponse?.detail?.image ?? ""),
+                      widget.informationResponse?.foto ?? ""),
                   fit: BoxFit.cover,
                 ),
                 borderRadius:
@@ -90,7 +99,7 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.informationResponse?.detail?.judulInfo ?? "", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                Text(widget.informationResponse?.judulInfo ?? "", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                 SizedBox(height: 10,),
                 Text(DateFormat("EEEE, dd MMM yyyy").format(widget.informationResponse?.tanggal ?? DateTime.now()) ?? "", style: TextStyle(color: Colors.black54),),
                 SizedBox(height: 5,),
@@ -100,7 +109,8 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 13),
             child: Html(
-              data: widget.informationResponse?.detail?.detailInfo ?? "",
+              data: "",
+              // data: widget.informationResponse?. ?? "",
             ),
           ),
         ],

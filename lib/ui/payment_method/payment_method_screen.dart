@@ -67,7 +67,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                               bankTransferExpanded = !bankTransferExpanded;
                               setState(() {});
                             },
-                            child: Text(e ?? "", style: TextStyle(fontSize: 18),)),
+                            child: Text(e ?? "", style: TextStyle(fontSize: 18,color: MyColors.primary),)),
                         Spacer(),
                         InkWell(
                             onTap: (){
@@ -81,7 +81,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                     ),
                   ),
                   children: widget.bayar.where((element) => element.metodeBayar == e).map((ev) =>  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: InkWell(
                       onTap: (){
                         widget.onSelectPayment(ev);
@@ -89,15 +89,27 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                       },
                       child: Row(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(ev.detail?.kode ?? "", style: TextStyle(fontSize: 16),),
-                              // Text("Rp.125.000",style: TextStyle(color: MyColors.grey_60),),
-                            ],
+                          Container(
+                            width: 50,
+                            height: 50,
+                            child: Image.network(ev.detail?.metodeBankLogo ?? "", width: 50, errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                              return Center(
+                                child: Container(
+                                  child: Text("No Image", style: TextStyle(fontSize: 7),),
+                                ),
+                              );
+                            },),
                           ),
-                          Spacer(),
-                          Image.asset(ev.detail?.metodeBankLogo ?? "", width: 50,),
+                          SizedBox(width: 5,),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(ev.detail?.kode ?? "", style: TextStyle(fontSize: 16),),
+                                // Text("Rp.125.000",style: TextStyle(color: MyColors.grey_60),),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),

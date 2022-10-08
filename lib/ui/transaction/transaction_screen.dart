@@ -49,8 +49,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
   final listFilter = <ItemFilter>[
     ItemFilter(1, 'Semua Tahun', false),
-    ItemFilter(2, 'Selesai', false),
-    ItemFilter(3, 'Menunggu Pembayaran', false),
+    // ItemFilter(2, 'Selesai', false),
+    // ItemFilter(3, 'Menunggu Pembayaran', false),
   ];
 
   YearModel? selectedYear;

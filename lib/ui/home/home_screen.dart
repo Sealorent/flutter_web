@@ -40,8 +40,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  late StudentLoginResponse _user;
-  late PesantrenLoginResponse _pesantren;
+  StudentLoginResponse? _user;
+  PesantrenLoginResponse? _pesantren;
   bool _isLoading = true;
   InformationResponse? _informationResponse;
   late HomeBloc bloc;
@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> buildInformations(){
     return _informationResponse?.informasi?.take(3).map((e) {
-      print(e.detail?.image);
+
       return Column(
         children: [
           SizedBox(height: 15,),
@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: const Color(0xff7c94b6),
                           image: DecorationImage(
                             image: NetworkImage(
-                                e.detail?.image ?? ""),
+                                e.foto ?? ""),
                             fit: BoxFit.cover,
                           ),
                           borderRadius:
@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(e.detail?.judulInfo ?? "", style: TextStyle( fontSize: 18),),
+                            Text(e.judulInfo ?? "", style: TextStyle( fontSize: 18),),
                             SizedBox(height: 8,),
                             Text(DateFormat('dd-MM-yyyy').format(e.tanggal ?? DateTime.now()), style: TextStyle(color: Colors.black.withOpacity(0.6)),),
                           ],
@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _pesantren.namaPesantren ?? "",
+                            _pesantren?.namaPesantren ?? "",
                             style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
                           SizedBox(
@@ -198,12 +198,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    _user.nama ?? "",
+                                    _user?.nama ?? "",
                                     style: TextStyle(
                                         fontSize: 20, color: Colors.white),
                                   ),
                                   Text(
-                                    _user.kelas ?? "",
+                                    _user?.kelas ?? "",
                                     style: TextStyle(
                                         color: Colors.white.withOpacity(0.6)),
                                   ),
@@ -217,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: const Color(0xff7c94b6),
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                        _user.photo ?? ""),
+                                        _user?.photo ?? ""),
                                     fit: BoxFit.cover,
                                   ),
                                   borderRadius:

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -189,6 +190,86 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
     )).toList() ?? [];
   }
 
+  List<Widget> buildBulananWidget(){
+    return _bulananResponse?.detail?.map((e) => Column(
+      children: [
+        TreeViewChild(
+            startExpanded : true,
+            parent: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                        onTap: (){
+                          sppExpanded = !sppExpanded;
+                          setState(() {});
+                        },
+                        child: Text(e.detailBulan?.row ?? "", style: TextStyle(fontSize: 18,color: MyColors.primary),)),
+                  ),
+                  InkWell(
+                      onTap: (){
+                        sppExpanded = !sppExpanded;
+                        setState(() {});
+                      },
+                      child: sppExpanded ? Icon(Icons.keyboard_arrow_down_sharp)
+                          : Icon(Icons.keyboard_arrow_right_sharp)
+                  )
+                ],
+              ),
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(NumberUtils.toRupiah((int.tryParse(e.detailBulan?.bulanBill ?? "0") ?? 0).toDouble()),style: TextStyle(color: MyColors.grey_60),),
+                      ],
+                    ),
+                    Spacer(),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0)
+                              )
+                          ),
+                          backgroundColor: e.detailBulan?.processPaid == false ? MaterialStateProperty.all(MyColors.primary) : MaterialStateProperty.all(Colors.white)
+                      ),
+                      onPressed: () async{
+                        setState(() {
+                          e.detailBulan?.processPaid = !(e.detailBulan?.processPaid ?? true);
+                        });
+                      },
+                      child:  Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              e.detailBulan?.processPaid == false ? "Bayar" : "Batalkan",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.apply(color: e.detailBulan?.processPaid == false ? Colors.white : Colors.red),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ]
+        ),
+        Divider(),
+      ],
+    )).toList() ?? [];
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -214,9 +295,12 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
           onRefresh: () async {
             getData();
           },
-          child: TreeView(
-            startExpanded: false,
-            children: widget.isBebas ? buildBebasWidget() : buildBebasWidget()
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 100),
+            child: TreeView(
+              startExpanded: false,
+              children: widget.isBebas ? buildBebasWidget() : buildBulananWidget()
+            ),
           ),
         ),
         bottomSheet: Container(
@@ -260,7 +344,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                       return;
                     }
                     bloc.add(BayarTagihan(param));
-                  }else if(_isBayarLoading != null){
+                  }else if(_bulananResponse != null){
                     var selectedList = _bulananResponse?.detail?.where((element) => element.detailBulan?.processPaid == true).toList() ?? [];
                     var bayarIds = selectedList.map((e) => int.tryParse(e.detailBulan?.bulanId ?? "") ?? 0).toList();
                     bayarIds.removeWhere((element) => element == 0);

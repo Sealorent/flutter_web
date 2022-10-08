@@ -12,6 +12,7 @@ import '../network_exception.dart';
 import '../param/edit_profile_param.dart';
 import '../param/login_param.dart';
 import '../response/login_response.dart';
+import '../response/setting_response.dart';
 
 
 abstract class AuthenticationRepository {
@@ -19,6 +20,8 @@ abstract class AuthenticationRepository {
 
   Future<StudentLoginResponse?> loginStudent(String nis, String password);
   Future<Object> editProfile(EditProfileParam param);
+  Future<SettingResponse> getSetting();
+  Future<Object> changePassword(String newPassword, String confirmNewPassword, String oldPassword);
 }
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
@@ -55,6 +58,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       if (statusCode == Constant.successCode) {
         var data = StudentLoginResponse.fromJson(response.data);
         if(data.isCorrect == true){
+          await getSetting();
           return data;
         }else{
           throw ClientErrorException(statusMessage, statusCode);
@@ -99,6 +103,37 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     }
   }
 
+  @override
+  Future<Object> changePassword(String newPassword, String confirmNewPassword, String oldPassword) async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    var data = FormData.fromMap({
+      'student_nis': student.nis,
+      'kode_sekolah': pesantren.kodeSekolah,
+      'password_lama': oldPassword,
+      'password_baru': newPassword,
+      'konfirmasi_password': confirmNewPassword,
+    });
+    try {
+      final response = await _dioClient.post(Constant.changePassword, data: data);
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return true;
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      print("Gilang2 ${ex.message}");
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      print("Gilang1 ${e}");
+      throw Exception(e);
+    }
+  }
+
 
   @override
   Future<Object> editProfile(EditProfileParam param) async{
@@ -123,6 +158,31 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       throw ClientErrorException(statusMessage, statusCode);
     } catch (e) {
       print("Gilang1 ${e}");
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<SettingResponse> getSetting() async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.get(Constant.setting, queryParameters: {
+        "kode_sekolah" : pesantren.kodeSekolah,
+        "nis": student.nis
+      });
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return SettingResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
       throw Exception(e);
     }
   }

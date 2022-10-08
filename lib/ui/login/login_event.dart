@@ -30,3 +30,14 @@ class EditProfile extends LoginEvent {
 
   EditProfile(this.param);
 }
+
+class ChangePassword extends LoginEvent {
+  @override
+  List<Object> get props => [];
+
+  String oldPass;
+  String newPass;
+  String confirmNewPass;
+
+  ChangePassword(this.oldPass,this.newPass, this.confirmNewPass);
+}

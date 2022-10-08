@@ -20,6 +20,7 @@ import 'package:pesantren_flutter/widget/social_media.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../network/response/pesantren_login_response.dart';
+import '../../network/response/setting_response.dart';
 import '../../network/response/student_login_response.dart';
 import '../../preferences/pref_data.dart';
 import '../../utils/screen_utils.dart';
@@ -125,8 +126,8 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  late StudentLoginResponse _user;
-  late PesantrenLoginResponse _pesantren;
+  StudentLoginResponse? _user;
+  PesantrenLoginResponse? _pesantren;
 
   Future<void> _getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -151,7 +152,21 @@ class _AccountScreenState extends State<AccountScreen> {
   void initState() {
     _getPesantren();
     _getUser();
+    _getSetting();
     super.initState();
+  }
+
+  SettingResponse? _settingResponse;
+
+  Future<void> _getSetting() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var student = prefs.getString(PrefData.setting);
+    print("gilang $student");
+    var objectStudent = SettingResponse.fromJson(json.decode(student ?? ""));
+
+    setState(() {
+      _settingResponse = objectStudent;
+    });
   }
 
   @override
@@ -184,7 +199,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       color: const Color(0xff7c94b6),
                       image: DecorationImage(
                         image: NetworkImage(
-                            _user.photo ?? ""),
+                            _user?.photo ?? ""),
                         fit: BoxFit.cover,
                       ),
                       borderRadius:
@@ -201,19 +216,19 @@ class _AccountScreenState extends State<AccountScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _user.nama ?? "",
+                          _user?.nama ?? "",
                           style: TextStyle(
                               fontSize: 20),
                         ),
                         SizedBox(height: 5,),
                         Text(
-                          "NIS : ${_user.nis ?? ""}",
+                          "NIS : ${_user?.nis ?? ""}",
                           style: TextStyle(
                               color: Colors.black.withOpacity(0.6)),
                         ),
                         SizedBox(height: 5,),
                         Text(
-                          _user.kelas ?? "",
+                          _user?.kelas ?? "",
                           style: TextStyle(
                               color: Colors.black.withOpacity(0.6)),
                         ),
@@ -309,6 +324,22 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             Divider(),
             InkWell(
+              onTap: () async {
+                widget.alice?.showInspector();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                child: Row(
+                  children: [
+                    Text("Inspeksi API"),
+                    Spacer(),
+                    Icon(Icons.keyboard_arrow_right, size: 20,)
+                  ],
+                ),
+              ),
+            ),
+            Divider(),
+            InkWell(
               onTap: (){
                 _logoutBottomSheetMenu();
               },
@@ -345,7 +376,7 @@ class _AccountScreenState extends State<AccountScreen> {
             SizedBox(height: 40,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SocialMedia(),
+              child: SocialMedia(_settingResponse,context),
             )
           ],
         ),

@@ -4,14 +4,17 @@ import 'package:pesantren_flutter/ui/payment_method/payment_method_screen.dart';
 import 'package:pesantren_flutter/utils/my_snackbar.dart';
 import 'package:pesantren_flutter/utils/screen_utils.dart';
 import 'package:pesantren_flutter/network/response/ringkasan_response.dart';
+import 'package:pesantren_flutter/widget/progress_loading.dart';
 
 class PaymentMethod extends StatelessWidget {
   BuildContext context;
   List<Bayar> bayar;
   Bayar? selectedPembayaran;
   Function(Bayar) onSelectPayment;
+  Function continueClicked;
+  bool isLoading;
 
-  PaymentMethod(this.context, this.bayar, this.selectedPembayaran,this.onSelectPayment );
+  PaymentMethod(this.context, this.bayar, this.selectedPembayaran,this.onSelectPayment,this.continueClicked,this.isLoading );
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +36,21 @@ class PaymentMethod extends StatelessWidget {
                 onSelectPayment(payment);
               }));
             },
-            child: selectedPembayaran == null ? Text("Pilih pembayaran") : Row(
+            child: selectedPembayaran == null ? Row(
               children: [
-                Image.asset(selectedPembayaran?.detail?.metodeBankLogo ?? "", width: 50,),
+                Text("Pilih"),
+                Spacer(),
+                Icon(Icons.keyboard_arrow_right_sharp)
+              ],
+            ) : Row(
+              children: [
+                Image.network(selectedPembayaran?.detail?.metodeBankLogo ?? "", width: 50, errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                  return Center(
+                    child: Container(
+                      child: Text("No Image", style: TextStyle(fontSize: 7),),
+                    ),
+                  );
+                }),
                 SizedBox(width: 10,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +65,7 @@ class PaymentMethod extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10,),
-          ElevatedButton(
+          isLoading ? ProgressLoading() : ElevatedButton(
             style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
@@ -59,7 +74,7 @@ class PaymentMethod extends StatelessWidget {
                 )
             ),
             onPressed: () async{
-              MySnackbar(context).errorSnackbar("Proses development");
+              continueClicked();
             },
             child:  Row(
               mainAxisAlignment: MainAxisAlignment.center,

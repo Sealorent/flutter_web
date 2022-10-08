@@ -62,3 +62,17 @@ class EditProfileLoading extends LoginState {
   @override
   List<Object?> get props => [];
 }
+
+class ChangePasswordSuccess extends LoginState {
+  ChangePasswordSuccess();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class ChangePasswordLoading extends LoginState {
+  ChangePasswordLoading();
+
+  @override
+  List<Object?> get props => [];
+}

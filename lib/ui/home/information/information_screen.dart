@@ -94,7 +94,7 @@ class _InformationScreenState extends State<InformationScreen> {
                         color: const Color(0xff7c94b6),
                         image: DecorationImage(
                           image: NetworkImage(
-                              e.detail?.image ?? ""),
+                              e.foto ?? ""),
                           fit: BoxFit.cover,
                         ),
                         borderRadius:
@@ -106,7 +106,7 @@ class _InformationScreenState extends State<InformationScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(e.detail?.judulInfo ?? "", style: TextStyle( fontSize: 18),),
+                          Text(e.judulInfo ?? "", style: TextStyle( fontSize: 18),),
                           SizedBox(height: 8,),
                           Text(DateFormat('dd-MM-yyyy').format(e.tanggal ?? DateTime.now()), style: TextStyle(color: Colors.black.withOpacity(0.6)),),
                         ],

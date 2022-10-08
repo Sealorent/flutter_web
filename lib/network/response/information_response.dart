@@ -28,39 +28,19 @@ class InformationResponse {
 class Informasi {
   Informasi({
     this.tanggal,
-    this.detail,
+    this.judulInfo,
+    this.foto,
   });
 
   DateTime? tanggal;
-  Detail? detail;
+  String? judulInfo;
+  String? foto;
 
   factory Informasi.fromJson(Map<String, dynamic> json) => Informasi(
-    tanggal: DateTime.now(),
-    detail: Detail.fromJson(json["detail"]),
-  );
-
-}
-
-class Detail {
-  Detail({
-    this.judulInfo,
-    this.image,
-    this.detailInfo,
-  });
-
-  String? judulInfo;
-  String? image;
-  String? detailInfo;
-
-  factory Detail.fromJson(Map<String, dynamic> json) => Detail(
+    tanggal: DateTime.parse(json["tanggal"]),
     judulInfo: json["judul_info"],
-    image: json["foto"] == null ? null : json["foto"],
-    detailInfo: json["detail_info"],
+    foto: json["foto"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "judul_info": judulInfo,
-    "image": image == null ? null : image,
-    "detail_info": detailInfo,
-  };
+
 }

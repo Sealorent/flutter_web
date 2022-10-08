@@ -1,6 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:pesantren_flutter/network/param/bayar_param.dart';
 
+import '../../network/param/ipaymu_param.dart';
+import '../../network/param/top_up_tabungan_param.dart';
+
 abstract class PaymentEvent extends Equatable {}
 
 class GetPayment extends PaymentEvent {
@@ -55,4 +58,32 @@ class GetRingkasan extends PaymentEvent {
   List<Object> get props => [];
 
   GetRingkasan(this.noIpaymu);
+}
+
+
+class InsertIpaymu extends PaymentEvent {
+  IpaymuParam ipaymu;
+
+  @override
+  List<Object> get props => [];
+
+  InsertIpaymu(this.ipaymu);
+}
+
+class GetCaraPembayaran extends PaymentEvent {
+  IpaymuParam? ipaymu;
+
+  @override
+  List<Object> get props => [];
+
+  GetCaraPembayaran(this.ipaymu);
+}
+
+class TopUpTabungan extends PaymentEvent {
+  TopUpTabunganParam param;
+
+  @override
+  List<Object> get props => [];
+
+  TopUpTabungan(this.param);
 }
