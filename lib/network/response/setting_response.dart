@@ -22,7 +22,7 @@ class SettingResponse {
   }
 
   String getTelegram(){
-    return laporan?.firstWhereOrNull((element) => element.settingWhatsapp != null)?.settingWhatsapp ?? "";
+    return laporan?.firstWhereOrNull((element) => element.settingTelegram != null)?.settingTelegram ?? "";
   }
 
   String getInstagram(){
@@ -77,6 +77,7 @@ class Laporan {
     this.settingInstagram,
     this.settingYoutube,
     this.settingPackage,
+    this.settingTelegram
   });
 
   String? settingAktivasi;
@@ -87,6 +88,7 @@ class Laporan {
   String? settingInstagram;
   String? settingYoutube;
   String? settingPackage;
+  String? settingTelegram;
 
   factory Laporan.fromJson(Map<String, dynamic> json) => Laporan(
     settingAktivasi: json["setting_aktivasi"] == null ? null : json["setting_aktivasi"],
@@ -97,6 +99,7 @@ class Laporan {
     settingInstagram: json["setting_instagram"] == null ? null : json["setting_instagram"],
     settingYoutube: json["setting_youtube"] == null ? null : json["setting_youtube"],
     settingPackage: json["setting_package"] == null ? null : json["setting_package"],
+    settingTelegram: json["setting_telegram"] == null ? null : json["setting_telegram"],
   );
 
   Map<String, dynamic> toJson() => {

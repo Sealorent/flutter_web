@@ -55,9 +55,9 @@ class _BantuanScreenState extends State<BantuanScreen> {
   }
 
   _launchTelegram() async {
-    String url = _settingResponse?.getWhatsapp() ?? "";
+    String url = _settingResponse?.getTelegram() ?? "";
     if(url.isEmpty) {
-      MySnackbar(context).errorSnackbar("Nomor whatsapp belum di setting.");
+      MySnackbar(context).errorSnackbar("Telegram belum di setting.");
       return;
     }
     var telegramAndroid =Uri.parse(url);
