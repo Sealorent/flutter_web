@@ -22,7 +22,8 @@ class SettingResponse {
   }
 
   String getTelegram(){
-    return laporan?.firstWhereOrNull((element) => element.settingTelegram != null)?.settingTelegram ?? "";
+    var url = laporan?.firstWhereOrNull((element) => element.settingTelegram != null)?.settingTelegram ?? "";
+    return url.replaceAll("t.me", "telegram.me");
   }
 
   String getInstagram(){
@@ -111,5 +112,6 @@ class Laporan {
     "setting_instagram": settingInstagram == null ? null : settingInstagram,
     "setting_youtube": settingYoutube == null ? null : settingYoutube,
     "setting_package": settingPackage == null ? null : settingPackage,
+    "setting_telegram" : settingTelegram == null ? null : settingTelegram
   };
 }

@@ -61,7 +61,7 @@ class _BantuanScreenState extends State<BantuanScreen> {
       return;
     }
     var telegramAndroid =Uri.parse(url);
-    await launchUrl(telegramAndroid);
+    await launchUrl(telegramAndroid, mode: LaunchMode.externalApplication);
   }
 
 

@@ -17,7 +17,7 @@ class SocialMedia extends StatelessWidget {
         _settingResponse?.getWeb() ?? "";
     if(url.isEmpty) MySnackbar(context).errorSnackbar("Url web belum di setting.");
     var telegramAndroid =Uri.parse(url);
-    await launchUrl(telegramAndroid);
+    await launchUrl(telegramAndroid, mode: LaunchMode.externalApplication);
   }
 
   _launchFb() async {
@@ -25,7 +25,7 @@ class SocialMedia extends StatelessWidget {
         _settingResponse?.getFacebook() ?? "";
     if(url.isEmpty) MySnackbar(context).errorSnackbar("Url facebook belum di setting.");
     var telegramAndroid =Uri.parse(url);
-    await launchUrl(telegramAndroid);
+    await launchUrl(telegramAndroid, mode: LaunchMode.externalApplication);
   }
 
   _launchInsta() async {
@@ -33,7 +33,7 @@ class SocialMedia extends StatelessWidget {
         _settingResponse?.getInstagram() ?? "";
     if(url.isEmpty) MySnackbar(context).errorSnackbar("Url instagram belum di setting.");
     var telegramAndroid =Uri.parse(url);
-    await launchUrl(telegramAndroid);
+    await launchUrl(telegramAndroid, mode: LaunchMode.externalApplication);
   }
 
   _launchYoutube() async {
@@ -41,7 +41,7 @@ class SocialMedia extends StatelessWidget {
         _settingResponse?.getYoutube() ?? "";
     if(url.isEmpty) MySnackbar(context).errorSnackbar("Url youtube belum di setting.");
     var telegramAndroid =Uri.parse(url);
-    await launchUrl(telegramAndroid);
+    await launchUrl(telegramAndroid, mode: LaunchMode.externalApplication);
   }
 
   @override
