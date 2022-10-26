@@ -117,6 +117,16 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }
+
+    if (event is UnduhTagihan) {
+      try {
+        yield UnduhTagihanLoading();
+        var resp = await repository.unduhTagihan();
+        yield UnduhTagihanSuccess(resp);
+      } catch (e) {
+        yield FailedState("Login gagal, silahkan coba lagi", 0);
+      }
+    }
   }
 
 }

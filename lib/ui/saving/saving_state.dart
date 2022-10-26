@@ -39,3 +39,18 @@ class GetSavingLoading extends SavingState {
   @override
   List<Object?> get props => [];
 }
+
+class TopUpSuccess extends SavingState {
+
+  TopUpSuccess();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class TopUpLoading extends SavingState {
+  TopUpLoading();
+
+  @override
+  List<Object?> get props => [];
+}

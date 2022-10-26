@@ -87,3 +87,10 @@ class TopUpTabungan extends PaymentEvent {
 
   TopUpTabungan(this.param);
 }
+
+class UnduhTagihan extends PaymentEvent {
+  @override
+  List<Object> get props => [];
+
+  UnduhTagihan();
+}

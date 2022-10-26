@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:pesantren_flutter/network/response/base_response.dart';
 import 'package:pesantren_flutter/network/response/cara_pembayaran_response.dart';
 import 'package:pesantren_flutter/network/response/history_response.dart';
 import 'package:pesantren_flutter/network/response/mudif_response.dart';
@@ -181,6 +182,23 @@ class TopUpTabunganSuccess extends PaymentState {
   TopUpTabunganResponse response;
 
   TopUpTabunganSuccess(this.response);
+
+  @override
+  List<Object?> get props => [];
+}
+
+class UnduhTagihanLoading extends PaymentState {
+  UnduhTagihanLoading();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class UnduhTagihanSuccess extends PaymentState {
+
+  BaseResponse response;
+
+  UnduhTagihanSuccess(this.response);
 
   @override
   List<Object?> get props => [];

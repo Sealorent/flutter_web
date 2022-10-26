@@ -39,4 +39,5 @@ class Constant {
   static const String ipaymu = "/insert_ipaymu.php";
   static const String caraBayar = "/cara_pembayaran.php";
   static const String topupTabungan = "/top_up_tabungan.php";
+  static const String unduhTagihan = "/unduh_tagihan.php";
 }

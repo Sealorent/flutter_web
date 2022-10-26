@@ -37,6 +37,34 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
     });
   }
 
+  Future<List<String>> _getKodePesantren() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var pesantren = prefs.getStringList(PrefData.kodePesantren);
+    return pesantren ?? [];
+  }
+
+  Future<void> saveKodePesantren(String kPesantren) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var kodepesantrens = await _getKodePesantren();
+    kodepesantrens.add(kPesantren);
+    kodepesantrens = kodepesantrens.toSet().toList();
+    prefs.setStringList(PrefData.kodePesantren, kodepesantrens);
+  }
+
+  Future<List<String>> _getKodeStudent() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var pesantren = prefs.getStringList(PrefData.nisSantri);
+    return pesantren ?? [];
+  }
+
+  Future<void> saveKodeStudnet(String kPesantren) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var kodepesantrens = await _getKodeStudent();
+    kodepesantrens.add(kPesantren);
+    kodepesantrens = kodepesantrens.toSet().toList();
+    prefs.setStringList(PrefData.nisSantri, kodepesantrens);
+  }
+
   PesantrenLoginResponse? _pesantrenLoginResponse;
   bool _passwordVisible = false;
   TextEditingController nisController = TextEditingController();
@@ -132,24 +160,70 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                       ],
                     ),
                     SizedBox(height: 40,),
-                    TextFormField(
-                      controller: pesantrenController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'Kode Pesantren',
-                        border: OutlineInputBorder(),
+                    TypeAheadFormField(
+                      textFieldConfiguration: TextFieldConfiguration(
+                        controller: pesantrenController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 16.0),
+                            hintText: 'Pesantren',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
                       ),
+                      suggestionsCallback: (pattern) async {
+                        return await _getKodePesantren();
+                      },
+                      itemBuilder: (context, suggestion) {
+                        return ListTile(
+                          title: Text(suggestion?.toString() ?? ""),
+                        );
+                      },
+                      transitionBuilder: (context, suggestionsBox, controller) {
+                        return suggestionsBox;
+                      },
+                      onSuggestionSelected: (suggestion) {
+                        if(suggestion != null){
+                          pesantrenController.text = suggestion.toString();
+                        }
+                      },
+                      validator: (value) {
+                        // if (value.isEmpty) {
+                        //   return 'Please select a city';
+                        // }
+                      },
                     ),
                     SizedBox(
                       height: 15,
                     ),
-                    TextFormField(
-                      controller: nisController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'NIS Santri',
-                        border: OutlineInputBorder(),
+                    TypeAheadFormField(
+                      textFieldConfiguration: TextFieldConfiguration(
+                        controller: nisController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 16.0),
+                            hintText: 'NIS Santri',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
                       ),
+                      suggestionsCallback: (pattern) async {
+                        return await _getKodeStudent();
+                      },
+                      itemBuilder: (context, suggestion) {
+                        return ListTile(
+                          title: Text(suggestion?.toString() ?? ""),
+                        );
+                      },
+                      transitionBuilder: (context, suggestionsBox, controller) {
+                        return suggestionsBox;
+                      },
+                      onSuggestionSelected: (suggestion) {
+                        if(suggestion != null){
+                          nisController.text = suggestion.toString();
+                        }
+                      },
+                      validator: (value) {
+                        // if (value.isEmpty) {
+                        //   return 'Please select a city';
+                        // }
+                      },
                     ),
                     SizedBox(
                       height: 15,
@@ -191,6 +265,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                           )
                       ),
                       onPressed: () async {
+                        print("gglang");
                         var nis = nisController.text;
                         var password = passwordController.text;
                         if(nis.isEmpty){
@@ -201,6 +276,8 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                           MySnackbar(context).errorSnackbar("Password tidak boleh kosong");
                           return;
                         }
+                        await saveKodeStudnet(nis);
+                        await saveKodePesantren(pesantrenController.text);
                         bloc.add(LoginPesantren(pesantrenController.text));
                       },
                       child:  Padding(
@@ -220,7 +297,12 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                       ),
                     ),
                     SizedBox(height: 15,),
-                    Center(child: Text("Hapus riwayat", style: TextStyle(color: MyColors.primary),)),
+                    InkWell(
+                        onTap: () async{
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          prefs.clear();
+                        },
+                        child: Center(child: Text("Hapus riwayat", style: TextStyle(color: MyColors.primary),))),
                     SizedBox(height: 20,),
                     Divider(),
                     SizedBox(height: 20,),

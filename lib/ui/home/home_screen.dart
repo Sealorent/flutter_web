@@ -392,7 +392,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Lihat semua"),
+                      // Text("Lihat semua"),
                       SizedBox(width: 5,),
                     ],
                   ),

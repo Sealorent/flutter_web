@@ -9,12 +9,16 @@ class TopUpTabunganParam {
 
   TopUpTabunganParam({this.student_nis, this.kode_sekolah, this.nominal, this.catatan});
 
-  Future<FormData?> toFormData() async {
+  FormData? toFormData() {
       return FormData.fromMap({
         'student_nis': student_nis,
         'kode_sekolah': kode_sekolah,
         'nominal' : nominal,
         'catatan' :catatan
       });
+  }
+
+  bool isValid(){
+    return nominal?.isNotEmpty == true;
   }
 }

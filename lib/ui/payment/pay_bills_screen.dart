@@ -112,7 +112,9 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
   }
 
   List<Widget> buildBebasWidget(){
-    return _bebasResponse?.detail?.map((e) => Column(
+    return _bebasResponse?.detail
+        ?.where((element) => element.detailBulan?.sisa != 0)
+        .map((e) => Column(
       children: [
         TreeViewChild(
             startExpanded : true,

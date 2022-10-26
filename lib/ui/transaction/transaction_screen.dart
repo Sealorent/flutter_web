@@ -251,7 +251,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                 child: InkWell(
                   onTap: (){
-                    ScreenUtils(context).navigateTo(TranscationDetailScreen());
+                    // SnackBar()
+                    // ScreenUtils(context).navigateTo(TranscationDetailScreen());
                   },
                   child: Column(
                     children: _response?.laporan?.where((element) {

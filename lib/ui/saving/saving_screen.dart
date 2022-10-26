@@ -13,6 +13,7 @@ import 'package:pesantren_flutter/ui/payment/pay_bills_screen.dart';
 import 'package:pesantren_flutter/ui/saving/saving_bloc.dart';
 import 'package:pesantren_flutter/ui/saving/saving_event.dart';
 import 'package:pesantren_flutter/ui/saving/saving_state.dart';
+import 'package:pesantren_flutter/ui/saving/saving_topup.dart';
 import 'package:pesantren_flutter/utils/number_utils.dart';
 import 'package:pesantren_flutter/utils/screen_utils.dart';
 import 'package:pesantren_flutter/widget/progress_loading.dart';
@@ -147,7 +148,9 @@ class _SavingScreenState extends State<SavingScreen> {
                                       )
                                   ),
                                   onPressed: () async{
-                                    // ScreenUtils(context).navigateTo(PayBillsScreen());
+                                    ScreenUtils(context).navigateTo(SavingTopUpScreen(), listener: (val){
+                                      if(val == 200) getData();
+                                    });
                                   },
                                   child:  Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 10),

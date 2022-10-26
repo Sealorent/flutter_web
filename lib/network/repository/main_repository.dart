@@ -61,6 +61,7 @@ abstract class MainRepository {
   Future<Object> insertIpaymu(IpaymuParam param);
   Future<CaraPembayaranResponse> getCaraPemabayaran(IpaymuParam param);
   Future<TopUpTabunganResponse> topUpTabungan(TopUpTabunganParam param);
+  Future<BaseResponse> unduhTagihan();
 }
 
 class MainRepositoryImpl extends MainRepository {
@@ -609,6 +610,31 @@ class MainRepositoryImpl extends MainRepository {
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
         return RingkasanResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<BaseResponse> unduhTagihan() async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.get(Constant.unduhTagihan, queryParameters: {
+        "kode_sekolah" : pesantren.kodeSekolah,
+        "nis": student.nis
+      });
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return BaseResponse.fromJson(response.data);
       } else {
         throw ClientErrorException(statusMessage, statusCode);
       }

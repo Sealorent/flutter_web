@@ -20,18 +20,34 @@ class EditProfileParam {
 
 
   Future<FormData?> toFormData() async {
-    return FormData.fromMap({
-      'student_nis': student_nis,
-      'kode_sekolah': kode_sekolah,
-      'nama_santri': nama_santri,
-      'alamat': alamat,
-      'tempatlahir': tempatlahir,
-      'tanggallahir': tanggallahir,
-      'nomorwa': nomorwa,
-      'gender': gender,
-      'ayah': ayah,
-      'ibu': ibu,
-      // 'student_img': await MultipartFile.fromFile(student_img ?? "",filename: '${DateTime.now().microsecondsSinceEpoch}profile.png')
-    });
+    if(student_img == null){
+      return FormData.fromMap({
+        'student_nis': student_nis,
+        'kode_sekolah': kode_sekolah,
+        'nama_santri': nama_santri,
+        'alamat': alamat,
+        'tempatlahir': tempatlahir,
+        'tanggallahir': tanggallahir,
+        'nomorwa': nomorwa,
+        'gender': gender,
+        'ayah': ayah,
+        'ibu': ibu,
+      });
+    }else{
+      return FormData.fromMap({
+        'student_nis': student_nis,
+        'kode_sekolah': kode_sekolah,
+        'nama_santri': nama_santri,
+        'alamat': alamat,
+        'tempatlahir': tempatlahir,
+        'tanggallahir': tanggallahir,
+        'nomorwa': nomorwa,
+        'gender': gender,
+        'ayah': ayah,
+        'ibu': ibu,
+        'student_img': await MultipartFile.fromFile(student_img ?? "",filename: '${DateTime.now().microsecondsSinceEpoch}profile.jpg')
+      });
+    }
+
   }
 }

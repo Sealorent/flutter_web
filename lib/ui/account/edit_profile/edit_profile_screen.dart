@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/network/param/edit_profile_param.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
@@ -32,6 +34,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   late LoginBloc bloc;
   bool _isLoading = false;
+  String? studentImagePath;
 
   void loginListener(BuildContext context, LoginState state) async {
     if (state is EditProfileLoading) {
@@ -129,6 +132,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     prefs.setString(PrefData.student, jsonEncode(_user.toJson()));
 
   }
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -168,28 +172,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               height: 20,
             ),
             Center(
-              child: Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: const Color(0xff7c94b6),
-                  image: DecorationImage(
-                    image: NetworkImage(_user.photo ?? ""),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.4),
-                    width: 4.0,
-                  ),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0),
                 ),
+                elevation: 0,
+                clipBehavior: Clip.antiAlias,
+                child: studentImagePath == null ? _user.photo?.contains("http") == true ? Image.network(_user.photo ?? "", width: 60, height: 60, fit: BoxFit.fill,) : Image.file(File(_user.photo ?? ""), width: 60, height: 60, fit: BoxFit.fill,) : Image.file(File(studentImagePath!), width: 60, height: 60, fit: BoxFit.fill,),
               ),
             ),
             SizedBox(
               height: 10,
             ),
             InkWell(
-              onTap: () {},
+              onTap: () async {
+                final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                setState(() {
+                  studentImagePath = image?.path;
+                });
+              },
               child: Center(
                 child: Text(
                   "Ganti foto profil",
@@ -371,7 +372,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 nomorwa: _phoneController.text.trim(),
                 gender: sexValue == 0 ? "L" : "P",
                 ayah: _ayahController.text.toString(),
-                ibu: _ibuController.text.toString()
+                ibu: _ibuController.text.toString(),
+                student_img: studentImagePath
               );
 
               _user.nama = _nameController.text.trim();
@@ -381,6 +383,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               _user.gender = sexValue == 0 ? "L" : "P";
               _user.ayah = _ayahController.text.toString();
               _user.ibu = _ibuController.text.toString();
+              _user.photo = studentImagePath;
 
               bloc.add(EditProfile(param));
             },

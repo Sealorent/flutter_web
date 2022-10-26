@@ -96,7 +96,11 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                         onPressed: () async{
                           SharedPreferences prefs = await SharedPreferences.getInstance();
-                          prefs.clear();
+                          prefs.remove(PrefData.pesantren);
+                          prefs.remove(PrefData.student);
+                          prefs.remove(PrefData.setting);
+                          prefs.remove(PrefData.role);
+
                           ScreenUtils(context).navigateTo(LoginUserScreen(), replaceScreen: true);
                         },
                         child:  Padding(
