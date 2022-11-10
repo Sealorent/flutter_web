@@ -148,9 +148,9 @@ class _SavingScreenState extends State<SavingScreen> {
                                       )
                                   ),
                                   onPressed: () async{
-                                    ScreenUtils(context).navigateTo(SavingTopUpScreen(), listener: (val){
-                                      if(val == 200) getData();
-                                    });
+                                    // ScreenUtils(context).navigateTo(SavingTopUpScreen(), listener: (val){
+                                    //   if(val == 200) getData();
+                                    // });
                                   },
                                   child:  Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 10),
