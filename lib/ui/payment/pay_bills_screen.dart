@@ -20,7 +20,7 @@ import 'package:pesantren_flutter/widget/progress_loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tree_view/tree_view.dart';
 
-import '../../network/response/bayar_bebas_response.dart';
+import '../../network/response/bayar_bebas_response.dart' as Bebas;
 import '../../network/response/bayar_bulanan_response.dart';
 import '../../utils/my_snackbar.dart';
 import '../transaction/model/item_filter_model.dart';
@@ -45,8 +45,9 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
   late PaymentBloc bloc;
   bool _isLoading = true;
   bool _isBayarLoading = false;
-  BayarBebasResponse? _bebasResponse;
+  Bebas.BayarBebasResponse? _bebasResponse;
   BayarBulananResponse? _bulananResponse;
+  TextEditingController _nominalController = TextEditingController();
 
   @override
   void initState() {
@@ -81,8 +82,8 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
     } else if (state is GetDetailBayarSuccess) {
       setState(() {
         _isLoading = false;
-        if(state.response is BayarBebasResponse){
-          _bebasResponse = state.response as BayarBebasResponse?;
+        if(state.response is Bebas.BayarBebasResponse){
+          _bebasResponse = state.response as Bebas.BayarBebasResponse?;
         }else{
           _bulananResponse = state.response as BayarBulananResponse?;
         }
@@ -109,6 +110,159 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
     }else{
       bloc.add(GetDetailPaymentBulanan());
     }
+  }
+
+  void _modalBebasInputSheetMenu(Bebas.Detail e){
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (builder){
+          var bottom = MediaQuery.of(context).viewInsets.bottom;
+
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom:  bottom
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 10,),
+                Center(
+                  child: Container(
+                    width: 50,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: MyColors.grey_20,
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(16.0)),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20,),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text("Pembayaran Bebas",style: TextStyle(color: Colors.black.withOpacity(0.4)),),
+                ),
+                SizedBox(height: 20,),
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: (){
+
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        child: Row(
+                          children: [
+                            Text(e.detailBulan?.bebas ?? "",style: TextStyle(fontSize: 18),),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          Text("Total Tagihan",style: TextStyle(fontSize: 14),),
+                          Spacer(),
+                          Text("${NumberUtils.toRupiah(double.tryParse(e.detailBulan?.bebasBill ?? "0") ?? 0)}",style: TextStyle(fontSize: 14),),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          Text("Sudah dibayar",style: TextStyle(fontSize: 14),),
+                          Spacer(),
+                          Text("${NumberUtils.toRupiah(double.tryParse(e.detailBulan?.bebasTotalPay ?? "0") ?? 0)}",style: TextStyle(fontSize: 14),),
+                        ],
+                      ),
+                    ),
+                    Divider(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          Text("Kekurangan",style: TextStyle(fontSize: 14, color: Colors.red),),
+                          Spacer(),
+                          Text("${NumberUtils.toRupiah(e.detailBulan?.sisa?.toDouble() ?? 0)}",style: TextStyle(fontSize: 14, color: Colors.red),),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 25,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextFormField(
+                        controller: _nominalController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Nominal',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text("Masukkan nominal yang ingin dibayar",style: TextStyle(fontSize: 14),),
+                    ),
+                    SizedBox(height: 15,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0)
+                                )
+                            ),
+                            backgroundColor: e.detailBulan?.processPaid == false ? MaterialStateProperty.all(MyColors.primary) : MaterialStateProperty.all(Colors.white)
+                        ),
+                        onPressed: () async{
+                          var nominal = double.tryParse(_nominalController.text.trim()) ?? 0;
+                          if(nominal != 0){
+                            setState(() {
+                              e.detailBulan?.processPaid = !(e.detailBulan?.processPaid ?? true);
+                              e.detailBulan?.nominalBayar = nominal;
+                            });
+                            Navigator.pop(context);
+                          }
+                        },
+                        child:  Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Bayar" ,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    ?.apply(color: Colors.white ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 70,)
+              ],
+            ),
+          );
+        }
+    );
   }
 
   List<Widget> buildBebasWidget(){
@@ -152,35 +306,47 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                       ],
                     ),
                     Spacer(),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0)
-                              )
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0)
+                                  )
+                              ),
+                              backgroundColor: e.detailBulan?.processPaid == false ? MaterialStateProperty.all(MyColors.primary) : MaterialStateProperty.all(Colors.white)
                           ),
-                          backgroundColor: e.detailBulan?.processPaid == false ? MaterialStateProperty.all(MyColors.primary) : MaterialStateProperty.all(Colors.white)
-                      ),
-                      onPressed: () async{
-                        setState(() {
-                          e.detailBulan?.processPaid = !(e.detailBulan?.processPaid ?? true);
-                        });
-                      },
-                      child:  Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              e.detailBulan?.processPaid == false ? "Bayar" : "Batalkan",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.apply(color: e.detailBulan?.processPaid == false ? Colors.white : Colors.red),
+                          onPressed: () async{
+                            if(e.detailBulan?.processPaid == false){
+                              _modalBebasInputSheetMenu(e);
+                            }else{
+                              setState(() {
+                                e.detailBulan?.processPaid = !(e.detailBulan?.processPaid ?? true);
+                                e.detailBulan?.nominalBayar = null;
+                              });
+                            }
+                          },
+                          child:  Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  e.detailBulan?.processPaid == false ? "Bayar" : "Batalkan",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      ?.apply(color: e.detailBulan?.processPaid == false ? Colors.white : Colors.red),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                        Visibility(
+                            visible:e.detailBulan?.nominalBayar != null ,
+                            child: Text("${NumberUtils.toRupiah(e.detailBulan?.nominalBayar ?? 0)}"))
+                      ],
                     )
                   ],
                 ),
@@ -251,6 +417,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            //nd
                             Text(
                               e.detailBulan?.processPaid == false ? "Bayar" : "Batalkan",
                               style: Theme.of(context)
@@ -333,7 +500,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                     var bayarIds = selectedList.map((e) => int.tryParse(e.detailBulan?.bebasId ?? "") ?? 0).toList();
                     bayarIds.removeWhere((element) => element == 0);
 
-                    var nominalIds = selectedList.map((e) => int.tryParse(e.detailBulan?.bebasBill ?? "") ?? 0).toList();
+                    var nominalIds = selectedList.map((e) => e.detailBulan?.nominalBayar?.toInt() ?? 0).toList();
                     nominalIds.removeWhere((element) => element == 0);
 
                     var param = BayarParam(
@@ -399,7 +566,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
     if (widget.isBebas) {
       var items = _bebasResponse?.detail?.where((element) =>
       element.detailBulan?.processPaid == true).toList() ?? [];
-      var ints = items.map((e) => (e.detailBulan?.sisa ?? 0).toDouble());
+      var ints = items.map((e) => (e.detailBulan?.nominalBayar ?? 0).toDouble());
       if(ints.isNotEmpty) {
         return ints.reduce((a, b) => a + b);
       } else {

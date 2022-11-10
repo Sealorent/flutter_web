@@ -49,6 +49,7 @@ class DetailBulan {
     this.bebasId,
     this.period,
     this.sisa,
+    this.nominalBayar
   });
 
   String? bebas;
@@ -58,6 +59,7 @@ class DetailBulan {
   String? period;
   int? sisa;
   bool processPaid = false;
+  double? nominalBayar = null;
 
   factory DetailBulan.fromJson(Map<String, dynamic> json) => DetailBulan(
     bebas: json["bebas"],
