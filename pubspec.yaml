@@ -36,6 +36,8 @@ dependencies:
   flutter_share: ^2.0.0
   image_picker: ^0.8.6
   open_file: ^3.2.1
+  get: ^4.6.5
+  pin_code_fields: ^7.4.0
 
 flutter_icons:
   android: "launcher_icon"
