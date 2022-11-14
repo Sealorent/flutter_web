@@ -16,8 +16,10 @@ class GetOtpController extends GetxController {
   TextEditingController inputKodeSekolah = TextEditingController();
   TextEditingController inputNis = TextEditingController();
   TextEditingController inputWa = TextEditingController();
+
   // ignore: non_constant_identifier_names
   void GetOtpMethod() async {
+    update();
     var req = dio.Dio();
     var data = {
       'kode_sekolah': inputKodeSekolah.text,
