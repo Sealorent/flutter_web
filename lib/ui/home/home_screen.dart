@@ -30,6 +30,7 @@ import '../../network/response/student_login_response.dart';
 import '../../preferences/pref_data.dart';
 import '../../utils/my_snackbar.dart';
 import '../../utils/screen_utils.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -105,67 +106,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> buildInformations() {
     return _informationResponse?.informasi?.take(3).map((e) {
-          return Column(
-            children: [
-              SizedBox(
-                height: 15,
-              ),
-              InkWell(
-                onTap: () {
-                  ScreenUtils(context).navigateTo(InformationDetailScreen(e));
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 70,
-                            decoration: BoxDecoration(
-                              color: const Color(0xff7c94b6),
-                              image: DecorationImage(
-                                image: NetworkImage(e.foto ?? ""),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8.0)),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  e.judulInfo ?? "",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  DateFormat('dd-MM-yyyy')
-                                      .format(e.tanggal ?? DateTime.now()),
-                                  style: TextStyle(
-                                      color: Colors.black.withOpacity(0.6)),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
+          return InkWell(
+            onTap: () {
+              ScreenUtils(context).navigateTo(InformationDetailScreen(e));
+            },
+            child: Container(
+              width: 300,
+              decoration: BoxDecoration(
+                color: const Color(0xff7c94b6),
+                image: DecorationImage(
+                  image: NetworkImage(e.foto ?? ""),
+                  fit: BoxFit.cover,
                 ),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
               ),
-            ],
+            ),
           );
         }).toList() ??
         [];
@@ -460,9 +415,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    Column(
-                      children: buildInformations(),
+                    SizedBox(
+                      height: 20,
                     ),
+                    CarouselSlider(
+                        items: buildInformations(),
+                        options: CarouselOptions(
+                          autoPlay: true,
+                          autoPlayAnimationDuration: const Duration(seconds: 1),
+                          aspectRatio: 2.0,
+                          enlargeCenterPage: true,
+                          enlargeStrategy: CenterPageEnlargeStrategy.height,
+                        )),
                     SizedBox(
                       height: 20,
                     ),
