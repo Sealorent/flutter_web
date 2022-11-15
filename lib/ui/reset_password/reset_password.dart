@@ -49,7 +49,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: Center(
-                        child: SvgPicture.asset("assets/My_password_amico.svg",
+                        child: SvgPicture.asset("assets/reset_pass.svg",
                             fit: BoxFit.cover,
                             height: MediaQuery.of(context).size.height * 0.3),
                       ),
@@ -113,7 +113,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     // Based on passwordVisible state choose the icon
-                                    _passwordVisible1
+                                    _passwordVisible2
                                         ? Icons.visibility
                                         : Icons.visibility_off,
                                     color: Colors.grey,
@@ -122,7 +122,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                     // Update the state i.e. toogle the state of passwordVisible variable
                                     setState(
                                       () {
-                                        _passwordVisible1 = !_passwordVisible1;
+                                        _passwordVisible2 = !_passwordVisible2;
                                       },
                                     );
                                   },

@@ -56,8 +56,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: Center(
-                        child: SvgPicture.asset(
-                            "assets/Two_factor_authentication_bro.svg",
+                        child: SvgPicture.asset("assets/lupa_pass.svg",
                             fit: BoxFit.cover,
                             height: MediaQuery.of(context).size.height * 0.3),
                       ),
