@@ -421,6 +421,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     CarouselSlider(
                         items: buildInformations(),
                         options: CarouselOptions(
+                          enableInfiniteScroll: false,
+                          reverse: true,
                           autoPlay: true,
                           autoPlayAnimationDuration: const Duration(seconds: 1),
                           aspectRatio: 2.0,
