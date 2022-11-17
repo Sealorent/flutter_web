@@ -48,7 +48,7 @@ class LupaPasswordController extends GetxController {
     if (res['is_correct'] == true) {
       Get.snackbar("Berhasil", "Password Anda berhasil direset",
           backgroundColor: Colors.green);
-      Get.offAll(const LoginUserScreen());
+      Get.offAll( LoginUserScreen());
     } else {
       Get.snackbar("Gagal", "Data Yang Dimasukkan Salah",
           backgroundColor: Colors.red);

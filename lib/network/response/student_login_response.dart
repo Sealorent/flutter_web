@@ -57,7 +57,7 @@ class StudentLoginResponse {
     ayah: json["ayah"],
     gender: json["gender"],
     tempatlahir: json["tempatlahir"],
-    tanggallahir: DateTime.tryParse(json["tanggallahir"]),
+    tanggallahir: json["tanggallahir"] == null ? null : DateTime.tryParse(json["tanggallahir"]),
     kelasId: json["kelas_id"],
     kelas: json["kelas"],
     majorsId: json["majors_id"],

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -104,6 +105,53 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  List<Widget> buildSliders(){
+    return _informationResponse?.informasi?.map((item) => InkWell(
+      onTap: (){
+        ScreenUtils(context).navigateTo(InformationDetailScreen(item));
+      },
+      child: Container(
+        child: Container(
+          margin: EdgeInsets.all(5.0),
+          child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              child: Stack(
+                children: <Widget>[
+                  Image.network(item.foto ?? "", fit: BoxFit.cover, width: 1000.0),
+                  // Positioned(
+                  //   bottom: 0.0,
+                  //   left: 0.0,
+                  //   right: 0.0,
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //       gradient: LinearGradient(
+                  //         colors: [
+                  //           Color.fromARGB(200, 0, 0, 0),
+                  //           Color.fromARGB(0, 0, 0, 0)
+                  //         ],
+                  //         begin: Alignment.bottomCenter,
+                  //         end: Alignment.topCenter,
+                  //       ),
+                  //     ),
+                  //     padding: EdgeInsets.symmetric(
+                  //         vertical: 10.0, horizontal: 20.0),
+                  //     child: Text(
+                  //       '${item.tanggal.toString()}',
+                  //       style: TextStyle(
+                  //         color: Colors.white,
+                  //         fontSize: 20.0,
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              )),
+        ),
+      ),
+    )).toList() ?? [];
+  }
+
   List<Widget> buildInformations(){
     return _informationResponse?.informasi?.take(3).map((e) {
 
@@ -194,22 +242,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Row(
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _user?.nama ?? "",
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
-                                  ),
-                                  Text(
-                                    _user?.kelas ?? "",
-                                    style: TextStyle(
-                                        color: Colors.white.withOpacity(0.6)),
-                                  ),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _user?.nama ?? "",
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white),
+                                    ),
+                                    Text(
+                                      _user?.kelas ?? "",
+                                      style: TextStyle(
+                                          color: Colors.white.withOpacity(0.6)),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              Spacer(),
                               Container(
                                 width: 70,
                                 height: 70,
@@ -365,24 +414,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text("Informasi", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                     Spacer(),
-                    InkWell(
-                      onTap: (){
-                        ScreenUtils(context).navigateTo(InformationScreen());
-                      },
-                      child: Row(
-                        children: [
-                          Text("Lihat semua"),
-                          SizedBox(width: 5,),
-                          Icon(Icons.arrow_forward_ios, color: MyColors.grey_60, size: 20,)
-                        ],
-                      ),
-                    )
+                    // InkWell(
+                    //   onTap: (){
+                    //     ScreenUtils(context).navigateTo(InformationScreen());
+                    //   },
+                    //   child: Row(
+                    //     children: [
+                    //       Text("Lihat semua"),
+                    //       SizedBox(width: 5,),
+                    //       Icon(Icons.arrow_forward_ios, color: MyColors.grey_60, size: 20,)
+                    //     ],
+                    //   ),
+                    // )
                   ],
                 ),
               ),
-              Column(
-                children: buildInformations(),
+              SizedBox(height: 10,),
+              Container(
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    aspectRatio: 2.0,
+                    enlargeCenterPage: true,
+                  ),
+                  items: buildSliders(),
+                ),
               ),
+              // Column(
+              //   children: buildInformations(),
+              // ),
               SizedBox(height: 20,),
               Center(
                 child: InkWell(
@@ -392,7 +452,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Text("Lihat semua"),
+                      Text("Lihat semua"),
                       SizedBox(width: 5,),
                     ],
                   ),

@@ -101,7 +101,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           prefs.remove(PrefData.setting);
                           prefs.remove(PrefData.role);
 
-                          ScreenUtils(context).navigateTo(LoginUserScreen(), replaceScreen: true);
+                          ScreenUtils(context).navigateTo(LoginUserScreen(alice: widget.alice,), replaceScreen: true);
                         },
                         child:  Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),

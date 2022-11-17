@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:alice_lightweight/alice.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,7 +23,9 @@ import 'login_bloc.dart';
 import 'login_state.dart';
 
 class LoginUserScreen extends StatefulWidget {
-  const LoginUserScreen({Key? key}) : super(key: key);
+  Alice? alice;
+
+  LoginUserScreen({this.alice});
 
   @override
   State<LoginUserScreen> createState() => _LoginUserScreenState();
@@ -88,7 +91,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
     } else if (state is LoginSuccess) {
       setState(() {
         _isLoading = false;
-        ScreenUtils(context).navigateTo(DashboardScreen(null));
+        ScreenUtils(context).navigateTo(DashboardScreen(widget.alice));
       });
     } else if (state is LoginPesantrenSuccess) {
       bloc.add(LoginStudent(nisController.text, passwordController.text));
