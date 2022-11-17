@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/forgot_password/forgot_password_controller.dart';
+import 'package:pesantren_flutter/widget/progress_loading.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -13,6 +14,8 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+  bool isLoadingPassword = false;
+  // ignore: prefer_final_fields
   @override
   void initState() {
     Get.put(GetOtpController());
@@ -53,8 +56,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: Center(
-                        child: SvgPicture.asset(
-                            "assets/Two_factor_authentication_bro.svg",
+                        child: SvgPicture.asset("assets/lupa_pass.svg",
                             fit: BoxFit.cover,
                             height: MediaQuery.of(context).size.height * 0.3),
                       ),
@@ -131,28 +133,29 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       height: 30,
                     ),
                     // ignore: avoid_unnecessary_containers
-                    Container(
-                      child: Center(
-                        child: Column(
-                          children: [
-                            ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            MyColors.primary),
-                                    shape: MaterialStateProperty.resolveWith<
-                                        OutlinedBorder>((_) {
-                                      return RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20));
-                                    })),
-                                onPressed: () {
-                                  _.GetOtpMethod();
-                                },
-                                child: const Text("Verifiasi")),
-                            const SizedBox(height: 5),
-                          ],
-                        ),
+                    Center(
+                      child: Column(
+                        children: [
+                          isLoadingPassword
+                              ? ProgressLoading()
+                              : ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              MyColors.primary),
+                                      shape: MaterialStateProperty.resolveWith<
+                                          OutlinedBorder>((_) {
+                                        return RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20));
+                                      })),
+                                  onPressed: () {
+                                    isLoadingPassword = true;
+                                    _.GetOtpMethod();
+                                  },
+                                  child: const Text("Verifikasi")),
+                          const SizedBox(height: 5),
+                        ],
                       ),
                     ),
                   ],

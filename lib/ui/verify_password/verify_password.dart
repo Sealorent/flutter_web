@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/verify_password/verify_password_controller.dart';
+import 'package:pesantren_flutter/widget/progress_loading.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 // ignore: must_be_immutable
@@ -16,6 +17,7 @@ class GetOtp extends StatefulWidget {
 }
 
 class _GetOtpState extends State<GetOtp> {
+  bool isLoading = false;
   @override
   void initState() {
     Get.put(VerifyOtpController());
@@ -63,19 +65,23 @@ class _GetOtpState extends State<GetOtp> {
               Center(
                 child: Column(
                   children: [
-                    ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                MyColors.primary),
-                            shape: MaterialStateProperty.resolveWith<
-                                OutlinedBorder>((_) {
-                              return RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20));
-                            })),
-                        onPressed: () {
-                          _.GetOtp('${widget.kodeSekolah}', '${widget.nis}');
-                        },
-                        child: const Text("Verifikasi")),
+                    isLoading
+                        ? ProgressLoading()
+                        : ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        MyColors.primary),
+                                shape: MaterialStateProperty.resolveWith<
+                                    OutlinedBorder>((_) {
+                                  return RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20));
+                                })),
+                            onPressed: () {
+                              _.GetOtp(
+                                  '${widget.kodeSekolah}', '${widget.nis}');
+                            },
+                            child: const Text("Verifikasi")),
                     const SizedBox(height: 5),
                   ],
                 ),

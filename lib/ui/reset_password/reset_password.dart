@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/reset_password/reset_password_controller.dart';
+import 'package:pesantren_flutter/widget/progress_loading.dart';
 
 // ignore: must_be_immutable
 class ResetPassword extends StatefulWidget {
@@ -18,6 +19,8 @@ class ResetPassword extends StatefulWidget {
 
 class _ResetPasswordState extends State<ResetPassword> {
   bool _passwordVisible1 = false;
+  bool _passwordVisible2 = false;
+  bool isLoading = false;
   @override
   void initState() {
     Get.put(LupaPasswordController());
@@ -46,7 +49,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: Center(
-                        child: SvgPicture.asset("assets/My_password_amico.svg",
+                        child: SvgPicture.asset("assets/reset_pass.svg",
                             fit: BoxFit.cover,
                             height: MediaQuery.of(context).size.height * 0.3),
                       ),
@@ -102,7 +105,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                             ),
                             TextFormField(
                               controller: _.inputPassword,
-                              obscureText: !_passwordVisible1,
+                              obscureText: !_passwordVisible2,
                               decoration: InputDecoration(
                                 labelText: 'Konfirmasi Password yang Baru',
                                 hintText: "Konfirmasi Password yang Baru",
@@ -110,7 +113,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     // Based on passwordVisible state choose the icon
-                                    _passwordVisible1
+                                    _passwordVisible2
                                         ? Icons.visibility
                                         : Icons.visibility_off,
                                     color: Colors.grey,
@@ -119,7 +122,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                     // Update the state i.e. toogle the state of passwordVisible variable
                                     setState(
                                       () {
-                                        _passwordVisible1 = !_passwordVisible1;
+                                        _passwordVisible2 = !_passwordVisible2;
                                       },
                                     );
                                   },
@@ -138,22 +141,24 @@ class _ResetPasswordState extends State<ResetPassword> {
                       child: Center(
                         child: Column(
                           children: [
-                            ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            MyColors.primary),
-                                    shape: MaterialStateProperty.resolveWith<
-                                        OutlinedBorder>((_) {
-                                      return RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20));
-                                    })),
-                                onPressed: () {
-                                  _.ResetPass(
-                                      '${widget.nis}', '${widget.kodeSekolah}');
-                                },
-                                child: const Text("Verifikasi")),
+                            isLoading
+                                ? ProgressLoading()
+                                : ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                MyColors.primary),
+                                        shape: MaterialStateProperty
+                                            .resolveWith<OutlinedBorder>((_) {
+                                          return RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20));
+                                        })),
+                                    onPressed: () {
+                                      _.ResetPass('${widget.nis}',
+                                          '${widget.kodeSekolah}');
+                                    },
+                                    child: const Text("Verifikasi")),
                             const SizedBox(height: 5),
                           ],
                         ),

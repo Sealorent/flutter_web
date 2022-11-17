@@ -31,6 +31,7 @@ import '../../network/response/student_login_response.dart';
 import '../../preferences/pref_data.dart';
 import '../../utils/my_snackbar.dart';
 import '../../utils/screen_utils.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -40,7 +41,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   StudentLoginResponse? _user;
   PesantrenLoginResponse? _pesantren;
   bool _isLoading = true;
@@ -50,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var student = prefs.getString(PrefData.student);
-    var objectStudent = StudentLoginResponse.fromJson(json.decode(student ?? ""));
+    var objectStudent =
+        StudentLoginResponse.fromJson(json.decode(student ?? ""));
 
     setState(() {
       _user = objectStudent;
@@ -72,7 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
         _isLoading = true;
       });
     } else if (state is GetInformationSuccess) {
-
       setState(() {
         _isLoading = false;
         _informationResponse = state.response;
@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _getData(){
+  void _getData() {
     bloc.add(GetInformation());
   }
 
@@ -152,315 +152,415 @@ class _HomeScreenState extends State<HomeScreen> {
     )).toList() ?? [];
   }
 
-  List<Widget> buildInformations(){
+  List<Widget> buildInformations() {
     return _informationResponse?.informasi?.take(3).map((e) {
-
-      return Column(
-        children: [
-          SizedBox(height: 15,),
-          InkWell(
-            onTap: (){
+          return InkWell(
+            onTap: () {
               ScreenUtils(context).navigateTo(InformationDetailScreen(e));
             },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 100,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: const Color(0xff7c94b6),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                e.foto ?? ""),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(8.0)),
-                        ),
-                      ),
-                      SizedBox(width: 10,),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(e.judulInfo ?? "", style: TextStyle( fontSize: 18),),
-                            SizedBox(height: 8,),
-                            Text(DateFormat('dd-MM-yyyy').format(e.tanggal ?? DateTime.now()), style: TextStyle(color: Colors.black.withOpacity(0.6)),),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                ],
+            child: Container(
+              width: 300,
+              decoration: BoxDecoration(
+                color: const Color(0xff7c94b6),
+                image: DecorationImage(
+                  image: NetworkImage(e.foto ?? ""),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
               ),
             ),
-          ),
-        ],
-      );
-    }).toList() ?? [];
+          );
+        }).toList() ??
+        [];
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return BlocListener<HomeBloc, HomeState>(
-        listener: listener,
+      listener: listener,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: RefreshIndicator(
           onRefresh: () async {
             _getData();
           },
-          child: _isLoading ? ProgressLoading() : ListView(
-            children: [
-              Stack(
-                children: [
-                  SizedBox(
-                    width: size.width,
-                    child: SvgPicture.asset("assets/background_mosque.svg",
-                        fit: BoxFit.fill),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _pesantren?.namaPesantren ?? "",
-                            style: TextStyle(fontSize: 16, color: Colors.white),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: _isLoading
+              ? ProgressLoading()
+              : ListView(
+                  children: [
+                    Stack(
+                      children: [
+                        SizedBox(
+                          width: size.width,
+                          child: SvgPicture.asset(
+                              "assets/background_mosque.svg",
+                              fit: BoxFit.fill),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 25),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _pesantren?.namaPesantren ?? "",
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.white),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
                                   children: [
-                                    Text(
-                                      _user?.nama ?? "",
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.white),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            _user?.nama ?? "",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
+                                          ),
+                                          Text(
+                                            _user?.kelas ?? "",
+                                            style: TextStyle(
+                                                color: Colors.white
+                                                    .withOpacity(0.6)),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    Text(
-                                      _user?.kelas ?? "",
-                                      style: TextStyle(
-                                          color: Colors.white.withOpacity(0.6)),
+                                    Container(
+                                      width: 70,
+                                      height: 70,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xff7c94b6),
+                                        image: DecorationImage(
+                                          image:
+                                              NetworkImage(_user?.photo ?? ""),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(50.0)),
+                                        border: Border.all(
+                                          color: Colors.white.withOpacity(0.4),
+                                          width: 4.0,
+                                        ),
+                                      ),
                                     ),
                                   ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              ScreenUtils(context).navigateTo(PaymentScreen());
+                            },
+                            child: Column(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/ic_bayar.svg",
+                                  width: 50,
                                 ),
-                              ),
-                              Container(
-                                width: 70,
-                                height: 70,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xff7c94b6),
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                        _user?.photo ?? ""),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(50.0)),
-                                  border: Border.all(
-                                    color: Colors.white.withOpacity(0.4),
-                                    width: 4.0,
-                                  ),
+                                SizedBox(
+                                  height: 5,
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
+                                Text("Bayar\n")
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              ScreenUtils(context).navigateTo(SavingScreen());
+                            },
+                            child: Column(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/ic_tabungan.svg",
+                                  width: 50,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text("Tabungan\n")
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              ScreenUtils(context).navigateTo(TahfidzScreen());
+                            },
+                            child: Column(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/ic_tahfidz.svg",
+                                  width: 50,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text("Tafidz\n")
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              ScreenUtils(context)
+                                  .navigateTo(RekamMedisScreen());
+                            },
+                            child: Column(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/ic_rekam_medis.svg",
+                                  width: 50,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text("Rekam\nMedis")
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15,),
-              Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: (){
-                        ScreenUtils(context).navigateTo(PaymentScreen());
-                      },
-                      child: Column(
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              ScreenUtils(context)
+                                  .navigateTo(KonselingScreen());
+                            },
+                            child: Column(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/ic_conseling.svg",
+                                  width: 50,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text("Konseling")
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              ScreenUtils(context).navigateTo(IzinScreen());
+                            },
+                            child: Column(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/ic_izin.svg",
+                                  width: 50,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text("Izin")
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              ScreenUtils(context).navigateTo(MudifScreen());
+                            },
+                            child: Column(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/ic_mudif.svg",
+                                  width: 50,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text("Mudif")
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              ScreenUtils(context).navigateTo(PresensiScreen());
+                            },
+                            child: Column(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/ic_presensi.svg",
+                                  width: 50,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text("Presensi")
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
                         children: [
-                          SvgPicture.asset("assets/ic_bayar.svg", width: 50,),
-                          SizedBox(height: 5,),
-                          Text("Bayar\n")
+                          Text(
+                            "Informasi",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          Spacer(),
+                          // InkWell(
+                          //   onTap: () {
+                          //     ScreenUtils(context)
+                          //         .navigateTo(InformationScreen());
+                          //   },
+                          //   child: Row(
+                          //     children: [
+                          //       Text("Lihat semua"),
+                          //       SizedBox(
+                          //         width: 5,
+                          //       ),
+                          //       Icon(
+                          //         Icons.arrow_forward_ios,
+                          //         color: MyColors.grey_60,
+                          //         size: 20,
+                          //       )
+                          //     ],
+                          //   ),
+                          // )
                         ],
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: (){
-                        ScreenUtils(context).navigateTo(SavingScreen());
-                      },
-                      child: Column(
-                        children: [
-                          SvgPicture.asset("assets/ic_tabungan.svg", width: 50,),
-                          SizedBox(height: 5,),
-                          Text("Tabungan\n")
-                        ],
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CarouselSlider(
+                        items: buildInformations(),
+                        options: CarouselOptions(
+                          enableInfiniteScroll: false,
+                          reverse: true,
+                          autoPlay: true,
+                          autoPlayAnimationDuration: const Duration(seconds: 1),
+                          aspectRatio: 2.0,
+                          enlargeCenterPage: true,
+                          enlargeStrategy: CenterPageEnlargeStrategy.height,
+                        )),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: InkWell(
+                        onTap: () {
+                          ScreenUtils(context).navigateTo(InformationScreen());
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Lihat semua"),
+                            SizedBox(
+                              width: 5,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: (){
-                        ScreenUtils(context).navigateTo(TahfidzScreen());
-                      },
-                      child: Column(
-                        children: [
-                          SvgPicture.asset("assets/ic_tahfidz.svg", width: 50,),
-                          SizedBox(height: 5,),
-                          Text("Tafidz\n")
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: (){
-                        ScreenUtils(context).navigateTo(RekamMedisScreen());
-                      },
-                      child: Column(
-                        children: [
-                          SvgPicture.asset("assets/ic_rekam_medis.svg", width: 50,),
-                          SizedBox(height: 5,),
-                          Text("Rekam\nMedis")
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15,),
-              Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap : (){
-                        ScreenUtils(context).navigateTo(KonselingScreen());
-                      },
-                      child: Column(
-                        children: [
-                          SvgPicture.asset("assets/ic_conseling.svg", width: 50,),
-                          SizedBox(height: 5,),
-                          Text("Konseling")
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap : (){
-                        ScreenUtils(context).navigateTo(IzinScreen());
-                      },
-                      child: Column(
-                        children: [
-                          SvgPicture.asset("assets/ic_izin.svg", width: 50,),
-                          SizedBox(height: 5,),
-                          Text("Izin")
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: (){
-                        ScreenUtils(context).navigateTo(MudifScreen());
-                      },
-                      child: Column(
-                        children: [
-                          SvgPicture.asset("assets/ic_mudif.svg", width: 50,),
-                          SizedBox(height: 5,),
-                          Text("Mudif")
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: (){
-                        ScreenUtils(context).navigateTo(PresensiScreen());
-                      },
-                      child: Column(
-                        children: [
-                          SvgPicture.asset("assets/ic_presensi.svg", width: 50,),
-                          SizedBox(height: 5,),
-                          Text("Presensi")
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 50,),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    Text("Informasi", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                    Spacer(),
-                    // InkWell(
-                    //   onTap: (){
-                    //     ScreenUtils(context).navigateTo(InformationScreen());
-                    //   },
-                    //   child: Row(
-                    //     children: [
-                    //       Text("Lihat semua"),
-                    //       SizedBox(width: 5,),
-                    //       Icon(Icons.arrow_forward_ios, color: MyColors.grey_60, size: 20,)
-                    //     ],
-                    //   ),
-                    // )
+// <<<<<<< HEAD
+//                   ),
+//                 ],
+//               ),
+//               SizedBox(height: 50,),
+//               Padding(
+//                 padding: EdgeInsets.symmetric(horizontal: 20),
+//                 child: Row(
+//                   children: [
+//                     Text("Informasi", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+//                     Spacer(),
+//                     // InkWell(
+//                     //   onTap: (){
+//                     //     ScreenUtils(context).navigateTo(InformationScreen());
+//                     //   },
+//                     //   child: Row(
+//                     //     children: [
+//                     //       Text("Lihat semua"),
+//                     //       SizedBox(width: 5,),
+//                     //       Icon(Icons.arrow_forward_ios, color: MyColors.grey_60, size: 20,)
+//                     //     ],
+//                     //   ),
+//                     // )
+//                   ],
+//                 ),
+//               ),
+//               SizedBox(height: 10,),
+//               Container(
+//                 child: CarouselSlider(
+//                   options: CarouselOptions(
+//                     autoPlay: true,
+//                     aspectRatio: 2.0,
+//                     enlargeCenterPage: true,
+//                   ),
+//                   items: buildSliders(),
+//                 ),
+//               ),
+//               // Column(
+//               //   children: buildInformations(),
+//               // ),
+//               SizedBox(height: 20,),
+//               Center(
+//                 child: InkWell(
+//                   onTap: (){
+//                     ScreenUtils(context).navigateTo(InformationScreen());
+//                   },
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: [
+//                       Text("Lihat semua"),
+//                       SizedBox(width: 5,),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//               SizedBox(height: 100,)
+//             ],
+//           ),
+// =======
+                    SizedBox(
+                      height: 100,
+                    )
                   ],
                 ),
-              ),
-              SizedBox(height: 10,),
-              Container(
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    autoPlay: true,
-                    aspectRatio: 2.0,
-                    enlargeCenterPage: true,
-                  ),
-                  items: buildSliders(),
-                ),
-              ),
-              // Column(
-              //   children: buildInformations(),
-              // ),
-              SizedBox(height: 20,),
-              Center(
-                child: InkWell(
-                  onTap: (){
-                    ScreenUtils(context).navigateTo(InformationScreen());
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Lihat semua"),
-                      SizedBox(width: 5,),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 100,)
-            ],
-          ),
         ),
       ),
     );
