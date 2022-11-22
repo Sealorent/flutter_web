@@ -24,15 +24,14 @@ class ViewProfileScreen extends StatefulWidget {
 }
 
 class _ViewProfileScreenState extends State<ViewProfileScreen> {
-
-
   late StudentLoginResponse _user;
   late PesantrenLoginResponse _pesantren;
 
   Future<void> _getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var student = prefs.getString(PrefData.student);
-    var objectStudent = StudentLoginResponse.fromJson(json.decode(student ?? ""));
+    var objectStudent =
+        StudentLoginResponse.fromJson(json.decode(student ?? ""));
 
     setState(() {
       _user = objectStudent;
@@ -82,7 +81,10 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
         ],
         centerTitle: true,
         elevation: 0,
-        title: Text("Profil", style: TextStyle(color: Colors.white),),
+        title: Text(
+          "Profil",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       backgroundColor: Colors.white,
       body: RefreshIndicator(
@@ -92,7 +94,9 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
         },
         child: ListView(
           children: [
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Center(
               child: Container(
                 width: 60,
@@ -100,12 +104,10 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                 decoration: BoxDecoration(
                   color: const Color(0xff7c94b6),
                   image: DecorationImage(
-                    image: NetworkImage(
-                        _user.photo ?? ""),
+                    image: NetworkImage(_user.photo ?? ""),
                     fit: BoxFit.cover,
                   ),
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(50.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(50.0)),
                   border: Border.all(
                     color: Colors.white.withOpacity(0.4),
                     width: 4.0,
@@ -113,16 +115,18 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Center(
               child: Text(
                 _user.nama ?? "",
-                style: TextStyle(
-                    fontSize: 20
-                ),
+                style: TextStyle(fontSize: 20),
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               color: MyColors.grey_10,
               padding: EdgeInsets.symmetric(vertical: 10),
@@ -131,47 +135,89 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                 child: Text("Data Santri"),
               ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("NIS", style: TextStyle(color: MyColors.grey_60),),
+              child: Text(
+                "NIS",
+                style: TextStyle(color: MyColors.grey_60),
+              ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(_user.nis ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(
+                _user.nis ?? "",
+                style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+              ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("KELAS", style: TextStyle(color: MyColors.grey_60),),
+              child: Text(
+                "KELAS",
+                style: TextStyle(color: MyColors.grey_60),
+              ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(_user.kelas ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(
+                _user.kelas ?? "",
+                style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+              ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("UNIT", style: TextStyle(color: MyColors.grey_60),),
+              child: Text(
+                "UNIT",
+                style: TextStyle(color: MyColors.grey_60),
+              ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(_pesantren.namaPesantren ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(
+                _pesantren.namaPesantren ?? "",
+                style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+              ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("MADIN", style: TextStyle(color: MyColors.grey_60),),
+              child: Text(
+                "MADIN",
+                style: TextStyle(color: MyColors.grey_60),
+              ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("-", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(
+                '-',
+                style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+              ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               color: MyColors.grey_10,
               padding: EdgeInsets.symmetric(vertical: 10),
@@ -180,37 +226,69 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                 child: Text("Data Pribadi"),
               ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("TEMPAT TANGGAL LAHIR", style: TextStyle(color: MyColors.grey_60),),
+              child: Text(
+                "TEMPAT TANGGAL LAHIR",
+                style: TextStyle(color: MyColors.grey_60),
+              ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("${_user.tempatlahir ?? ""}, ${DateFormat("dd MMM yyyy").format(_user.tanggallahir ?? DateTime.now()) }", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(
+                "${_user.tempatlahir ?? ""}, ${DateFormat("dd MMM yyyy").format(_user.tanggallahir ?? DateTime.now())}",
+                style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+              ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("JENIS KELAMIN", style: TextStyle(color: MyColors.grey_60),),
+              child: Text(
+                "JENIS KELAMIN",
+                style: TextStyle(color: MyColors.grey_60),
+              ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(_user.gender == "L" ? "Laki-laki" : "Perempuan", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(
+                _user.gender == "L" ? "Laki-laki" : "Perempuan",
+                style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+              ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("ALAMAT", style: TextStyle(color: MyColors.grey_60),),
+              child: Text(
+                "ALAMAT",
+                style: TextStyle(color: MyColors.grey_60),
+              ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("-", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(
+                "-",
+                style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+              ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               color: MyColors.grey_10,
               padding: EdgeInsets.symmetric(vertical: 10),
@@ -219,39 +297,69 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                 child: Text("Data Keluarga"),
               ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("NAMA AYAH", style: TextStyle(color: MyColors.grey_60),),
+              child: Text(
+                "NAMA AYAH",
+                style: TextStyle(color: MyColors.grey_60),
+              ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(_user.ayah ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(
+                _user.ayah ?? "",
+                style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+              ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("NAMA IBU", style: TextStyle(color: MyColors.grey_60),),
+              child: Text(
+                "NAMA IBU",
+                style: TextStyle(color: MyColors.grey_60),
+              ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(_user.ibu ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(
+                _user.ibu ?? "",
+                style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+              ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("NO. WHATSAPP ORANG TUA", style: TextStyle(color: MyColors.grey_60),),
+              child: Text(
+                "NO. WHATSAPP ORANG TUA",
+                style: TextStyle(color: MyColors.grey_60),
+              ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(_user.phone ?? "", style: TextStyle(color: MyColors.grey_80, fontSize: 16),),
+              child: Text(
+                _user.phone ?? "",
+                style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+              ),
             ),
-
-
-            SizedBox(height: 150,)
+            SizedBox(
+              height: 150,
+            )
           ],
         ),
       ),
