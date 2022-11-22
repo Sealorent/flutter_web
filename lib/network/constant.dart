@@ -43,4 +43,5 @@ class Constant {
   static const String getOtp = "/get_otp.php";
   static const String veriftOtp = "/verify_otp.php";
   static const String resetPassword = "/reset_password.php";
+  static const String konfirmasi = "/info_upload_pembayaran.php";
 }

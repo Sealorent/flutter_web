@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:pesantren_flutter/network/repository/authentication_repository.dart';
 import 'package:pesantren_flutter/network/response/information_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
@@ -15,6 +17,8 @@ import 'package:pesantren_flutter/ui/home/home_state.dart';
 import 'package:pesantren_flutter/ui/home/information/information_detail.dart';
 import 'package:pesantren_flutter/ui/home/information/information_screen.dart';
 import 'package:pesantren_flutter/ui/izin/izin_screen.dart';
+import 'package:pesantren_flutter/ui/konfirmasi/controller_konfirmasi.dart';
+import 'package:pesantren_flutter/ui/konfirmasi/konfirmasi.dart';
 import 'package:pesantren_flutter/ui/konseling/konseling_screen.dart';
 import 'package:pesantren_flutter/ui/mudif/mudif_screen.dart';
 import 'package:pesantren_flutter/ui/payment/main/payment_screen.dart';
@@ -101,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _getData();
     _getUser();
     _getPesantren();
+    Get.put(KonfirmasiController());
     super.initState();
   }
 
@@ -124,6 +129,92 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }).toList() ??
         [];
+  }
+
+  void _otherBottomSheetMenu() {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        builder: (builder) {
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: SizedBox(
+                height: 150,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Lainnya"),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            ScreenUtils(context).navigateTo(PresensiScreen());
+                          },
+                          child: Column(
+                            children: [
+                              SvgPicture.asset(
+                                "assets/ic_presensi.svg",
+                                width: 50,
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text("Presensi")
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        GetBuilder<KonfirmasiController>(
+                            initState: (state) =>
+                                KonfirmasiController.to.getKonfirmasi(),
+                            builder: (_) {
+                              return InkWell(
+                                  onTap: () {
+                                    _.getKonfirmasi();
+                                    Get.to(const Konfirmasi());
+                                  },
+                                  child: SizedBox(
+                                    width: 95,
+                                    child: Column(children: [
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            "assets/ic_tabungan.svg",
+                                            width: 50,
+                                            color: MyColors.primary
+                                                .withOpacity(0.1),
+                                          ),
+                                          const Icon(
+                                            Icons.account_balance,
+                                            color: Colors.green,
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text('Konfirmasi')
+                                    ]),
+                                  ));
+                            }),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -167,25 +258,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          _user?.nama ?? "",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white),
-                                        ),
-                                        Text(
-                                          _user?.kelas ?? "",
-                                          style: TextStyle(
-                                              color: Colors.white
-                                                  .withOpacity(0.6)),
-                                        ),
-                                      ],
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            _user?.nama ?? "",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
+                                          ),
+                                          Text(
+                                            _user?.kelas ?? "",
+                                            style: TextStyle(
+                                                color: Colors.white
+                                                    .withOpacity(0.6)),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    Spacer(),
                                     Container(
                                       width: 70,
                                       height: 70,
@@ -276,10 +368,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Expanded(
                           child: InkWell(
-                            onTap: () {
-                              ScreenUtils(context)
-                                  .navigateTo(RekamMedisScreen());
-                            },
+                            onTap: () {},
                             child: Column(
                               children: [
                                 SvgPicture.asset(
@@ -362,18 +451,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              ScreenUtils(context).navigateTo(PresensiScreen());
+                              _otherBottomSheetMenu();
                             },
                             child: Column(
                               children: [
-                                SvgPicture.asset(
-                                  "assets/ic_presensi.svg",
-                                  width: 50,
+                                Icon(
+                                  Icons.more_horiz,
+                                  size: 50,
                                 ),
                                 SizedBox(
                                   height: 5,
                                 ),
-                                Text("Presensi")
+                                Text("Lainnya")
                               ],
                             ),
                           ),
