@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isLoggedIn) {
         ScreenUtils(context).navigateTo(DashboardScreen(widget.alice), replaceScreen: true);
       } else {
-        ScreenUtils(context).navigateTo(LoginUserScreen(), replaceScreen: true);
+        ScreenUtils(context).navigateTo(LoginUserScreen(alice: widget.alice,), replaceScreen: true);
       }
     }
 

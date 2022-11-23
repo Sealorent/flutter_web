@@ -40,4 +40,8 @@ class Constant {
   static const String caraBayar = "/cara_pembayaran.php";
   static const String topupTabungan = "/top_up_tabungan.php";
   static const String unduhTagihan = "/unduh_tagihan.php";
+  static const String getOtp = "/get_otp.php";
+  static const String veriftOtp = "/verify_otp.php";
+  static const String resetPassword = "/reset_password.php";
+  static const String konfirmasi = "/info_upload_pembayaran.php";
 }

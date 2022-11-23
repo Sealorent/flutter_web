@@ -13,14 +13,21 @@ class EditProfileParam {
   String? ibu;
   String? student_img;
 
-
-  EditProfileParam({this.student_nis, this.kode_sekolah, this.nama_santri,
-      this.alamat, this.tempatlahir, this.tanggallahir, this.nomorwa,
-      this.gender, this.ayah, this.ibu, this.student_img});
-
+  EditProfileParam(
+      {this.student_nis,
+      this.kode_sekolah,
+      this.nama_santri,
+      this.alamat,
+      this.tempatlahir,
+      this.tanggallahir,
+      this.nomorwa,
+      this.gender,
+      this.ayah,
+      this.ibu,
+      this.student_img});
 
   Future<FormData?> toFormData() async {
-    if(student_img == null){
+    if (student_img == null) {
       return FormData.fromMap({
         'student_nis': student_nis,
         'kode_sekolah': kode_sekolah,
@@ -33,7 +40,7 @@ class EditProfileParam {
         'ayah': ayah,
         'ibu': ibu,
       });
-    }else{
+    } else {
       return FormData.fromMap({
         'student_nis': student_nis,
         'kode_sekolah': kode_sekolah,
@@ -45,9 +52,9 @@ class EditProfileParam {
         'gender': gender,
         'ayah': ayah,
         'ibu': ibu,
-        'student_img': await MultipartFile.fromFile(student_img ?? "",filename: '${DateTime.now().microsecondsSinceEpoch}profile.jpg')
+        'student_img': await MultipartFile.fromFile(student_img ?? "",
+            filename: '${DateTime.now().microsecondsSinceEpoch}profile.jpg')
       });
     }
-
   }
 }

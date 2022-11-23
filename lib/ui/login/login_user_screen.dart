@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:alice_lightweight/alice.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:get/instance_manager.dart';
 import 'package:pesantren_flutter/network/response/pesantren_login_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
+import 'package:pesantren_flutter/ui/forgot_password/forgot_password.dart';
 import 'package:pesantren_flutter/ui/login/login_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,14 +23,15 @@ import 'login_bloc.dart';
 import 'login_state.dart';
 
 class LoginUserScreen extends StatefulWidget {
-  const LoginUserScreen({Key? key}) : super(key: key);
+  Alice? alice;
+
+  LoginUserScreen({this.alice});
 
   @override
   State<LoginUserScreen> createState() => _LoginUserScreenState();
 }
 
 class _LoginUserScreenState extends State<LoginUserScreen> {
-
   Future<void> _getPesantren() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var pesantren = prefs.getString(PrefData.pesantren);
@@ -79,7 +83,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
         print("client:loading");
         _isLoading = true;
       });
-    }else if (state is LoginPesantrenLoading) {
+    } else if (state is LoginPesantrenLoading) {
       setState(() {
         print("client:loading");
         _isLoading = true;
@@ -87,7 +91,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
     } else if (state is LoginSuccess) {
       setState(() {
         _isLoading = false;
-        ScreenUtils(context).navigateTo(DashboardScreen(null));
+        ScreenUtils(context).navigateTo(DashboardScreen(widget.alice));
       });
     } else if (state is LoginPesantrenSuccess) {
       bloc.add(LoginStudent(nisController.text, passwordController.text));
@@ -96,8 +100,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
         _isLoading = false;
       });
       if (state.code == 401 || state.code == 0) {
-        MySnackbar(context)
-            .errorSnackbar("Login gagal, silahkan login ulang");
+        MySnackbar(context).errorSnackbar("Login gagal, silahkan login ulang");
         return;
       }
 
@@ -149,25 +152,39 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ListView(
                   children: [
-                    Image.asset("assets/circle_logo.png", height: 100,),
-                    SizedBox(height: 40,),
+                    Image.asset(
+                      "assets/circle_logo.png",
+                      height: 100,
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text("Assalamu’alaikum, selamat datang"),
-                        SizedBox(height: 10,),
-                        Text(_pesantrenLoginResponse?.namaPesantren ?? "", style: TextStyle(fontSize: 22),),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          _pesantrenLoginResponse?.namaPesantren ?? "",
+                          style: TextStyle(fontSize: 22),
+                        ),
                       ],
                     ),
-                    SizedBox(height: 40,),
+                    SizedBox(
+                      height: 40,
+                    ),
                     TypeAheadFormField(
                       textFieldConfiguration: TextFieldConfiguration(
                         controller: pesantrenController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                            errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 16.0),
+                            errorStyle: const TextStyle(
+                                color: Colors.redAccent, fontSize: 16.0),
                             hintText: 'Pesantren',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0))),
                       ),
                       suggestionsCallback: (pattern) async {
                         return await _getKodePesantren();
@@ -181,7 +198,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                         return suggestionsBox;
                       },
                       onSuggestionSelected: (suggestion) {
-                        if(suggestion != null){
+                        if (suggestion != null) {
                           pesantrenController.text = suggestion.toString();
                         }
                       },
@@ -199,9 +216,11 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                         controller: nisController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                            errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 16.0),
+                            errorStyle: const TextStyle(
+                                color: Colors.redAccent, fontSize: 16.0),
                             hintText: 'NIS Santri',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0))),
                       ),
                       suggestionsCallback: (pattern) async {
                         return await _getKodeStudent();
@@ -215,7 +234,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                         return suggestionsBox;
                       },
                       onSuggestionSelected: (suggestion) {
-                        if(suggestion != null){
+                        if (suggestion != null) {
                           nisController.text = suggestion.toString();
                         }
                       },
@@ -245,7 +264,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                           onPressed: () {
                             // Update the state i.e. toogle the state of passwordVisible variable
                             setState(
-                                  () {
+                              () {
                                 _passwordVisible = !_passwordVisible;
                               },
                             );
@@ -253,62 +272,97 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10,),
-                    Text("Lupa password?", style: TextStyle(color: MyColors.primary,), textAlign: TextAlign.end,),
-                    SizedBox(height: 20,),
-                    _isLoading ? ProgressLoading() : ElevatedButton(
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0)
-                              )
-                          )
-                      ),
-                      onPressed: () async {
-                        print("gglang");
-                        var nis = nisController.text;
-                        var password = passwordController.text;
-                        if(nis.isEmpty){
-                          MySnackbar(context).errorSnackbar("NIS tidak boleh kosong");
-                          return;
-                        }
-                        if(password.isEmpty){
-                          MySnackbar(context).errorSnackbar("Password tidak boleh kosong");
-                          return;
-                        }
-                        await saveKodeStudnet(nis);
-                        await saveKodePesantren(pesantrenController.text);
-                        bloc.add(LoginPesantren(pesantrenController.text));
-                      },
-                      child:  Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Lanjut",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.apply(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
+                    SizedBox(
+                      height: 10,
                     ),
-                    SizedBox(height: 15,),
                     InkWell(
-                        onTap: () async{
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                        onTap: () {
+                          Get.to(ForgotPassword());
+                        },
+                        child: Text(
+                          "Lupa password?",
+                          style: TextStyle(
+                            color: MyColors.primary,
+                          ),
+                          textAlign: TextAlign.end,
+                        )),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _isLoading
+                        ? ProgressLoading()
+                        : ElevatedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0)))),
+                            onPressed: () async {
+                              print("gglang");
+                              var nis = nisController.text;
+                              var password = passwordController.text;
+                              if (nis.isEmpty) {
+                                MySnackbar(context)
+                                    .errorSnackbar("NIS tidak boleh kosong");
+                                return;
+                              }
+                              if (password.isEmpty) {
+                                MySnackbar(context).errorSnackbar(
+                                    "Password tidak boleh kosong");
+                                return;
+                              }
+                              await saveKodeStudnet(nis);
+                              await saveKodePesantren(pesantrenController.text);
+                              bloc.add(
+                                  LoginPesantren(pesantrenController.text));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Lanjut",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2
+                                        ?.apply(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    InkWell(
+                        onTap: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
                           prefs.clear();
                         },
-                        child: Center(child: Text("Hapus riwayat", style: TextStyle(color: MyColors.primary),))),
-                    SizedBox(height: 20,),
+                        child: Center(
+                            child: Text(
+                          "Hapus riwayat",
+                          style: TextStyle(color: MyColors.primary),
+                        ))),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Divider(),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Center(child: Text("Butuh bantuan?")),
-                    SizedBox(height: 5,),
-                    Center(child: Text("Hubungi admin", style: TextStyle(color: MyColors.primary),)),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Center(
+                        child: Text(
+                      "Hubungi admin",
+                      style: TextStyle(color: MyColors.primary),
+                    )),
                   ],
                 ),
               ),
