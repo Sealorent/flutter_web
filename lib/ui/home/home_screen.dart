@@ -27,6 +27,7 @@ import 'package:pesantren_flutter/ui/presensi/presensi_screen.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_screen.dart';
 import 'package:pesantren_flutter/ui/saving/saving_screen.dart';
 import 'package:pesantren_flutter/ui/tahfidz/tahfidz_screen.dart';
+import 'package:pesantren_flutter/utils/show_image.dart';
 import 'package:pesantren_flutter/widget/progress_loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -110,51 +111,56 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  List<Widget> buildSliders(){
-    return _informationResponse?.informasi?.map((item) => InkWell(
-      onTap: (){
-        ScreenUtils(context).navigateTo(InformationDetailScreen(item));
-      },
-      child: Container(
-        child: Container(
-          margin: EdgeInsets.all(5.0),
-          child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              child: Stack(
-                children: <Widget>[
-                  Image.network(item.foto ?? "", fit: BoxFit.cover, width: 1000.0),
-                  // Positioned(
-                  //   bottom: 0.0,
-                  //   left: 0.0,
-                  //   right: 0.0,
-                  //   child: Container(
-                  //     decoration: BoxDecoration(
-                  //       gradient: LinearGradient(
-                  //         colors: [
-                  //           Color.fromARGB(200, 0, 0, 0),
-                  //           Color.fromARGB(0, 0, 0, 0)
-                  //         ],
-                  //         begin: Alignment.bottomCenter,
-                  //         end: Alignment.topCenter,
-                  //       ),
-                  //     ),
-                  //     padding: EdgeInsets.symmetric(
-                  //         vertical: 10.0, horizontal: 20.0),
-                  //     child: Text(
-                  //       '${item.tanggal.toString()}',
-                  //       style: TextStyle(
-                  //         color: Colors.white,
-                  //         fontSize: 20.0,
-                  //         fontWeight: FontWeight.bold,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              )),
-        ),
-      ),
-    )).toList() ?? [];
+  List<Widget> buildSliders() {
+    return _informationResponse?.informasi
+            ?.map((item) => InkWell(
+                  onTap: () {
+                    ScreenUtils(context)
+                        .navigateTo(InformationDetailScreen(item));
+                  },
+                  child: Container(
+                    child: Container(
+                      margin: EdgeInsets.all(5.0),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                          child: Stack(
+                            children: <Widget>[
+                              Image.network(item.foto ?? "",
+                                  fit: BoxFit.cover, width: 1000.0),
+                              // Positioned(
+                              //   bottom: 0.0,
+                              //   left: 0.0,
+                              //   right: 0.0,
+                              //   child: Container(
+                              //     decoration: BoxDecoration(
+                              //       gradient: LinearGradient(
+                              //         colors: [
+                              //           Color.fromARGB(200, 0, 0, 0),
+                              //           Color.fromARGB(0, 0, 0, 0)
+                              //         ],
+                              //         begin: Alignment.bottomCenter,
+                              //         end: Alignment.topCenter,
+                              //       ),
+                              //     ),
+                              //     padding: EdgeInsets.symmetric(
+                              //         vertical: 10.0, horizontal: 20.0),
+                              //     child: Text(
+                              //       '${item.tanggal.toString()}',
+                              //       style: TextStyle(
+                              //         color: Colors.white,
+                              //         fontSize: 20.0,
+                              //         fontWeight: FontWeight.bold,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                            ],
+                          )),
+                    ),
+                  ),
+                ))
+            .toList() ??
+        [];
   }
 
   List<Widget> buildInformations() {
@@ -326,21 +332,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ],
                                       ),
                                     ),
-                                    Container(
-                                      width: 70,
-                                      height: 70,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xff7c94b6),
-                                        image: DecorationImage(
-                                          image:
-                                              NetworkImage(_user?.photo ?? ""),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50.0)),
-                                        border: Border.all(
-                                          color: Colors.white.withOpacity(0.4),
-                                          width: 4.0,
+                                    InkWell(
+                                      onTap: () {
+                                        ScreenUtils(context).navigateTo(
+                                            ShowImage(_user?.photo ?? "",
+                                                _user?.nama ?? ""));
+                                      },
+                                      child: Container(
+                                        width: 70,
+                                        height: 70,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xff7c94b6),
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                                _user?.photo ?? ""),
+                                            fit: BoxFit.cover,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50.0)),
+                                          border: Border.all(
+                                            color:
+                                                Colors.white.withOpacity(0.4),
+                                            width: 4.0,
+                                          ),
                                         ),
                                       ),
                                     ),

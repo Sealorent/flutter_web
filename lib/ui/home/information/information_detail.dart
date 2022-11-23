@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,19 +19,22 @@ import 'package:pesantren_flutter/ui/payment/main/payment_screen.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_screen.dart';
 import 'package:pesantren_flutter/ui/saving/saving_screen.dart';
 import 'package:pesantren_flutter/ui/tahfidz/tahfidz_screen.dart';
+import 'package:pesantren_flutter/utils/show_image.dart';
 import 'package:pesantren_flutter/widget/progress_loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/my_snackbar.dart';
+import '../../../utils/screen_utils.dart';
 
 class InformationDetailScreen extends StatefulWidget {
-
   Informasi? informationResponse;
 
-  InformationDetailScreen(this.informationResponse, {Key? key}) : super(key: key);
+  InformationDetailScreen(this.informationResponse, {Key? key})
+      : super(key: key);
 
   @override
-  State<InformationDetailScreen> createState() => _InformationDetailScreenState();
+  State<InformationDetailScreen> createState() =>
+      _InformationDetailScreenState();
 }
 
 class _InformationDetailScreenState extends State<InformationDetailScreen> {
@@ -41,9 +43,9 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
         title: widget.informationResponse?.judulInfo ?? "",
         text: widget.informationResponse?.judulInfo ?? "",
         linkUrl: widget.informationResponse?.foto ?? "",
-        chooserTitle: widget.informationResponse?.judulInfo ?? ""
-    );
+        chooserTitle: widget.informationResponse?.judulInfo ?? "");
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -64,9 +66,14 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
           ),
         ),
         actions: [
-          IconButton(onPressed: (){
-            share();
-          }, icon: Icon(Icons.share, color: Colors.black54,))
+          IconButton(
+              onPressed: () {
+                share();
+              },
+              icon: Icon(
+                Icons.share,
+                color: Colors.black54,
+              ))
         ],
         centerTitle: true,
         elevation: 0,
@@ -75,34 +82,56 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
       backgroundColor: Colors.white,
       body: ListView(
         children: [
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              width: double.infinity,
-              height: 180,
-              decoration: BoxDecoration(
-                color: const Color(0xff7c94b6),
-                image: DecorationImage(
-                  image: NetworkImage(
-                      widget.informationResponse?.foto ?? ""),
-                  fit: BoxFit.cover,
+            child: InkWell(
+              onTap: () {
+                ScreenUtils(context).navigateTo(ShowImage(
+                    widget.informationResponse?.foto ?? "",
+                    widget.informationResponse?.judulInfo ?? ""));
+              },
+              child: Container(
+                width: double.infinity,
+                height: 180,
+                decoration: BoxDecoration(
+                  color: const Color(0xff7c94b6),
+                  image: DecorationImage(
+                    image: NetworkImage(widget.informationResponse?.foto ?? ""),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
                 ),
-                borderRadius:
-                BorderRadius.all(Radius.circular(8.0)),
               ),
             ),
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.informationResponse?.judulInfo ?? "", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                SizedBox(height: 10,),
-                Text(DateFormat("EEEE, dd MMM yyyy").format(widget.informationResponse?.tanggal ?? DateTime.now()) ?? "", style: TextStyle(color: Colors.black54),),
-                SizedBox(height: 5,),
+                Text(
+                  widget.informationResponse?.judulInfo ?? "",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  DateFormat("EEEE, dd MMM yyyy").format(
+                          widget.informationResponse?.tanggal ??
+                              DateTime.now()) ??
+                      "",
+                  style: TextStyle(color: Colors.black54),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
               ],
             ),
           ),

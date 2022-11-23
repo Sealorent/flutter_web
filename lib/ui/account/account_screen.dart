@@ -24,6 +24,7 @@ import '../../network/response/setting_response.dart';
 import '../../network/response/student_login_response.dart';
 import '../../preferences/pref_data.dart';
 import '../../utils/screen_utils.dart';
+import '../../utils/show_image.dart';
 
 class AccountScreen extends StatefulWidget {
   Alice? alice;
@@ -212,19 +213,25 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff7c94b6),
-                      image: DecorationImage(
-                        image: NetworkImage(_user?.photo ?? ""),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.4),
-                        width: 4.0,
+                  InkWell(
+                    onTap: () {
+                      ScreenUtils(context).navigateTo(
+                          ShowImage(_user?.photo ?? "", _user?.nama ?? ""));
+                    },
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: const Color(0xff7c94b6),
+                        image: DecorationImage(
+                          image: NetworkImage(_user?.photo ?? ""),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.4),
+                          width: 4.0,
+                        ),
                       ),
                     ),
                   ),
