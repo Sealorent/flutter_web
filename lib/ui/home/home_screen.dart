@@ -430,7 +430,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Expanded(
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              ScreenUtils(context)
+                                  .navigateTo(RekamMedisScreen());
+                            },
                             child: Column(
                               children: [
                                 SvgPicture.asset(

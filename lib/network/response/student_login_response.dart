@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-StudentLoginResponse studentLoginResponseFromJson(String str) => StudentLoginResponse.fromJson(json.decode(str));
+StudentLoginResponse studentLoginResponseFromJson(String str) =>
+    StudentLoginResponse.fromJson(json.decode(str));
 
-String studentLoginResponseToJson(StudentLoginResponse data) => json.encode(data.toJson());
+String studentLoginResponseToJson(StudentLoginResponse data) =>
+    json.encode(data.toJson());
 
 class StudentLoginResponse {
   StudentLoginResponse({
@@ -18,6 +20,8 @@ class StudentLoginResponse {
     this.ibu,
     this.ayah,
     this.gender,
+    // ignore: non_constant_identifier_names
+    this.student_madin,
     this.tempatlahir,
     this.tanggallahir,
     this.kelasId,
@@ -37,6 +41,8 @@ class StudentLoginResponse {
   String? ibu;
   String? ayah;
   String? gender;
+  // ignore: non_constant_identifier_names
+  String? student_madin;
   String? tempatlahir;
   DateTime? tanggallahir;
   String? kelasId;
@@ -47,43 +53,49 @@ class StudentLoginResponse {
   String? photo;
   String? message;
 
-  factory StudentLoginResponse.fromJson(Map<String, dynamic> json) => StudentLoginResponse(
-    isCorrect: json["is_correct"],
-    username: json["username"],
-    nama: json["nama"],
-    nis: json["nis"],
-    phone: json["phone"],
-    ibu: json["ibu"],
-    ayah: json["ayah"],
-    gender: json["gender"],
-    tempatlahir: json["tempatlahir"],
-    tanggallahir: json["tanggallahir"] == null ? null : DateTime.tryParse(json["tanggallahir"]),
-    kelasId: json["kelas_id"],
-    kelas: json["kelas"],
-    majorsId: json["majors_id"],
-    majors: json["majors"],
-    majorsShortName: json["majors_short_name"],
-    photo: json["photo"],
-    message: json["message"],
-  );
+  factory StudentLoginResponse.fromJson(Map<String, dynamic> json) =>
+      StudentLoginResponse(
+        isCorrect: json["is_correct"],
+        username: json["username"],
+        nama: json["nama"],
+        nis: json["nis"],
+        phone: json["phone"],
+        ibu: json["ibu"],
+        ayah: json["ayah"],
+        gender: json["gender"],
+        student_madin: json["student_madin"],
+        tempatlahir: json["tempatlahir"],
+        tanggallahir: json["tanggallahir"] == null
+            ? null
+            : DateTime.tryParse(json["tanggallahir"]),
+        kelasId: json["kelas_id"],
+        kelas: json["kelas"],
+        majorsId: json["majors_id"],
+        majors: json["majors"],
+        majorsShortName: json["majors_short_name"],
+        photo: json["photo"],
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "is_correct": isCorrect,
-    "username": username,
-    "nama": nama,
-    "nis": nis,
-    "phone": phone,
-    "ibu": ibu,
-    "ayah": ayah,
-    "gender": gender,
-    "tempatlahir": tempatlahir,
-    "tanggallahir": "${tanggallahir?.year.toString().padLeft(4, '0')}-${tanggallahir?.month.toString().padLeft(2, '0')}-${tanggallahir?.day.toString().padLeft(2, '0')}",
-    "kelas_id": kelasId,
-    "kelas": kelas,
-    "majors_id": majorsId,
-    "majors": majors,
-    "majors_short_name": majorsShortName,
-    "photo": photo,
-    "message": message,
-  };
+        "is_correct": isCorrect,
+        "username": username,
+        "nama": nama,
+        "nis": nis,
+        "phone": phone,
+        "ibu": ibu,
+        "ayah": ayah,
+        "gender": gender,
+        "student_madin": student_madin,
+        "tempatlahir": tempatlahir,
+        "tanggallahir":
+            "${tanggallahir?.year.toString().padLeft(4, '0')}-${tanggallahir?.month.toString().padLeft(2, '0')}-${tanggallahir?.day.toString().padLeft(2, '0')}",
+        "kelas_id": kelasId,
+        "kelas": kelas,
+        "majors_id": majorsId,
+        "majors": majors,
+        "majors_short_name": majorsShortName,
+        "photo": photo,
+        "message": message,
+      };
 }

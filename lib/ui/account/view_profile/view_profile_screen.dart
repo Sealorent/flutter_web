@@ -211,7 +211,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                '-',
+                _user.student_madin ?? "-",
                 style: TextStyle(color: MyColors.grey_80, fontSize: 16),
               ),
             ),
