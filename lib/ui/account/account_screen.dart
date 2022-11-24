@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/account/change_password/change_password_screen.dart';
@@ -112,8 +113,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           prefs.remove(PrefData.role);
                           prefs.clear();
 
-                          ScreenUtils(context).navigateTo(LoginUserScreen(),
-                              replaceScreen: true);
+                          Get.offAll(LoginUserScreen());
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),

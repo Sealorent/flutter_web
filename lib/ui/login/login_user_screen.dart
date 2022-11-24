@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:get/instance_manager.dart';
 import 'package:pesantren_flutter/network/response/pesantren_login_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
@@ -91,7 +90,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
     } else if (state is LoginSuccess) {
       setState(() {
         _isLoading = false;
-        ScreenUtils(context).navigateTo(DashboardScreen(widget.alice));
+        Get.offAll(DashboardScreen(widget.alice));
       });
     } else if (state is LoginPesantrenSuccess) {
       bloc.add(LoginStudent(nisController.text, passwordController.text));
