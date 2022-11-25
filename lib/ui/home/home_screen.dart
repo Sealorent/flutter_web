@@ -188,7 +188,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void _otherBottomSheetMenu() {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
         builder: (builder) {
