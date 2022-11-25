@@ -129,15 +129,15 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
               statusBarIconBrightness: Brightness.light,
             ),
             elevation: 0,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: MyColors.grey_60,
-              ),
-            ),
+            // leading: IconButton(
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            //   icon: Icon(
+            //     Icons.arrow_back_ios,
+            //     color: MyColors.grey_60,
+            //   ),
+            // ),
           ),
           backgroundColor: Colors.white,
           body: Stack(children: [
