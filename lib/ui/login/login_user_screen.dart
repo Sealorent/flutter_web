@@ -98,13 +98,9 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
       setState(() {
         _isLoading = false;
       });
-      if (state.code == 401 || state.code == 0) {
-        MySnackbar(context).errorSnackbar("Login gagal, silahkan login ulang");
-        return;
-      }
 
       MySnackbar(context)
-          .errorSnackbar(state.message + " : " + state.code.toString());
+          .errorSnackbar(state.message);
     }
   }
 

@@ -59,7 +59,8 @@ class _BulananScreenState extends State<BulananScreen> {
               _unduhIsLoading = false;
             });
             openFile(savePath);
-          } );
+          },
+      );
       setState(() {
         _unduhIsLoading = false;
       });
