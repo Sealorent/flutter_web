@@ -16,7 +16,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     if (event is GetPayment) {
       try {
         yield GetPaymentLoading();
-        var response = await repository.getPayments();
+        var response = await repository.getPayments(event.periodIds);
         yield GetPaymentSuccess(response);
       } catch (e) {
         yield FailedState("Login gagal, silahkan coba lagi", 0);
@@ -26,7 +26,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     if (event is GetPaymentBebas) {
       try {
         yield GetPaymentBebasLoading();
-        var response = await repository.getPaymentBebas();
+        var response = await repository.getPaymentBebas(event.periodIds);
         yield GetPaymentBebasSuccess(response);
       } catch (e) {
         yield FailedState("Login gagal, silahkan coba lagi", 0);

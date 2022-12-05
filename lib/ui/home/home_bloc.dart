@@ -16,6 +16,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       try {
         yield GetInformationLoading();
         var response = await repository.getInformation();
+        await repository.getTahunAjaran();
         yield GetInformationSuccess(response);
       } catch (e) {
         print("informationerr ${e}");

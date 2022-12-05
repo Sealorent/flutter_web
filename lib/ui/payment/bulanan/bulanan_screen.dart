@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -13,9 +14,13 @@ import 'package:pesantren_flutter/ui/payment/payment_event.dart';
 import 'package:pesantren_flutter/ui/payment/payment_state.dart';
 import 'package:pesantren_flutter/utils/number_utils.dart';
 import 'package:pesantren_flutter/widget/progress_loading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tree_view/tree_view.dart';
 
 import '../../../model/year_model.dart';
+import '../../../network/response/setting_response.dart';
+import '../../../network/response/tahun_ajaran_response.dart';
+import '../../../preferences/pref_data.dart';
 import '../../../res/my_colors.dart';
 import '../../../utils/my_snackbar.dart';
 import '../../../utils/screen_utils.dart';
@@ -37,6 +42,28 @@ class _BulananScreenState extends State<BulananScreen> {
   PaymentResponse? _response;
   bool _unduhIsLoading = false;
   String savePath = "";
+  TahunAjaranResponse? _tahunAjaranResponse;
+
+  Future<void> _getTahunAjaran() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var student = prefs.getString(PrefData.TAHUN_AJARAN);
+    var objectStudent = TahunAjaranResponse.fromJson(json.decode(student ?? ""));
+
+    setState(() {
+      print(student);
+      _tahunAjaranResponse = objectStudent;
+      setAllPeriods();
+    });
+    getData();
+  }
+
+  void setAllPeriods(){
+    setState(() {
+      selectedPeriods = _tahunAjaranResponse?.tahunajaran?.map((e) => int.tryParse(e.id ?? "0") ?? 0).toList() ?? [];
+    });
+  }
+
+  List<int> selectedPeriods = [];
 
   Future<void> openFile(String filename) async {
     print(filename);
@@ -89,7 +116,7 @@ class _BulananScreenState extends State<BulananScreen> {
     ItemFilter(3, 'Belum Lunas', false),
   ];
 
-  YearModel? selectedYear;
+  Tahunajaran? selectedYear;
 
 
   List<Widget> buildWidget(){
@@ -98,7 +125,7 @@ class _BulananScreenState extends State<BulananScreen> {
       var yearEnd = int.tryParse(element.fromModel().endYear) ?? 0;
 
       if(selectedYear != null && yearStart != 0 && yearEnd != 0){
-        return yearStart >= (selectedYear?.startYear.year ?? 0) && yearEnd <= (selectedYear?.endYear.year ?? 0);
+        return yearStart >= (selectedYear?.getStart() ?? 0) && yearEnd <= (selectedYear?.getEnd() ?? 0);
       }else{
         return true;
       }
@@ -203,6 +230,8 @@ class _BulananScreenState extends State<BulananScreen> {
                       onTap: (){
                         setState(() {
                           selectedYear = null;
+                          setAllPeriods();
+                          getData();
                         });
                         Navigator.pop(context);
                       },
@@ -219,20 +248,22 @@ class _BulananScreenState extends State<BulananScreen> {
                     ),
                     SizedBox(height: 10,),
                     Column(
-                      children: YearUtils.getYearModel(2020).reversed.map((e) => Column(
+                      children: _tahunAjaranResponse?.tahunajaran?.map((e) => Column(
                         children: [
                           InkWell(
                             onTap: () {
                               setState(() {
                                 selectedYear = e;
+                                selectedPeriods = [int.tryParse(e.id ?? "0") ?? 0];
                               });
+                              getData();
                               Navigator.pop(context);
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                               child: Row(
                                 children: [
-                                  Text(e.title,style: TextStyle(fontSize: 18),),
+                                  Text("${e.getTitle()}",style: TextStyle(fontSize: 18),),
                                   Spacer(),
                                   Icon(Icons.arrow_forward_ios, size: 18,)
                                 ],
@@ -240,7 +271,7 @@ class _BulananScreenState extends State<BulananScreen> {
                             ),
                           ),
                         ],
-                      )).toList(),
+                      )).toList() ?? [],
                     )
                   ],
                 ),
@@ -254,12 +285,12 @@ class _BulananScreenState extends State<BulananScreen> {
   @override
   void initState() {
     bloc = BlocProvider.of<PaymentBloc>(context);
-    getData();
+    _getTahunAjaran();
     super.initState();
   }
 
   void getData(){
-    bloc.add(GetPayment());
+    bloc.add(GetPayment(selectedPeriods));
   }
 
   void listener(BuildContext context, PaymentState state) async {
@@ -360,7 +391,7 @@ class _BulananScreenState extends State<BulananScreen> {
                                 ],
                               ),
                             ),
-                            Text(selectedYear?.title ?? "Semua Tahun", style: TextStyle(color: MyColors.primary),),
+                            Text(selectedYear?.getTitle() ?? "Semua Tahun", style: TextStyle(color: MyColors.primary),),
                           ],
                         )),
                       ),

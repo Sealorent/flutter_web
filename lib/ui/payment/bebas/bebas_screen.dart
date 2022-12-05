@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -9,9 +10,12 @@ import 'package:pesantren_flutter/network/response/payment_bebas_response.dart';
 import 'package:pesantren_flutter/ui/payment/payment_event.dart';
 import 'package:pesantren_flutter/utils/number_utils.dart';
 import 'package:pesantren_flutter/widget/progress_loading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tree_view/tree_view.dart';
 
 import '../../../model/year_model.dart';
+import '../../../network/response/tahun_ajaran_response.dart';
+import '../../../preferences/pref_data.dart';
 import '../../../res/my_colors.dart';
 import '../../../utils/my_snackbar.dart';
 import '../../../utils/screen_utils.dart';
@@ -41,6 +45,29 @@ class _BebasScreenState extends State<BebasScreen> {
     print(filename);
     await OpenFile.open(filename);
   }
+
+  TahunAjaranResponse? _tahunAjaranResponse;
+
+  Future<void> _getTahunAjaran() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var student = prefs.getString(PrefData.TAHUN_AJARAN);
+    var objectStudent = TahunAjaranResponse.fromJson(json.decode(student ?? ""));
+
+    setState(() {
+      print(student);
+      _tahunAjaranResponse = objectStudent;
+      setAllPeriods();
+    });
+    getData();
+  }
+
+  void setAllPeriods(){
+    setState(() {
+      selectedPeriods = _tahunAjaranResponse?.tahunajaran?.map((e) => int.tryParse(e.id ?? "0") ?? 0).toList() ?? [];
+    });
+  }
+
+  List<int> selectedPeriods = [];
 
   Future downloadFile(String url, String fileName) async {
     try {
@@ -86,7 +113,7 @@ class _BebasScreenState extends State<BebasScreen> {
     ItemFilter(3, 'Belum Lunas', false),
   ];
 
-  YearModel? selectedYear;
+  Tahunajaran? selectedYear;
 
 
   void _modalBottomSheetMenu(){
@@ -124,6 +151,8 @@ class _BebasScreenState extends State<BebasScreen> {
                       onTap: (){
                         setState(() {
                           selectedYear = null;
+                          setAllPeriods();
+                          getData();
                         });
                         Navigator.pop(context);
                       },
@@ -140,12 +169,14 @@ class _BebasScreenState extends State<BebasScreen> {
                     ),
                     SizedBox(height: 10,),
                     Column(
-                      children: YearUtils.getYearModel(2020).reversed.map((e) => Column(
+                      children: _tahunAjaranResponse?.tahunajaran?.map((e) => Column(
                         children: [
                           InkWell(
                             onTap: () {
                               setState(() {
                                 selectedYear = e;
+                                selectedPeriods = [int.tryParse(e.id ?? "0") ?? 0];
+                                getData();
                               });
                               Navigator.pop(context);
                             },
@@ -153,7 +184,7 @@ class _BebasScreenState extends State<BebasScreen> {
                               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                               child: Row(
                                 children: [
-                                  Text(e.title,style: TextStyle(fontSize: 18),),
+                                  Text(e.getTitle(),style: TextStyle(fontSize: 18),),
                                   Spacer(),
                                   Icon(Icons.arrow_forward_ios, size: 18,)
                                 ],
@@ -161,7 +192,7 @@ class _BebasScreenState extends State<BebasScreen> {
                             ),
                           ),
                         ],
-                      )).toList(),
+                      )).toList() ?? [],
                     )
                   ],
                 ),
@@ -175,12 +206,12 @@ class _BebasScreenState extends State<BebasScreen> {
   @override
   void initState() {
     bloc = BlocProvider.of<PaymentBloc>(context);
-    getData();
+    _getTahunAjaran();
     super.initState();
   }
 
   void getData(){
-    bloc.add(GetPaymentBebas());
+    bloc.add(GetPaymentBebas(selectedPeriods));
   }
 
   List<Widget> buildWidget(){
@@ -296,9 +327,6 @@ class _BebasScreenState extends State<BebasScreen> {
                   if(index == 0){
                     return InkWell(
                       onTap: (){
-                        // setState(() {
-                        //   selectedYear = "2021/2022";
-                        // });
                         _modalBottomSheetMenu();
                       },
                       child: Padding(
@@ -325,7 +353,7 @@ class _BebasScreenState extends State<BebasScreen> {
                                   ],
                                 ),
                               ),
-                              Text(selectedYear?.title ?? "Semua Tahun", style: TextStyle(color: MyColors.primary),),
+                              Text(selectedYear?.getTitle() ?? "Semua Tahun", style: TextStyle(color: MyColors.primary),),
                             ],
                           )),
                         ),

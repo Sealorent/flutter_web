@@ -25,9 +25,9 @@ class Constant {
   static const String mudif = "/mudif.php";
   static const String addIzin = "/add_izin.php";
   static const String addPulang = "/add_pulang.php";
-  static const String payments = "/pembayaran.php";
+  static const String payments = "/pembayaran2.php";
   static const String presensi = "/presensi.php";
-  static const String paymentBebas = "/pembayaran_bebas.php";
+  static const String paymentBebas = "/pembayaran_bebas2.php";
   static const String editProfile = "/edit_profil.php";
   static const String changePassword = "/edit_password.php";
   static const String bayarBebas = "/bayar_tagihan_bebas.php";
@@ -44,4 +44,5 @@ class Constant {
   static const String veriftOtp = "/verify_otp.php";
   static const String resetPassword = "/reset_password.php";
   static const String konfirmasi = "/info_upload_pembayaran.php";
+  static const String tahunAjaran = "/tahun_ajaran.php";
 }
