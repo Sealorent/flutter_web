@@ -29,7 +29,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await repository.loginStudent(event.nis, event.password);
         yield LoginSuccess();
       } catch (e) {
-        yield FailedState("Username atau password salah, silahkan periksa kembali", 0);
+        yield FailedState("NIS atau password salah, silahkan periksa kembali", 0);
       }
     }
 

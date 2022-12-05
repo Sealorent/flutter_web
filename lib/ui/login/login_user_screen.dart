@@ -98,13 +98,9 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
       setState(() {
         _isLoading = false;
       });
-      if (state.code == 401 || state.code == 0) {
-        MySnackbar(context).errorSnackbar("Login gagal, silahkan login ulang");
-        return;
-      }
 
       MySnackbar(context)
-          .errorSnackbar(state.message + " : " + state.code.toString());
+          .errorSnackbar(state.message);
     }
   }
 
@@ -129,15 +125,15 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
               statusBarIconBrightness: Brightness.light,
             ),
             elevation: 0,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: MyColors.grey_60,
-              ),
-            ),
+            // leading: IconButton(
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            //   icon: Icon(
+            //     Icons.arrow_back_ios,
+            //     color: MyColors.grey_60,
+            //   ),
+            // ),
           ),
           backgroundColor: Colors.white,
           body: Stack(children: [
