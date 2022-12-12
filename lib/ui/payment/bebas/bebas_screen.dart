@@ -454,7 +454,7 @@ class _BebasScreenState extends State<BebasScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "TAGIHAN BULANAN",
+                            "TAGIHAN BEBAS",
                             style: TextStyle(color: MyColors.grey_60),
                           ),
                           SizedBox(
