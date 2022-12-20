@@ -54,8 +54,8 @@ abstract class MainRepository {
   Future<PaymentResponse> getPayments(List<int> periodIds);
   Future<PresensiResponse> getPresensi(int bulan);
   Future<PaymentBebasResponse> getPaymentBebas(List<int> periodIds);
-  Future<BayarBulananResponse> getBayarBulanan();
-  Future<BayarBebasResponse> getBayarBebas();
+  Future<BayarBulananResponse> getBayarBulanan(List<int> periodIds);
+  Future<BayarBebasResponse> getBayarBebas(List<int> periodIds);
   Future<HistoryResponse> getHistory();
   Future<BayarResponse> bayar(BayarParam param);
   Future<RingkasanResponse> getRingkasan(String noIpayMu);
@@ -412,14 +412,16 @@ class MainRepositoryImpl extends MainRepository {
   }
 
   @override
-  Future<BayarBulananResponse> getBayarBulanan() async {
+  Future<BayarBulananResponse> getBayarBulanan(List<int> periodIds) async {
     var student = await _getUser();
     var pesantren = await _getPesantren();
+    print("gilang $periodIds");
     try {
-      final response = await _dioClient.post(Constant.bayarBulanan, data: FormData.fromMap({
+      final response = await _dioClient.post(Constant.bayarBulanan, data: {
         "kode_sekolah" : pesantren.kodeSekolah,
-        "student_nis": student.nis
-      }));
+        "nis": student.nis,
+        "period_id": periodIds.toList()
+      });
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
@@ -437,14 +439,15 @@ class MainRepositoryImpl extends MainRepository {
   }
 
   @override
-  Future<BayarBebasResponse> getBayarBebas() async {
+  Future<BayarBebasResponse> getBayarBebas(List<int> periodIds) async {
     var student = await _getUser();
     var pesantren = await _getPesantren();
     try {
-      final response = await _dioClient.post(Constant.bayarBebas, data: FormData.fromMap({
+      final response = await _dioClient.post(Constant.bayarBebas, data: {
         "kode_sekolah" : pesantren.kodeSekolah,
-        "student_nis": student.nis
-      }));
+        "nis": student.nis,
+        "period_id": periodIds.toList()
+      });
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {

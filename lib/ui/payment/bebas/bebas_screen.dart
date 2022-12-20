@@ -409,7 +409,7 @@ class _BebasScreenState extends State<BebasScreen> {
                                 //   MySnackbar(context).successSnackbar("Tidak ada tagihan");
                                 //   return;
                                 // }
-                                // ScreenUtils(context).navigateTo(PayBillsScreen(true));
+                                ScreenUtils(context).navigateTo(PayBillsScreen(true));
                               },
                               child:  Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 10),

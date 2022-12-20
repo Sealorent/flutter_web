@@ -24,17 +24,19 @@ class GetPaymentBebas extends PaymentEvent {
 }
 
 class GetDetailPaymentBulanan extends PaymentEvent {
+  List<int> periodIds;
   @override
   List<Object> get props => [];
 
-  GetDetailPaymentBulanan();
+  GetDetailPaymentBulanan(this.periodIds);
 }
 
 class GetDetailPaymentBebas extends PaymentEvent {
+  List<int> periodIds;
   @override
   List<Object> get props => [];
 
-  GetDetailPaymentBebas();
+  GetDetailPaymentBebas(this.periodIds);
 }
 
 class GetHistory extends PaymentEvent {

@@ -90,10 +90,15 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
   }
 
   double getTotal(){
-    var totalBebas = (_response?.bebas?.map((e) => int.tryParse(e.nominal ?? "") ?? 0).toList() ?? []).reduce((a, b) => a + b);
-    var totalBulan = (_response?.bulan?.map((e) => int.tryParse(e.nominal ?? "") ?? 0).toList() ?? []).reduce((a, b) => a + b);
+    var totalBebas = (_response?.bebas?.map((e) => int.tryParse(e.nominal ?? "0") ?? 0).toList() ?? []); //.reduce((a, b) => a + b);
+    var totalBulan = (_response?.bulan?.map((e) => int.tryParse(e.nominal ?? "0") ?? 0).toList() ?? []); //.reduce((a, b) => a + b);
+    var tbeb = 0;
+    var tbul = 0;
+    if(totalBebas.isNotEmpty) tbeb = totalBebas.reduce((a, b) => a + b);
+    if(totalBulan.isNotEmpty) tbul = totalBulan.reduce((a, b) => a + b);
 
-    return totalBebas.toDouble() + totalBulan.toDouble();
+    return tbeb.toDouble() + tbul.toDouble();
+    return 0;
   }
 
   @override
