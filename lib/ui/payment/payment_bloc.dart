@@ -76,7 +76,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     if (event is GetRingkasan) {
       try {
         yield GetRingkasanLoading();
-        var response = await repository.getRingkasan(event.noIpaymu);
+        var response = await repository.getRingkasan(event.noIpaymu,event.removedBebas,event.removedBulanan);
         yield GetRingkasanSuccess(response);
       } catch (e) {
         yield FailedState("Login gagal, silahkan coba lagi", 0);

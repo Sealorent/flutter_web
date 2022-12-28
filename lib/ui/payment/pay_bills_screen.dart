@@ -26,6 +26,7 @@ import '../../network/response/bayar_bulanan_response.dart';
 import '../../network/response/tahun_ajaran_response.dart';
 import '../../preferences/pref_data.dart';
 import '../../utils/my_snackbar.dart';
+import '../../widget/tahun_ajaran_widget.dart';
 import '../transaction/model/item_filter_model.dart';
 
 class PayBillsScreen extends StatefulWidget {
@@ -91,8 +92,8 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
       setState(() {
         _isBayarLoading = false;
       });
-
-      if(state.response.isCorrect == true){
+      print("no ipaymu : ${state.response.noIpaymu}");
+      if(state.response.noIpaymu != null){
         ScreenUtils(context).navigateTo(PaymentDetailScreen(
           state.response.noIpaymu
         ));
@@ -116,6 +117,9 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
       });
 
     } else if (state is FailedState) {
+      print("homeee");
+      _bebasResponse = null;
+      _bulananResponse = null;
       setState(() {
         _isLoading = false;
       });
@@ -178,7 +182,6 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                   children: [
                     InkWell(
                       onTap: (){
-
                         Navigator.pop(context);
                       },
                       child: Padding(
@@ -471,7 +474,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
     // ItemFilter(3, 'Belum Lunas', false),
   ];
 
-  Tahunajaran? selectedYear;
+  List<Tahunajaran> selectedYear = [];
 
   void _modalBottomSheetMenu(){
     showModalBottomSheet(
@@ -480,81 +483,33 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
         ),
         context: context,
         builder: (builder){
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 10,),
-              Center(
-                child: Container(
-                  width: 50,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: MyColors.grey_20,
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(16.0)),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20,),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text("Pilih tahun ajaran",style: TextStyle(color: Colors.black.withOpacity(0.4)),),
-              ),
-              SizedBox(height: 20,),
-              Expanded(
-                child: ListView(
-                  children: [
-                    InkWell(
-                      onTap: (){
-                        setState(() {
-                          selectedYear = null;
-                          setAllPeriods();
-                          getData();
-                        });
-                        Navigator.pop(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Row(
-                          children: [
-                            Text("Semua",style: TextStyle(fontSize: 18),),
-                            Spacer(),
-                            Icon(Icons.arrow_forward_ios, size: 18,)
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    Column(
-                      children: _tahunAjaranResponse?.tahunajaran?.map((e) => Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                selectedYear = e;
-                                selectedPeriods = [int.tryParse(e.id ?? "0") ?? 0];
-                              });
-                              getData();
-                              Navigator.pop(context);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                              child: Row(
-                                children: [
-                                  Text("${e.getTitle()}",style: TextStyle(fontSize: 18),),
-                                  Spacer(),
-                                  Icon(Icons.arrow_forward_ios, size: 18,)
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )).toList() ?? [],
-                    )
-                  ],
-                ),
-              )
-            ],
+          return TahunAjaranWidget(
+            onSelectTahunAjaran: (tahunAjaran){
+              if(selectedPeriods.length == _tahunAjaranResponse?.tahunajaran?.length){
+                selectedPeriods.clear();
+              }
+              _tahunAjaranResponse?.tahunajaran?.forEach((element) {
+                if(tahunAjaran.id == element.id){
+                  element.isSelected = !element.isSelected;
+
+                  if(element.isSelected){
+                    selectedYear.add(tahunAjaran);
+                    selectedPeriods.add(int.tryParse(element.id ?? "0") ?? 0);
+                  }else{
+                    selectedYear.remove(tahunAjaran);
+                    selectedPeriods.removeWhere((inte) => inte == (int.tryParse(element.id ?? "0") ?? 0));
+                  }
+                  setState(() {});
+                  getData();
+                }
+              });
+            },
+            onSelectAll: (){
+              selectedYear.clear();
+              setAllPeriods();
+              getData();
+            },
+            tahunAjaranResponse: _tahunAjaranResponse,
           );
         }
     );
@@ -562,7 +517,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    print("gilang  : ${selectedYear}");
     return BlocListener<PaymentBloc, PaymentState>(
       listener: listener,
       child: Scaffold(
@@ -628,7 +583,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                                       ],
                                     ),
                                   ),
-                                  Text(selectedYear?.getTitle() ?? "Semua Tahun", style: TextStyle(color: MyColors.primary),),
+                                  Text(selectedYear.isEmpty ? "Semua Tahun" : selectedYear.map((e) => e.getTitle()).toString() , style: TextStyle(color: MyColors.primary),),
                                 ],
                               )),
                             ),
@@ -702,9 +657,13 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                     var nominalIds = selectedList.map((e) => e.detailBulan?.nominalBayar?.toInt() ?? 0).toList();
                     nominalIds.removeWhere((element) => element == 0);
 
+                    var periodIds = selectedList.map((e) => int.tryParse(e.detailBulan?.period ?? "0") ?? 0).toList();
+                    periodIds.removeWhere((element) => element == 0);
+
                     var param = BayarParam(
                       bebas_id: bayarIds,
-                      bebas_nominal: nominalIds
+                      bebas_nominal: nominalIds,
+                      period_ids: periodIds
                     );
 
                     if(bayarIds.isEmpty){
@@ -716,8 +675,13 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                     var selectedList = _bulananResponse?.detail?.where((element) => element.detailBulan?.processPaid == true).toList() ?? [];
                     var bayarIds = selectedList.map((e) => int.tryParse(e.detailBulan?.bulanId ?? "") ?? 0).toList();
                     bayarIds.removeWhere((element) => element == 0);
+
+                    var periodIds = selectedList.map((e) => int.tryParse(e.detailBulan?.period ?? "0") ?? 0).toList();
+                    periodIds.removeWhere((element) => element == 0);
+
                     var param = BayarParam(
-                        bulan_id: bayarIds
+                        bulan_id: bayarIds,
+                        period_ids: periodIds
                     );
 
                     if(bayarIds.isEmpty){

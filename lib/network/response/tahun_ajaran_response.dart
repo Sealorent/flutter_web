@@ -37,12 +37,14 @@ class Tahunajaran {
     required this.periodStart,
     required this.periodEnd,
     this.periodStatus,
+    this.isSelected = false
   });
 
   String? id;
   String? periodStart;
   String? periodEnd;
   String? periodStatus;
+  bool isSelected;
 
   String getTitle(){
     return "$periodStart/$periodEnd";

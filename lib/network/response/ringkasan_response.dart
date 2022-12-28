@@ -93,14 +93,20 @@ class Beba {
   Beba({
     this.namaBayar,
     this.nominal,
+    this.bebasId,
+    this.bulanId
   });
 
   String? namaBayar;
   String? nominal;
+  String? bulanId;
+  String? bebasId;
 
   factory Beba.fromJson(Map<String, dynamic> json) => Beba(
     namaBayar: json["nama_bayar"],
     nominal: json["nominal"],
+    bebasId: json["bebas_id"],
+    bulanId: json["bulan_id"],
   );
 
   Map<String, dynamic> toJson() => {

@@ -40,6 +40,8 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
   Bayar? _selectedPayment;
   bool _insertIsLoading = false;
   IpaymuParam? _ipaymuParam;
+  List<int> removedBebas = [];
+  List<int> removedBulanan = [];
 
   @override
   void initState() {
@@ -86,7 +88,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
   }
 
   void getData(){
-    bloc.add(GetRingkasan(widget.noIpayMu ?? ""));
+    bloc.add(GetRingkasan(widget.noIpayMu ?? "", removedBebas, removedBulanan));
   }
 
   double getTotal(){
@@ -143,6 +145,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                         Text("ITEM (${(_response?.bulan?.length ?? 0) + (_response?.bebas?.length ?? 0)})", style: TextStyle(color: MyColors.grey_60, fontSize: 12)),
                         Spacer(),
                         Text("JUMLAH", style: TextStyle(color: MyColors.grey_60, fontSize: 12),),
+                        SizedBox(width: 50,)
                       ],
                     ),
                     SizedBox(height: 20,),
@@ -151,9 +154,19 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                         children: [
                           Row(
                             children: [
-                              Text(e.namaBayar ?? ""),
-                              Spacer(),
+                              Expanded(child: Text(e.namaBayar ?? "")),
+                              SizedBox(width: 20,),
                               Text(NumberUtils.toRupiah(double.tryParse(e.nominal ?? "") ?? 0.0)),
+                              Container(
+                                width: 50,
+                                child: InkWell(
+                                    onTap: (){
+                                      print("bebasId : ${e.bebasId}");
+                                      removedBulanan.add(int.tryParse(e.bulanId ?? "0") ?? 0);
+                                      getData();
+                                    },
+                                    child: Icon(Icons.restore_from_trash_outlined, color: Colors.red,)),
+                              )
                             ],
                           ),
                           SizedBox(height: 20,),
@@ -165,9 +178,18 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                         children: [
                           Row(
                             children: [
-                              Text(e.namaBayar ?? ""),
-                              Spacer(),
+                              Expanded(child: Text(e.namaBayar ?? "")),
+                              SizedBox(width: 20,),
                               Text(NumberUtils.toRupiah(double.tryParse(e.nominal ?? "") ?? 0.0)),
+                              Container(
+                                width: 50,
+                                child: InkWell(
+                                    onTap: (){
+                                      removedBebas.add(int.tryParse(e.bebasId ?? "0") ?? 0);
+                                      getData();
+                                    },
+                                    child: Icon(Icons.restore_from_trash_outlined, color: Colors.red,)),
+                              )
                             ],
                           ),
                           SizedBox(height: 20,),

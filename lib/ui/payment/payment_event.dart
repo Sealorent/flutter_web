@@ -58,11 +58,13 @@ class BayarTagihan extends PaymentEvent {
 
 class GetRingkasan extends PaymentEvent {
   String noIpaymu;
+  List<int> removedBebas;
+  List<int> removedBulanan;
 
   @override
   List<Object> get props => [];
 
-  GetRingkasan(this.noIpaymu);
+  GetRingkasan(this.noIpaymu,this.removedBebas,this.removedBulanan);
 }
 
 
