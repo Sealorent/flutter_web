@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pesantren_flutter/network/param/ipaymu_param.dart';
@@ -22,7 +23,7 @@ import 'package:tree_view/tree_view.dart';
 
 import '../../utils/my_snackbar.dart';
 import '../transaction/model/item_filter_model.dart';
-
+import 'package:collection/collection.dart';
 class CaraPembayaranScreen extends StatefulWidget {
   IpaymuParam? ipaymuParam;
   Bayar? _selectedPayment;
@@ -181,6 +182,10 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                     ),
                     SizedBox(height: 20,),
                     Text("Petunjuk Pembayaran",),
+                    SizedBox(height: 20,),
+                    Html(
+                      data: _response?.carabayar?.firstOrNull?.bayar ?? "-",
+                    ),
                   ],
                 ),
               )
