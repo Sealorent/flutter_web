@@ -51,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = true;
   InformationResponse? _informationResponse;
   late HomeBloc bloc;
+  int currentIndex = 0;
 
   Future<void> _getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -521,12 +522,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             child: Column(
                               children: [
-                                Icon(
-                                  Icons.more_horiz,
-                                  size: 50,
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                SvgPicture.asset(
+                                  "assets/Lainnya-01_fix.svg",
+                                  width: 35,
+                                  color: MyColors.primary.withOpacity(0.7),
                                 ),
                                 SizedBox(
-                                  height: 5,
+                                  height: 10,
                                 ),
                                 Text("Lainnya")
                               ],
@@ -548,25 +553,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           Spacer(),
-                          // InkWell(
-                          //   onTap: () {
-                          //     ScreenUtils(context)
-                          //         .navigateTo(InformationScreen());
-                          //   },
-                          //   child: Row(
-                          //     children: [
-                          //       Text("Lihat semua"),
-                          //       SizedBox(
-                          //         width: 5,
-                          //       ),
-                          //       Icon(
-                          //         Icons.arrow_forward_ios,
-                          //         color: MyColors.grey_60,
-                          //         size: 20,
-                          //       )
-                          //     ],
-                          //   ),
-                          // )
+                          InkWell(
+                            onTap: () {
+                              ScreenUtils(context)
+                                  .navigateTo(InformationScreen());
+                            },
+                            child: Row(
+                              children: [
+                                Text("Lihat semua"),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: MyColors.grey_60,
+                                  size: 20,
+                                )
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -576,33 +581,47 @@ class _HomeScreenState extends State<HomeScreen> {
                     CarouselSlider(
                         items: buildInformations(),
                         options: CarouselOptions(
-                          enableInfiniteScroll: false,
-                          reverse: true,
+                          // enableInfiniteScroll: false,
+                          // reverse: true,
                           autoPlay: true,
                           autoPlayAnimationDuration: const Duration(seconds: 1),
                           aspectRatio: 2.0,
                           enlargeCenterPage: true,
                           enlargeStrategy: CenterPageEnlargeStrategy.height,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              currentIndex = index;
+                            });
+                          },
                         )),
                     SizedBox(
                       height: 20,
                     ),
-                    Center(
-                      child: InkWell(
-                        onTap: () {
-                          ScreenUtils(context).navigateTo(InformationScreen());
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Lihat semua"),
-                            SizedBox(
-                              width: 5,
-                            ),
-                          ],
-                        ),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (int i = 0; i < buildInformations().length; i++)
+                          Container(
+                            height: 13,
+                            width: 13,
+                            margin: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                color: currentIndex == i
+                                    ? MyColors.primary
+                                    : Colors.white,
+                                shape: BoxShape.circle,
+                                // ignore: prefer_const_literals_to_create_immutables
+                                boxShadow: [
+                                  const BoxShadow(
+                                      color: Colors.grey,
+                                      spreadRadius: 1,
+                                      blurRadius: 3,
+                                      offset: Offset(2, 2))
+                                ]),
+                          )
+                      ],
                     ),
+
 // <<<<<<< HEAD
 //                   ),
 //                 ],
