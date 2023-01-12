@@ -18,6 +18,7 @@ class CaraPembayaranResponse {
     this.payment,
     this.expired,
     this.message,
+    this.carabayar
   });
 
   bool? isCorrect;
@@ -28,6 +29,7 @@ class CaraPembayaranResponse {
   String? payment;
   String? expired;
   String? message;
+  List<Carabayar>? carabayar;
 
   factory CaraPembayaranResponse.fromJson(Map<String, dynamic> json) => CaraPembayaranResponse(
     isCorrect: json["is_correct"],
@@ -38,6 +40,7 @@ class CaraPembayaranResponse {
     payment: json["payment"],
     expired: json["expired"],
     message: json["message"],
+    carabayar: List<Carabayar>.from(json["carabayar"].map((x) => Carabayar.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -49,5 +52,25 @@ class CaraPembayaranResponse {
     "payment": payment,
     "expired": expired,
     "message": message,
+  };
+}
+
+class Carabayar {
+  Carabayar({
+    this.metode,
+    this.bayar,
+  });
+
+  String? metode;
+  String? bayar;
+
+  factory Carabayar.fromJson(Map<String, dynamic> json) => Carabayar(
+    metode: json["metode"],
+    bayar: json["bayar"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "metode": metode,
+    "bayar": bayar,
   };
 }
