@@ -96,6 +96,21 @@ class _SavingScreenState extends State<SavingScreen> {
                 ),
               ),
               SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: laporan.detail?.debit == "0"
+                    ? Text(
+                        "Kredit",
+                        style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+                      )
+                    : Text(
+                        "Debit",
+                        style: TextStyle(color: MyColors.grey_80, fontSize: 16),
+                      ),
+              ),
+              SizedBox(
                 height: 20,
               ),
               Padding(

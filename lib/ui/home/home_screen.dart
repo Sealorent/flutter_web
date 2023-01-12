@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ScreenUtils(context).navigateTo(InformationDetailScreen(e));
             },
             child: Container(
-              width: 300,
+              width: Get.height * 0.35,
               decoration: BoxDecoration(
                 color: const Color(0xff7c94b6),
                 image: DecorationImage(
@@ -604,46 +604,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        for (int i = 0; i < buildInformations().length; i++)
-                          currentIndex == i
-                              ? Container(
-                                  height: 13,
-                                  width: 70,
-                                  margin: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      color: MyColors.primary,
-                                      borderRadius: BorderRadius.circular(10),
-                                      // ignore: prefer_const_literals_to_create_immutables
-                                      boxShadow: [
-                                        const BoxShadow(
-                                            color: Colors.grey,
-                                            spreadRadius: 1,
-                                            blurRadius: 3,
-                                            offset: Offset(2, 2))
-                                      ]),
-                                )
-                              : Container(
-                                  height: 13,
-                                  width: 13,
-                                  margin: const EdgeInsets.all(5),
-                                  decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle,
-                                      // ignore: prefer_const_literals_to_create_immutables
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.grey,
-                                            spreadRadius: 1,
-                                            blurRadius: 3,
-                                            offset: Offset(2, 2))
-                                      ]),
-                                )
-                      ],
+                    Center(
+                      child: AnimatedSmoothIndicator(
+                          activeIndex: currentIndex,
+                          count: buildInformations().length,
+                          effect: CustomizableEffect(
+                              spacing: 4,
+                              dotDecoration: DotDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: MyColors.primaryVariants,
+                                  width: 6,
+                                  height: 6),
+                              activeDotDecoration: DotDecoration(
+                                  color: MyColors.primary,
+                                  width: 36,
+                                  height: 6,
+                                  borderRadius: BorderRadius.circular(100)))),
                     ),
-
 // <<<<<<< HEAD
 //                   ),
 //                 ],
