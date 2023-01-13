@@ -158,7 +158,7 @@ class _SavingScreenState extends State<SavingScreen> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "Top-up Tabungan",
+                                          "Setor Tabungan",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText2

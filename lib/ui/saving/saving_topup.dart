@@ -101,7 +101,7 @@ class _PaymentDetailScreenState extends State<SavingTopUpScreen> {
           ),
           centerTitle: true,
           elevation: 0,
-          title: Text("Top-Up Tabungan", style: TextStyle(color: Colors.white),),
+          title: Text("Setor Tabungan", style: TextStyle(color: Colors.white),),
         ),
         backgroundColor: Colors.white,
         body: ListView(

@@ -181,6 +181,36 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                     ),
                     SizedBox(height: 20,),
                     Text("Petunjuk Pembayaran",),
+
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.all<
+                              RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(18.0)))),
+                      onPressed: () async {
+                        Navigator.pushAndRemoveUntil(context,
+                            MaterialPageRoute(builder: (BuildContext context) => DashboardScreen(null)),
+                                (Route<dynamic> route) => route is DashboardScreen
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Kembali ke Home",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.apply(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               )
