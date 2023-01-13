@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = true;
   InformationResponse? _informationResponse;
   late HomeBloc bloc;
+  int currentIndex = 0;
 
   Future<void> _getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -120,9 +121,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: Container(
                     child: Container(
-                      margin: EdgeInsets.all(5.0),
+                      margin: const EdgeInsets.all(5.0),
                       child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5.0)),
                           child: Stack(
                             children: <Widget>[
                               Image.network(item.foto ?? "",
@@ -170,14 +172,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ScreenUtils(context).navigateTo(InformationDetailScreen(e));
             },
             child: Container(
-              width: 300,
+              width: Get.height * 0.35,
               decoration: BoxDecoration(
                 color: const Color(0xff7c94b6),
                 image: DecorationImage(
                   image: NetworkImage(e.foto ?? ""),
                   fit: BoxFit.cover,
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
               ),
             ),
           );
@@ -187,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _otherBottomSheetMenu() {
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
@@ -201,8 +203,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Lainnya"),
-                    SizedBox(
+                    const Text("Lainnya"),
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -210,7 +212,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         InkWell(
                           onTap: () {
-                            ScreenUtils(context).navigateTo(PresensiScreen());
+                            ScreenUtils(context)
+                                .navigateTo(const PresensiScreen());
                           },
                           child: Column(
                             children: [
@@ -218,14 +221,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 "assets/ic_presensi.svg",
                                 width: 50,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
-                              Text("Presensi")
+                              const Text("Presensi")
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         GetBuilder<KonfirmasiController>(
@@ -258,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Text('Konfirmasi')
+                                      const Text('Konfirmasi')
                                     ]),
                                   ));
                             }),
@@ -305,10 +308,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Text(
                                   _pesantren?.namaPesantren ?? "",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 16, color: Colors.white),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
@@ -320,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Text(
                                             _user?.nama ?? "",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 20,
                                                 color: Colors.white),
                                           ),
@@ -349,7 +352,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 _user?.photo ?? ""),
                                             fit: BoxFit.cover,
                                           ),
-                                          borderRadius: BorderRadius.all(
+                                          borderRadius: const BorderRadius.all(
                                               Radius.circular(50.0)),
                                           border: Border.all(
                                             color:
@@ -367,7 +370,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Row(
@@ -375,7 +378,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              ScreenUtils(context).navigateTo(PaymentScreen());
+                              ScreenUtils(context)
+                                  .navigateTo(const PaymentScreen());
                             },
                             child: Column(
                               children: [
@@ -383,48 +387,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   "assets/ic_bayar.svg",
                                   width: 50,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                Text("Bayar\n")
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              ScreenUtils(context).navigateTo(SavingScreen());
-                            },
-                            child: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/ic_tabungan.svg",
-                                  width: 50,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text("Tabungan\n")
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              ScreenUtils(context).navigateTo(TahfidzScreen());
-                            },
-                            child: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/ic_tahfidz.svg",
-                                  width: 50,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text("Tafidz\n")
+                                const Text("Bayar\n")
                               ],
                             ),
                           ),
@@ -433,7 +399,47 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: InkWell(
                             onTap: () {
                               ScreenUtils(context)
-                                  .navigateTo(RekamMedisScreen());
+                                  .navigateTo(const SavingScreen());
+                            },
+                            child: Column(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/ic_tabungan.svg",
+                                  width: 50,
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Text("Tabungan\n")
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              ScreenUtils(context)
+                                  .navigateTo(const TahfidzScreen());
+                            },
+                            child: Column(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/ic_tahfidz.svg",
+                                  width: 50,
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Text("Tafidz\n")
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              ScreenUtils(context)
+                                  .navigateTo(const RekamMedisScreen());
                             },
                             child: Column(
                               children: [
@@ -441,17 +447,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                   "assets/ic_rekam_medis.svg",
                                   width: 50,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                Text("Rekam\nMedis")
+                                const Text("Rekam\nMedis")
                               ],
                             ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Row(
@@ -460,7 +466,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: InkWell(
                             onTap: () {
                               ScreenUtils(context)
-                                  .navigateTo(KonselingScreen());
+                                  .navigateTo(const KonselingScreen());
                             },
                             child: Column(
                               children: [
@@ -468,10 +474,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   "assets/ic_conseling.svg",
                                   width: 50,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                Text("Konseling")
+                                const Text("Konseling")
                               ],
                             ),
                           ),
@@ -479,7 +485,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              ScreenUtils(context).navigateTo(IzinScreen());
+                              ScreenUtils(context)
+                                  .navigateTo(const IzinScreen());
                             },
                             child: Column(
                               children: [
@@ -487,10 +494,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   "assets/ic_izin.svg",
                                   width: 50,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                Text("Izin")
+                                const Text("Izin")
                               ],
                             ),
                           ),
@@ -498,7 +505,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              ScreenUtils(context).navigateTo(MudifScreen());
+                              ScreenUtils(context)
+                                  .navigateTo(const MudifScreen());
                             },
                             child: Column(
                               children: [
@@ -506,10 +514,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   "assets/ic_mudif.svg",
                                   width: 50,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                Text("Mudif")
+                                const Text("Mudif")
                               ],
                             ),
                           ),
@@ -521,87 +529,97 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             child: Column(
                               children: [
-                                Icon(
-                                  Icons.more_horiz,
-                                  size: 50,
+                                const SizedBox(
+                                  height: 10,
                                 ),
-                                SizedBox(
-                                  height: 5,
+                                SvgPicture.asset(
+                                  "assets/Lainnya-01_fix.svg",
+                                  width: 35,
+                                  color: MyColors.primary.withOpacity(0.7),
                                 ),
-                                Text("Lainnya")
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Text("Lainnya")
                               ],
                             ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 50,
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Informasi",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                          Spacer(),
-                          // InkWell(
-                          //   onTap: () {
-                          //     ScreenUtils(context)
-                          //         .navigateTo(InformationScreen());
-                          //   },
-                          //   child: Row(
-                          //     children: [
-                          //       Text("Lihat semua"),
-                          //       SizedBox(
-                          //         width: 5,
-                          //       ),
-                          //       Icon(
-                          //         Icons.arrow_forward_ios,
-                          //         color: MyColors.grey_60,
-                          //         size: 20,
-                          //       )
-                          //     ],
-                          //   ),
-                          // )
+                          const Spacer(),
+                          InkWell(
+                            onTap: () {
+                              ScreenUtils(context)
+                                  .navigateTo(const InformationScreen());
+                            },
+                            child: Row(
+                              children: [
+                                const Text("Lihat semua"),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: MyColors.grey_60,
+                                  size: 20,
+                                )
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     CarouselSlider(
                         items: buildInformations(),
                         options: CarouselOptions(
-                          enableInfiniteScroll: false,
-                          reverse: true,
+                          // enableInfiniteScroll: false,
+                          // reverse: true,
                           autoPlay: true,
                           autoPlayAnimationDuration: const Duration(seconds: 1),
                           aspectRatio: 2.0,
                           enlargeCenterPage: true,
                           enlargeStrategy: CenterPageEnlargeStrategy.height,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              currentIndex = index;
+                            });
+                          },
                         )),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Center(
-                      child: InkWell(
-                        onTap: () {
-                          ScreenUtils(context).navigateTo(InformationScreen());
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Lihat semua"),
-                            SizedBox(
-                              width: 5,
-                            ),
-                          ],
-                        ),
-                      ),
+                      child: AnimatedSmoothIndicator(
+                          activeIndex: currentIndex,
+                          count: buildInformations().length,
+                          effect: CustomizableEffect(
+                              spacing: 4,
+                              dotDecoration: DotDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: MyColors.primaryVariants,
+                                  width: 6,
+                                  height: 6),
+                              activeDotDecoration: DotDecoration(
+                                  color: MyColors.primary,
+                                  width: 36,
+                                  height: 6,
+                                  borderRadius: BorderRadius.circular(100)))),
                     ),
 // <<<<<<< HEAD
 //                   ),
@@ -662,7 +680,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //             ],
 //           ),
 // =======
-                    SizedBox(
+                    const SizedBox(
                       height: 100,
                     )
                   ],

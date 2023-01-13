@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -22,7 +23,10 @@ import 'package:tree_view/tree_view.dart';
 
 import '../../network/response/bayar_bebas_response.dart' as Bebas;
 import '../../network/response/bayar_bulanan_response.dart';
+import '../../network/response/tahun_ajaran_response.dart';
+import '../../preferences/pref_data.dart';
 import '../../utils/my_snackbar.dart';
+import '../../widget/tahun_ajaran_widget.dart';
 import '../transaction/model/item_filter_model.dart';
 
 class PayBillsScreen extends StatefulWidget {
@@ -49,10 +53,33 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
   BayarBulananResponse? _bulananResponse;
   TextEditingController _nominalController = TextEditingController();
 
+  TahunAjaranResponse? _tahunAjaranResponse;
+
+  Future<void> _getTahunAjaran() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var student = prefs.getString(PrefData.TAHUN_AJARAN);
+    var objectStudent = TahunAjaranResponse.fromJson(json.decode(student ?? ""));
+
+    setState(() {
+      print(student);
+      _tahunAjaranResponse = objectStudent;
+      setAllPeriods();
+    });
+    getData();
+  }
+
+  void setAllPeriods(){
+    setState(() {
+      selectedPeriods = _tahunAjaranResponse?.tahunajaran?.map((e) => int.tryParse(e.id ?? "0") ?? 0).toList() ?? [];
+    });
+  }
+
+  List<int> selectedPeriods = [];
+
   @override
   void initState() {
     bloc = BlocProvider.of<PaymentBloc>(context);
-    getData();
+    _getTahunAjaran();
     super.initState();
   }
 
@@ -65,8 +92,8 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
       setState(() {
         _isBayarLoading = false;
       });
-
-      if(state.response.isCorrect == true){
+      print("no ipaymu : ${state.response.noIpaymu}");
+      if(state.response.noIpaymu != null){
         ScreenUtils(context).navigateTo(PaymentDetailScreen(
           state.response.noIpaymu
         ));
@@ -90,6 +117,9 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
       });
 
     } else if (state is FailedState) {
+      print("homeee");
+      _bebasResponse = null;
+      _bulananResponse = null;
       setState(() {
         _isLoading = false;
       });
@@ -106,9 +136,9 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
 
   void getData(){
     if(widget.isBebas){
-      bloc.add(GetDetailPaymentBebas());
+      bloc.add(GetDetailPaymentBebas(selectedPeriods));
     }else{
-      bloc.add(GetDetailPaymentBulanan());
+      bloc.add(GetDetailPaymentBulanan(selectedPeriods));
     }
   }
 
@@ -152,7 +182,6 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                   children: [
                     InkWell(
                       onTap: (){
-
                         Navigator.pop(context);
                       },
                       child: Padding(
@@ -439,9 +468,56 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
     )).toList() ?? [];
   }
 
+  final listFilter = <ItemFilter>[
+    ItemFilter(1, 'Semua Tahun', false),
+    // ItemFilter(2, 'Lunas', false),
+    // ItemFilter(3, 'Belum Lunas', false),
+  ];
+
+  List<Tahunajaran> selectedYear = [];
+
+  void _modalBottomSheetMenu(){
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        builder: (builder){
+          return TahunAjaranWidget(
+            onSelectTahunAjaran: (tahunAjaran){
+              if(selectedPeriods.length == _tahunAjaranResponse?.tahunajaran?.length){
+                selectedPeriods.clear();
+              }
+              _tahunAjaranResponse?.tahunajaran?.forEach((element) {
+                if(tahunAjaran.id == element.id){
+                  element.isSelected = !element.isSelected;
+
+                  if(element.isSelected){
+                    selectedYear.add(tahunAjaran);
+                    selectedPeriods.add(int.tryParse(element.id ?? "0") ?? 0);
+                  }else{
+                    selectedYear.remove(tahunAjaran);
+                    selectedPeriods.removeWhere((inte) => inte == (int.tryParse(element.id ?? "0") ?? 0));
+                  }
+                  setState(() {});
+                  getData();
+                }
+              });
+            },
+            onSelectAll: (){
+              selectedYear.clear();
+              setAllPeriods();
+              getData();
+            },
+            tahunAjaranResponse: _tahunAjaranResponse,
+          );
+        }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    print("gilang  : ${selectedYear}");
     return BlocListener<PaymentBloc, PaymentState>(
       listener: listener,
       child: Scaffold(
@@ -468,7 +544,85 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
             padding: const EdgeInsets.only(bottom: 100),
             child: TreeView(
               startExpanded: false,
-              children: widget.isBebas ? buildBebasWidget() : buildBulananWidget()
+              children: [
+                SizedBox(height: 15,),
+                SizedBox(
+                  height: 32,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: listFilter.length,
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    itemBuilder: (context, index) {
+                      var item = listFilter[index];
+                      if(index == 0){
+                        return InkWell(
+                          onTap: (){
+                            _modalBottomSheetMenu();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: selectedYear != null ? MyColors.primary.withOpacity(0.3) :  Color(0xffEBF6F3),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(16.0)),
+                                border: Border.all(
+                                  color: MyColors.grey_20,
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Center(child: Row(
+                                children: [
+                                  Visibility(
+                                    visible: selectedYear != null,
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.check, color: MyColors.primary,size: 18,),
+                                        SizedBox(width: 5,),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(selectedYear.isEmpty ? "Semua Tahun" : selectedYear.map((e) => e.getTitle()).toString() , style: TextStyle(color: MyColors.primary),),
+                                ],
+                              )),
+                            ),
+                          ),
+                        );
+                      }else{
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: FilterChip(
+                            label: Text(item.name, style: TextStyle(color: MyColors.primary),),
+                            selected: item.isFilterActive,
+                            backgroundColor: Color(0xffEBF6F3),
+                            shape: StadiumBorder(side: BorderSide(
+                                color: MyColors.grey_20
+                            )),
+                            selectedColor: MyColors.primary.withOpacity(0.3),
+                            checkmarkColor: MyColors.primary,
+                            onSelected: (val) {
+                              setState(() => item.isFilterActive = !
+                              item.isFilterActive);
+                              listFilter;
+
+                              print("list filter : ${listFilter.map((e) => e.isFilterActive)}");
+                              setState(() {
+                              });
+                            },
+                          ),
+                        );
+                      }
+
+                    },
+                  ),
+                ),
+                Column(
+                  children:  widget.isBebas ? buildBebasWidget() : buildBulananWidget(),
+                )
+              ]
+
+
             ),
           ),
         ),
@@ -503,9 +657,13 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                     var nominalIds = selectedList.map((e) => e.detailBulan?.nominalBayar?.toInt() ?? 0).toList();
                     nominalIds.removeWhere((element) => element == 0);
 
+                    var periodIds = selectedList.map((e) => int.tryParse(e.detailBulan?.period ?? "0") ?? 0).toList();
+                    periodIds.removeWhere((element) => element == 0);
+
                     var param = BayarParam(
                       bebas_id: bayarIds,
-                      bebas_nominal: nominalIds
+                      bebas_nominal: nominalIds,
+                      period_ids: periodIds
                     );
 
                     if(bayarIds.isEmpty){
@@ -517,8 +675,13 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                     var selectedList = _bulananResponse?.detail?.where((element) => element.detailBulan?.processPaid == true).toList() ?? [];
                     var bayarIds = selectedList.map((e) => int.tryParse(e.detailBulan?.bulanId ?? "") ?? 0).toList();
                     bayarIds.removeWhere((element) => element == 0);
+
+                    var periodIds = selectedList.map((e) => int.tryParse(e.detailBulan?.period ?? "0") ?? 0).toList();
+                    periodIds.removeWhere((element) => element == 0);
+
                     var param = BayarParam(
-                        bulan_id: bayarIds
+                        bulan_id: bayarIds,
+                        period_ids: periodIds
                     );
 
                     if(bayarIds.isEmpty){

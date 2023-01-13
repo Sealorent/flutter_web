@@ -10,28 +10,33 @@ class GetPayment extends PaymentEvent {
   @override
   List<Object> get props => [];
 
-  GetPayment();
+  List<int> periodIds;
+
+  GetPayment(this.periodIds);
 }
 
 class GetPaymentBebas extends PaymentEvent {
   @override
   List<Object> get props => [];
+  List<int> periodIds;
 
-  GetPaymentBebas();
+  GetPaymentBebas(this.periodIds);
 }
 
 class GetDetailPaymentBulanan extends PaymentEvent {
+  List<int> periodIds;
   @override
   List<Object> get props => [];
 
-  GetDetailPaymentBulanan();
+  GetDetailPaymentBulanan(this.periodIds);
 }
 
 class GetDetailPaymentBebas extends PaymentEvent {
+  List<int> periodIds;
   @override
   List<Object> get props => [];
 
-  GetDetailPaymentBebas();
+  GetDetailPaymentBebas(this.periodIds);
 }
 
 class GetHistory extends PaymentEvent {
@@ -53,11 +58,13 @@ class BayarTagihan extends PaymentEvent {
 
 class GetRingkasan extends PaymentEvent {
   String noIpaymu;
+  List<int> removedBebas;
+  List<int> removedBulanan;
 
   @override
   List<Object> get props => [];
 
-  GetRingkasan(this.noIpaymu);
+  GetRingkasan(this.noIpaymu,this.removedBebas,this.removedBulanan);
 }
 
 

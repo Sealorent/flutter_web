@@ -19,7 +19,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await repository.loginPesantren(event.code);
         yield LoginPesantrenSuccess();
       } catch (e) {
-        yield FailedState("Kode pesantren tidak ditemukan, silahkan periksa kembali", 0);
+        yield FailedState("Kode pesantren tidak ditemukan, silahkan periksa kembalii", 0);
       }
     }
 

@@ -49,7 +49,8 @@ class DetailBulan {
     this.bebasId,
     this.period,
     this.sisa,
-    this.nominalBayar
+    this.nominalBayar,
+    required this.processPaid
   });
 
   String? bebas;
@@ -68,6 +69,7 @@ class DetailBulan {
     bebasId: json["bebas_id"],
     period: json["period"],
     sisa: json["sisa"],
+    processPaid: json["status"]
   );
 
   Map<String, dynamic> toJson() => {

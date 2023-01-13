@@ -40,6 +40,8 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
   Bayar? _selectedPayment;
   bool _insertIsLoading = false;
   IpaymuParam? _ipaymuParam;
+  List<int> removedBebas = [];
+  List<int> removedBulanan = [];
 
   @override
   void initState() {
@@ -86,14 +88,19 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
   }
 
   void getData(){
-    bloc.add(GetRingkasan(widget.noIpayMu ?? ""));
+    bloc.add(GetRingkasan(widget.noIpayMu ?? "", removedBebas, removedBulanan));
   }
 
   double getTotal(){
-    var totalBebas = (_response?.bebas?.map((e) => int.tryParse(e.nominal ?? "") ?? 0).toList() ?? []).reduce((a, b) => a + b);
-    var totalBulan = (_response?.bulan?.map((e) => int.tryParse(e.nominal ?? "") ?? 0).toList() ?? []).reduce((a, b) => a + b);
+    var totalBebas = (_response?.bebas?.map((e) => int.tryParse(e.nominal ?? "0") ?? 0).toList() ?? []); //.reduce((a, b) => a + b);
+    var totalBulan = (_response?.bulan?.map((e) => int.tryParse(e.nominal ?? "0") ?? 0).toList() ?? []); //.reduce((a, b) => a + b);
+    var tbeb = 0;
+    var tbul = 0;
+    if(totalBebas.isNotEmpty) tbeb = totalBebas.reduce((a, b) => a + b);
+    if(totalBulan.isNotEmpty) tbul = totalBulan.reduce((a, b) => a + b);
 
-    return totalBebas.toDouble() + totalBulan.toDouble();
+    return tbeb.toDouble() + tbul.toDouble();
+    return 0;
   }
 
   @override
@@ -138,6 +145,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                         Text("ITEM (${(_response?.bulan?.length ?? 0) + (_response?.bebas?.length ?? 0)})", style: TextStyle(color: MyColors.grey_60, fontSize: 12)),
                         Spacer(),
                         Text("JUMLAH", style: TextStyle(color: MyColors.grey_60, fontSize: 12),),
+                        SizedBox(width: 50,)
                       ],
                     ),
                     SizedBox(height: 20,),
@@ -146,9 +154,19 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                         children: [
                           Row(
                             children: [
-                              Text(e.namaBayar ?? ""),
-                              Spacer(),
+                              Expanded(child: Text(e.namaBayar ?? "")),
+                              SizedBox(width: 20,),
                               Text(NumberUtils.toRupiah(double.tryParse(e.nominal ?? "") ?? 0.0)),
+                              Container(
+                                width: 50,
+                                child: InkWell(
+                                    onTap: (){
+                                      print("bebasId : ${e.bebasId}");
+                                      removedBulanan.add(int.tryParse(e.bulanId ?? "0") ?? 0);
+                                      getData();
+                                    },
+                                    child: Icon(Icons.restore_from_trash_outlined, color: Colors.red,)),
+                              )
                             ],
                           ),
                           SizedBox(height: 20,),
@@ -160,9 +178,18 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                         children: [
                           Row(
                             children: [
-                              Text(e.namaBayar ?? ""),
-                              Spacer(),
+                              Expanded(child: Text(e.namaBayar ?? "")),
+                              SizedBox(width: 20,),
                               Text(NumberUtils.toRupiah(double.tryParse(e.nominal ?? "") ?? 0.0)),
+                              Container(
+                                width: 50,
+                                child: InkWell(
+                                    onTap: (){
+                                      removedBebas.add(int.tryParse(e.bebasId ?? "0") ?? 0);
+                                      getData();
+                                    },
+                                    child: Icon(Icons.restore_from_trash_outlined, color: Colors.red,)),
+                              )
                             ],
                           ),
                           SizedBox(height: 20,),

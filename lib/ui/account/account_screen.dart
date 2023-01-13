@@ -111,6 +111,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           prefs.remove(PrefData.student);
                           prefs.remove(PrefData.setting);
                           prefs.remove(PrefData.role);
+                          prefs.remove(PrefData.TAHUN_AJARAN);
                           prefs.clear();
 
                           Get.offAll(LoginUserScreen());
@@ -378,26 +379,26 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ),
             ),
-            // Divider(),
-            // InkWell(
-            //   onTap: () async {
-            //     widget.alice?.showInspector();
-            //   },
-            //   child: Padding(
-            //     padding:
-            //         const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            //     child: Row(
-            //       children: [
-            //         Text("Inspeksi API"),
-            //         Spacer(),
-            //         Icon(
-            //           Icons.keyboard_arrow_right,
-            //           size: 20,
-            //         )
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            Divider(),
+            InkWell(
+              onTap: () async {
+                widget.alice?.showInspector();
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Row(
+                  children: [
+                    Text("Inspeksi API"),
+                    Spacer(),
+                    Icon(
+                      Icons.keyboard_arrow_right,
+                      size: 20,
+                    )
+                  ],
+                ),
+              ),
+            ),
             Divider(),
             InkWell(
               onTap: () {
