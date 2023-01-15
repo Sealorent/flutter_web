@@ -185,6 +185,8 @@ class _SavingScreenState extends State<SavingScreen> {
         });
   }
 
+  DateTimeRange? timeRange;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -207,6 +209,27 @@ class _SavingScreenState extends State<SavingScreen> {
             "Tabungan",
             style: TextStyle(color: Colors.white),
           ),
+          actions: [
+            PopupMenuButton<String>(
+              onSelected: (test){
+
+              },
+              itemBuilder: (BuildContext context) {
+                return {'Cetak buku tabungan'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Row(
+                      children: [
+                        Icon(Icons.download, color: Colors.black26,),
+                        SizedBox(width: 5,),
+                        Text(choice),
+                      ],
+                    ),
+                  );
+                }).toList();
+              },
+            ),
+          ],
         ),
         backgroundColor: Colors.white,
         body: RefreshIndicator(
@@ -217,6 +240,45 @@ class _SavingScreenState extends State<SavingScreen> {
               ? ProgressLoading()
               : ListView(
                   children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          Text("Tanggal"),
+                          Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: FilterChip(
+                              label: timeRange != null ? Text(
+                                "${DateFormat("d MMM yyyy").format(timeRange!.start)}-${DateFormat("d MMM yyyy").format(timeRange!.end)}",
+                                style: TextStyle(color: MyColors.primary),
+                              ) : Icon(Icons.calendar_month,color: MyColors.primary),
+                              selected: timeRange != null,
+                              backgroundColor: Color(0xffEBF6F3),
+                              shape: StadiumBorder(
+                                  side: BorderSide(color: MyColors.grey_20)),
+                              selectedColor: MyColors.primary.withOpacity(0.3),
+                              checkmarkColor: MyColors.primary,
+                              onSelected: (val)  async {
+                                DateTimeRange? result = await showDateRangePicker(
+                                  context: context,
+                                  firstDate: DateTime(2022, 1, 1), // the earliest allowable
+                                  lastDate: DateTime(2050, 12, 31), // the latest allowable
+                                  currentDate: DateTime.now(),
+                                  saveText: 'Done',
+                                );
+                                timeRange = result;
+
+                                setState(() {});
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                     SizedBox(
                       height: 15,
                     ),
@@ -348,7 +410,17 @@ class _SavingScreenState extends State<SavingScreen> {
 
   List<Widget> generateList() {
     return _savingResponse?.laporan
-            ?.map((e) => InkWell(
+            ?.where((element) {
+              var curDate = element.tanggal;
+              var start = timeRange?.start;
+              var end = timeRange?.end;
+              
+              if(curDate != null && start != null && end != null){
+                return (curDate.isAfter(start) && curDate.isBefore(end)) || curDate.isAtSameMomentAs(start) || curDate.isAtSameMomentAs(end);
+              }
+              
+              return true;
+            }).map((e) => InkWell(
                   onTap: () {
                     _detailBottomSheet(e);
                   },

@@ -253,6 +253,9 @@ class _KonselingScreenState extends State<KonselingScreen> {
     }
   }
 
+  bool isSearchVisible = false;
+  String? searchQuery;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -269,6 +272,33 @@ class _KonselingScreenState extends State<KonselingScreen> {
                 color: Colors.white,
               ),
             ),
+            actions: [
+              PopupMenuButton<String>(
+                onSelected: (test){
+                  if(test == "Pencarian"){
+                    setState(() {
+                      isSearchVisible = true;
+                    });
+                  }else{
+
+                  }
+                },
+                itemBuilder: (BuildContext context) {
+                  return {'Pencarian','Cetak buku konseling'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Row(
+                        children: [
+                          Icon(choice != "Pencarian" ? Icons.download : Icons.search, color: Colors.black26,),
+                          SizedBox(width: 5,),
+                          Text(choice),
+                        ],
+                      ),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
             centerTitle: true,
             elevation: 0,
             title: Text("Konseling", style: TextStyle(color: Colors.white),),
@@ -282,6 +312,26 @@ class _KonselingScreenState extends State<KonselingScreen> {
             },
             child: _isLoading ? ProgressLoading() : ListView(
               children: [
+                Visibility(
+                  visible: isSearchVisible,
+                  child: TextField(
+                      onChanged: (val){
+                        searchQuery = val;
+                        setState(() {});
+                      },
+                      decoration: InputDecoration(
+                          hintText: 'Pencarian',
+                          prefixIcon: Icon(Icons.search),
+                          suffix: InkWell(
+                              onTap: (){
+                                isSearchVisible = false;
+                                searchQuery = null;
+                                setState(() {
+
+                                });
+                              },
+                              child: Icon(Icons.close)))),
+                ),
                 SizedBox(height: 15,),
                 SizedBox(
                   height: 32,

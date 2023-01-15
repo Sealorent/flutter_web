@@ -70,7 +70,7 @@ class Detail {
   factory Detail.fromJson(Map<String, dynamic> json) => Detail(
     waktu: json["waktu"],
     catatan: json["note"],
-    disetujui: json["disetujui"],
+    disetujui: json["status"],
   );
 
   Map<String, dynamic> toJson() => {
