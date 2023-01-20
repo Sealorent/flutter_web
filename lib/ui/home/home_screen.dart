@@ -129,33 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: <Widget>[
                               Image.network(item.foto ?? "",
                                   fit: BoxFit.cover, width: 1000.0),
-                              // Positioned(
-                              //   bottom: 0.0,
-                              //   left: 0.0,
-                              //   right: 0.0,
-                              //   child: Container(
-                              //     decoration: BoxDecoration(
-                              //       gradient: LinearGradient(
-                              //         colors: [
-                              //           Color.fromARGB(200, 0, 0, 0),
-                              //           Color.fromARGB(0, 0, 0, 0)
-                              //         ],
-                              //         begin: Alignment.bottomCenter,
-                              //         end: Alignment.topCenter,
-                              //       ),
-                              //     ),
-                              //     padding: EdgeInsets.symmetric(
-                              //         vertical: 10.0, horizontal: 20.0),
-                              //     child: Text(
-                              //       '${item.tanggal.toString()}',
-                              //       style: TextStyle(
-                              //         color: Colors.white,
-                              //         fontSize: 20.0,
-                              //         fontWeight: FontWeight.bold,
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           )),
                     ),
@@ -280,347 +253,353 @@ class _HomeScreenState extends State<HomeScreen> {
     final size = MediaQuery.of(context).size;
     return BlocListener<HomeBloc, HomeState>(
       listener: listener,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: RefreshIndicator(
-          onRefresh: () async {
-            _getData();
-          },
-          child: _isLoading
-              ? ProgressLoading()
-              : ListView(
-                  children: [
-                    Stack(
-                      children: [
-                        SizedBox(
-                          width: size.width,
-                          child: SvgPicture.asset(
-                              "assets/background_mosque.svg",
-                              fit: BoxFit.fill),
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 25),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _pesantren?.namaPesantren ?? "",
-                                  style: const TextStyle(
-                                      fontSize: 16, color: Colors.white),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            _user?.nama ?? "",
-                                            style: const TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white),
-                                          ),
-                                          Text(
-                                            _user?.kelas ?? "",
-                                            style: TextStyle(
-                                                color: Colors.white
-                                                    .withOpacity(0.6)),
-                                          ),
-                                        ],
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: RefreshIndicator(
+            onRefresh: () async {
+              _getData();
+              _getData();
+              _getUser();
+              _getPesantren();
+            },
+            child: _isLoading
+                ? ProgressLoading()
+                : ListView(
+                    children: [
+                      Stack(
+                        children: [
+                          SizedBox(
+                            width: size.width,
+                            child: SvgPicture.asset(
+                                "assets/background_mosque.svg",
+                                fit: BoxFit.fill),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 25),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _pesantren?.namaPesantren ?? "",
+                                    style: const TextStyle(
+                                        fontSize: 16, color: Colors.white),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              _user?.nama ?? "",
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
+                                            Text(
+                                              _user?.kelas ?? "",
+                                              style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.6)),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        ScreenUtils(context).navigateTo(
-                                            ShowImage(_user?.photo ?? "",
-                                                _user?.nama ?? ""));
-                                      },
-                                      child: Container(
-                                        width: 70,
-                                        height: 70,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xff7c94b6),
-                                          image: DecorationImage(
-                                            image: NetworkImage(
-                                                _user?.photo ?? ""),
-                                            fit: BoxFit.cover,
-                                          ),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(50.0)),
-                                          border: Border.all(
-                                            color:
-                                                Colors.white.withOpacity(0.4),
-                                            width: 4.0,
+                                      InkWell(
+                                        onTap: () {
+                                          ScreenUtils(context).navigateTo(
+                                              ShowImage(_user?.photo ?? "",
+                                                  _user?.nama ?? ""));
+                                        },
+                                        child: Container(
+                                          width: 70,
+                                          height: 70,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xff7c94b6),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                  _user?.photo ?? ""),
+                                              fit: BoxFit.cover,
+                                            ),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(50.0)),
+                                            border: Border.all(
+                                              color:
+                                                  Colors.white.withOpacity(0.4),
+                                              width: 4.0,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              ],
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              ScreenUtils(context)
-                                  .navigateTo(const PaymentScreen());
-                            },
-                            child: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/ic_bayar.svg",
-                                  width: 50,
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                const Text("Bayar\n")
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              ScreenUtils(context)
-                                  .navigateTo(const SavingScreen());
-                            },
-                            child: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/ic_tabungan.svg",
-                                  width: 50,
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                const Text("Tabungan\n")
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              ScreenUtils(context)
-                                  .navigateTo(const TahfidzScreen());
-                            },
-                            child: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/ic_tahfidz.svg",
-                                  width: 50,
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                const Text("Tafidz\n")
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              ScreenUtils(context)
-                                  .navigateTo(const RekamMedisScreen());
-                            },
-                            child: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/ic_rekam_medis.svg",
-                                  width: 50,
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                const Text("Rekam\nMedis")
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              ScreenUtils(context)
-                                  .navigateTo(const KonselingScreen());
-                            },
-                            child: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/ic_conseling.svg",
-                                  width: 50,
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                const Text("Konseling")
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              ScreenUtils(context)
-                                  .navigateTo(const IzinScreen());
-                            },
-                            child: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/ic_izin.svg",
-                                  width: 50,
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                const Text("Izin")
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              ScreenUtils(context)
-                                  .navigateTo(const MudifScreen());
-                            },
-                            child: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/ic_mudif.svg",
-                                  width: 50,
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                const Text("Mudif")
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              _otherBottomSheetMenu();
-                            },
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                SvgPicture.asset(
-                                  "assets/Lainnya-01_fix.svg",
-                                  width: 35,
-                                  color: MyColors.primary.withOpacity(0.7),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Text("Lainnya")
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          const Text(
-                            "Informasi",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          const Spacer(),
-                          InkWell(
-                            onTap: () {
-                              ScreenUtils(context)
-                                  .navigateTo(const InformationScreen());
-                            },
-                            child: Row(
-                              children: [
-                                const Text("Lihat semua"),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                const Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: MyColors.grey_60,
-                                  size: 20,
-                                )
-                              ],
-                            ),
-                          )
                         ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    CarouselSlider(
-                        items: buildInformations(),
-                        options: CarouselOptions(
-                          // enableInfiniteScroll: false,
-                          // reverse: true,
-                          autoPlay: true,
-                          autoPlayAnimationDuration: const Duration(seconds: 1),
-                          aspectRatio: 2.0,
-                          enlargeCenterPage: true,
-                          enlargeStrategy: CenterPageEnlargeStrategy.height,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              currentIndex = index;
-                            });
-                          },
-                        )),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Center(
-                      child: AnimatedSmoothIndicator(
-                          activeIndex: currentIndex,
-                          count: buildInformations().length,
-                          effect: CustomizableEffect(
-                              spacing: 4,
-                              dotDecoration: DotDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  color: MyColors.primaryVariants,
-                                  width: 6,
-                                  height: 6),
-                              activeDotDecoration: DotDecoration(
-                                  color: MyColors.primary,
-                                  width: 36,
-                                  height: 6,
-                                  borderRadius: BorderRadius.circular(100)))),
-                    ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                ScreenUtils(context)
+                                    .navigateTo(const PaymentScreen());
+                              },
+                              child: Column(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/ic_bayar.svg",
+                                    width: 50,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const Text("Bayar\n")
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                ScreenUtils(context)
+                                    .navigateTo(const SavingScreen());
+                              },
+                              child: Column(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/ic_tabungan.svg",
+                                    width: 50,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const Text("Tabungan\n")
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                ScreenUtils(context)
+                                    .navigateTo(const TahfidzScreen());
+                              },
+                              child: Column(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/ic_tahfidz.svg",
+                                    width: 50,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const Text("Tafidz\n")
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                ScreenUtils(context)
+                                    .navigateTo(const RekamMedisScreen());
+                              },
+                              child: Column(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/ic_rekam_medis.svg",
+                                    width: 50,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const Text("Rekam\nMedis")
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                ScreenUtils(context)
+                                    .navigateTo(const KonselingScreen());
+                              },
+                              child: Column(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/ic_conseling.svg",
+                                    width: 50,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const Text("Konseling")
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                ScreenUtils(context)
+                                    .navigateTo(const IzinScreen());
+                              },
+                              child: Column(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/ic_izin.svg",
+                                    width: 50,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const Text("Izin")
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                ScreenUtils(context)
+                                    .navigateTo(const MudifScreen());
+                              },
+                              child: Column(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/ic_mudif.svg",
+                                    width: 50,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const Text("Mudif")
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                _otherBottomSheetMenu();
+                              },
+                              child: Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  SvgPicture.asset(
+                                    "assets/Lainnya-01_fix.svg",
+                                    width: 35,
+                                    color: MyColors.primary.withOpacity(0.7),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text("Lainnya")
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            const Text(
+                              "Informasi",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            const Spacer(),
+                            InkWell(
+                              onTap: () {
+                                ScreenUtils(context)
+                                    .navigateTo(const InformationScreen());
+                              },
+                              child: Row(
+                                children: [
+                                  const Text("Lihat semua"),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  const Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: MyColors.grey_60,
+                                    size: 20,
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CarouselSlider(
+                          items: buildInformations(),
+                          options: CarouselOptions(
+                            // enableInfiniteScroll: false,
+                            // reverse: true,
+                            autoPlay: true,
+                            autoPlayAnimationDuration:
+                                const Duration(seconds: 1),
+                            aspectRatio: 2.0,
+                            enlargeCenterPage: true,
+                            enlargeStrategy: CenterPageEnlargeStrategy.height,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                currentIndex = index;
+                              });
+                            },
+                          )),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Center(
+                        child: AnimatedSmoothIndicator(
+                            activeIndex: currentIndex,
+                            count: buildInformations().length,
+                            effect: CustomizableEffect(
+                                spacing: 4,
+                                dotDecoration: DotDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: MyColors.primaryVariants,
+                                    width: 6,
+                                    height: 6),
+                                activeDotDecoration: DotDecoration(
+                                    color: MyColors.primary,
+                                    width: 36,
+                                    height: 6,
+                                    borderRadius: BorderRadius.circular(100)))),
+                      ),
 // <<<<<<< HEAD
 //                   ),
 //                 ],
@@ -680,11 +659,12 @@ class _HomeScreenState extends State<HomeScreen> {
 //             ],
 //           ),
 // =======
-                    const SizedBox(
-                      height: 100,
-                    )
-                  ],
-                ),
+                      const SizedBox(
+                        height: 100,
+                      )
+                    ],
+                  ),
+          ),
         ),
       ),
     );

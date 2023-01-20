@@ -126,30 +126,30 @@ class _BebasScreenState extends State<BebasScreen> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Center(
                 child: Container(
                   width: 50,
                   height: 8,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: MyColors.grey_20,
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   "Pilih tahun ajaran",
                   style: TextStyle(color: Colors.black.withOpacity(0.4)),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Expanded(
@@ -169,12 +169,12 @@ class _BebasScreenState extends State<BebasScreen> {
                             horizontal: 20, vertical: 10),
                         child: Row(
                           children: [
-                            Text(
+                            const Text(
                               "Semua",
                               style: TextStyle(fontSize: 18),
                             ),
-                            Spacer(),
-                            Icon(
+                            const Spacer(),
+                            const Icon(
                               Icons.arrow_forward_ios,
                               size: 18,
                             )
@@ -182,7 +182,7 @@ class _BebasScreenState extends State<BebasScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Column(
@@ -207,10 +207,11 @@ class _BebasScreenState extends State<BebasScreen> {
                                             children: [
                                               Text(
                                                 e.getTitle(),
-                                                style: TextStyle(fontSize: 18),
+                                                style: const TextStyle(
+                                                    fontSize: 18),
                                               ),
-                                              Spacer(),
-                                              Icon(
+                                              const Spacer(),
+                                              const Icon(
                                                 Icons.arrow_forward_ios,
                                                 size: 18,
                                               )
@@ -264,7 +265,7 @@ class _BebasScreenState extends State<BebasScreen> {
               double.tryParse(e.detailBebas?.bebasTotalPay ?? "0.0") ?? 0.0;
           return Column(
             children: [
-              Divider(),
+              const Divider(),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
@@ -275,15 +276,15 @@ class _BebasScreenState extends State<BebasScreen> {
                       children: [
                         Text(
                           e.detailBebas?.namaBayar ?? "",
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ),
                         Text(
                           "${NumberUtils.toRupiah(bill)} dibayar ${NumberUtils.toRupiah(paid)}",
-                          style: TextStyle(color: MyColors.grey_60),
+                          style: const TextStyle(color: MyColors.grey_60),
                         ),
                       ],
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Text(
                       bill < paid ? "Belum Lunas" : "Lunas",
                       style: TextStyle(
@@ -296,8 +297,8 @@ class _BebasScreenState extends State<BebasScreen> {
           );
         }).toList() ??
         [
-          Padding(
-            padding: const EdgeInsets.all(40),
+          const Padding(
+            padding: EdgeInsets.all(40),
             child: Text("Tidak ada data"),
           )
         ];
@@ -359,7 +360,7 @@ class _BebasScreenState extends State<BebasScreen> {
           : TreeView(
               startExpanded: false,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 SizedBox(
@@ -367,7 +368,7 @@ class _BebasScreenState extends State<BebasScreen> {
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: listFilter.length,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     itemBuilder: (context, index) {
                       var item = listFilter[index];
                       if (index == 0) {
@@ -379,13 +380,14 @@ class _BebasScreenState extends State<BebasScreen> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 4.0),
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               decoration: BoxDecoration(
                                 color: selectedYear != null
                                     ? MyColors.primary.withOpacity(0.3)
-                                    : Color(0xffEBF6F3),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(16.0)),
+                                    : const Color(0xffEBF6F3),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(16.0)),
                                 border: Border.all(
                                   color: MyColors.grey_20,
                                   width: 1.5,
@@ -397,13 +399,14 @@ class _BebasScreenState extends State<BebasScreen> {
                                   Visibility(
                                     visible: selectedYear != null,
                                     child: Row(
+                                      // ignore: prefer_const_literals_to_create_immutables
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           Icons.check,
                                           color: MyColors.primary,
                                           size: 18,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 5,
                                         ),
                                       ],
@@ -411,7 +414,8 @@ class _BebasScreenState extends State<BebasScreen> {
                                   ),
                                   Text(
                                     selectedYear?.getTitle() ?? "Semua Tahun",
-                                    style: TextStyle(color: MyColors.primary),
+                                    style: const TextStyle(
+                                        color: MyColors.primary),
                                   ),
                                 ],
                               )),
@@ -424,11 +428,11 @@ class _BebasScreenState extends State<BebasScreen> {
                           child: FilterChip(
                             label: Text(
                               item.name,
-                              style: TextStyle(color: MyColors.primary),
+                              style: const TextStyle(color: MyColors.primary),
                             ),
                             selected: item.isFilterActive,
-                            backgroundColor: Color(0xffEBF6F3),
-                            shape: StadiumBorder(
+                            backgroundColor: const Color(0xffEBF6F3),
+                            shape: const StadiumBorder(
                                 side: BorderSide(color: MyColors.grey_20)),
                             selectedColor: MyColors.primary.withOpacity(0.3),
                             checkmarkColor: MyColors.primary,
@@ -440,7 +444,7 @@ class _BebasScreenState extends State<BebasScreen> {
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Padding(
@@ -452,18 +456,18 @@ class _BebasScreenState extends State<BebasScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "TAGIHAN BULANAN",
                             style: TextStyle(color: MyColors.grey_60),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(
                             NumberUtils.toRupiah(total.toDouble()),
-                            style: TextStyle(fontSize: 24),
+                            style: const TextStyle(fontSize: 24),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Row(
@@ -529,7 +533,7 @@ class _BebasScreenState extends State<BebasScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Column(

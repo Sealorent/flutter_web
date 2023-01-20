@@ -28,7 +28,7 @@ class Constant {
   static const String payments = "/pembayaran2.php";
   static const String presensi = "/presensi.php";
   static const String paymentBebas = "/pembayaran_bebas2.php";
-  static const String editProfile = "/edit_profil.php";
+  static const String editProfile = "/edit_profil1.php";
   static const String changePassword = "/edit_password.php";
   static const String bayarBebas = "/bayar_tagihan_bebas2.php";
   static const String bayarBulanan = "/bayar_tagihan_bulan2.php";

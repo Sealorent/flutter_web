@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 
 class EditProfileParam {
   String? student_nis;
@@ -11,7 +14,7 @@ class EditProfileParam {
   String? gender;
   String? ayah;
   String? ibu;
-  String? student_img;
+  File? student_img;
 
   EditProfileParam(
       {this.student_nis,
@@ -52,8 +55,9 @@ class EditProfileParam {
         'gender': gender,
         'ayah': ayah,
         'ibu': ibu,
-        'student_img': await MultipartFile.fromFile(student_img ?? "",
-            filename: '${DateTime.now().microsecondsSinceEpoch}profile.jpg')
+        'student_img': await MultipartFile.fromFile(student_img!.path,
+            filename:
+                '$nama_santri${DateFormat("HH:mm:ss").format(DateTime.now())}')
       });
     }
   }

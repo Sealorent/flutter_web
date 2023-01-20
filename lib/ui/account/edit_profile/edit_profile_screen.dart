@@ -30,11 +30,11 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  int? sexValue=0;
+  int? sexValue = 0;
 
   late LoginBloc bloc;
   bool _isLoading = false;
-  String? studentImagePath;
+  XFile? studentImagePath;
 
   void loginListener(BuildContext context, LoginState state) async {
     if (state is EditProfileLoading) {
@@ -130,8 +130,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _saveUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(PrefData.student, jsonEncode(_user.toJson()));
-
   }
+
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -178,7 +178,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 elevation: 0,
                 clipBehavior: Clip.antiAlias,
-                child: studentImagePath == null ? _user.photo?.contains("http") == true ? Image.network(_user.photo ?? "", width: 60, height: 60, fit: BoxFit.fill,) : Image.file(File(_user.photo ?? ""), width: 60, height: 60, fit: BoxFit.fill,) : Image.file(File(studentImagePath!), width: 60, height: 60, fit: BoxFit.fill,),
+                child: studentImagePath == null
+                    ? _user.photo?.contains("http") == true
+                        ? Image.network(
+                            _user.photo ?? "",
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.fill,
+                          )
+                        : Image.file(
+                            File(_user.photo ?? ""),
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.fill,
+                          )
+                    : Image.file(
+                        File(studentImagePath!.path),
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.fill,
+                      ),
               ),
             ),
             SizedBox(
@@ -186,9 +205,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             InkWell(
               onTap: () async {
-                final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                final XFile? image =
+                    await _picker.pickImage(source: ImageSource.gallery);
                 setState(() {
-                  studentImagePath = image?.path;
+                  studentImagePath = image;
                 });
               },
               child: Center(
@@ -365,25 +385,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         borderRadius: BorderRadius.circular(18.0)))),
             onPressed: () async {
               var param = EditProfileParam(
-                nama_santri: _nameController.text.trim(),
-                alamat: _addressController.text.trim(),
-                tempatlahir: _tempatLahirController.text.trim(),
-                tanggallahir: DateFormat("yyyy-MM-dd").format(_selectedTanggalLahir ?? DateTime.now()),
-                nomorwa: _phoneController.text.trim(),
-                gender: sexValue == 0 ? "L" : "P",
-                ayah: _ayahController.text.toString(),
-                ibu: _ibuController.text.toString(),
-                student_img: studentImagePath
-              );
+                  nama_santri: _nameController.text.trim(),
+                  alamat: _addressController.text.trim(),
+                  tempatlahir: _tempatLahirController.text.trim(),
+                  tanggallahir: DateFormat("yyyy-MM-dd")
+                      .format(_selectedTanggalLahir ?? DateTime.now()),
+                  nomorwa: _phoneController.text.trim(),
+                  gender: sexValue == 0 ? "L" : "P",
+                  ayah: _ayahController.text.toString(),
+                  ibu: _ibuController.text.toString(),
+                  student_img: File(studentImagePath!.path));
 
               _user.nama = _nameController.text.trim();
+
               _user.tempatlahir = _tempatLahirController.text.trim();
               _user.tanggallahir = _selectedTanggalLahir;
               _user.phone = _phoneController.text.trim();
               _user.gender = sexValue == 0 ? "L" : "P";
               _user.ayah = _ayahController.text.toString();
               _user.ibu = _ibuController.text.toString();
-              _user.photo = studentImagePath;
+              _user.photo = File(studentImagePath!.path).path;
 
               bloc.add(EditProfile(param));
             },
