@@ -48,7 +48,6 @@ class _KonfirmasiState extends State<Konfirmasi> {
       body: GetBuilder<KonfirmasiController>(
           initState: (state) => KonfirmasiController.to.getKonfirmasi(),
           builder: (_) {
-            print('loading ${_.isLoadingKonfirmasi}');
             return _.listKonfirmasi.isEmpty
                 ? const Center(
                     child: Text('Tidak Ada'),
