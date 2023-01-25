@@ -47,4 +47,5 @@ class Constant {
   static const String resetPassword = "/reset_password.php";
   static const String konfirmasi = "/info_upload_pembayaran.php";
   static const String tahunAjaran = "/tahun_ajaran.php";
+  static const String uploadBukti = "/upload_bukti_bayar.php";
 }

@@ -185,8 +185,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         InkWell(
                           onTap: () {
-                            ScreenUtils(context)
-                                .navigateTo(const PresensiScreen());
+                            Get.to(const PresensiScreen());
+                            Get.back();
                           },
                           child: Column(
                             children: [
@@ -212,6 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onTap: () {
                                     _.getKonfirmasi();
                                     Get.to(const Konfirmasi());
+                                    Get.back();
                                   },
                                   child: SizedBox(
                                     width: 95,
@@ -259,9 +260,8 @@ class _HomeScreenState extends State<HomeScreen> {
           body: RefreshIndicator(
             onRefresh: () async {
               _getData();
-              _getData();
-              _getUser();
-              _getPesantren();
+              await _getUser();
+              await _getPesantren();
             },
             child: _isLoading
                 ? ProgressLoading()

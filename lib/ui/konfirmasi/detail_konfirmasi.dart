@@ -5,7 +5,7 @@ import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/konfirmasi/model_konfirmasi.dart';
 
 class DetailKOnfirmasi extends StatefulWidget {
-  Upload? konfirmasi;
+  Data? konfirmasi;
   DetailKOnfirmasi(this.konfirmasi, {Key? key}) : super(key: key);
 
   @override

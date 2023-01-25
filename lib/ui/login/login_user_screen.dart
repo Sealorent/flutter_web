@@ -99,8 +99,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
         _isLoading = false;
       });
 
-      MySnackbar(context)
-          .errorSnackbar(state.message);
+      MySnackbar(context).errorSnackbar(state.message);
     }
   }
 

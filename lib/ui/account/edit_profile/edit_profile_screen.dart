@@ -153,14 +153,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_ios,
               color: MyColors.grey_5,
             ),
           ),
           centerTitle: true,
           elevation: 0,
-          title: Text(
+          title: const Text(
             "Edit Profil",
             style: TextStyle(color: Colors.white),
           ),
@@ -168,7 +168,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         backgroundColor: Colors.white,
         body: ListView(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Center(
@@ -200,7 +200,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             InkWell(
@@ -211,51 +211,51 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   studentImagePath = image;
                 });
               },
-              child: Center(
+              child: const Center(
                 child: Text(
                   "Ganti foto profil",
                   style: TextStyle(color: MyColors.primary),
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
               color: MyColors.grey_10,
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text("Data Pribadi"),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Nama Lengkap',
                   border: OutlineInputBorder(),
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: _tempatLahirController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Tempat Lahir',
                   border: OutlineInputBorder(),
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Padding(
@@ -264,9 +264,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 controller: _dateController,
                 decoration: InputDecoration(
                   labelText: 'Tanggal Lahir',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       // Based on passwordVisible state choose the icon
                       Icons.calendar_today,
                       color: MyColors.primary,
@@ -278,11 +278,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text("Jenis Kelamin"),
             ),
             Row(
@@ -305,7 +305,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Padding(
@@ -314,63 +314,63 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 controller: _addressController,
                 keyboardType: TextInputType.multiline,
                 maxLines: 3,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Alamat',
                   border: OutlineInputBorder(),
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
               color: MyColors.grey_10,
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text("Data Keluarga"),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: _ayahController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Nama Ayah',
                   border: OutlineInputBorder(),
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: _ibuController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Nama Ibu',
                   border: OutlineInputBorder(),
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: _phoneController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'No. WhatsApp Orang Tua',
                   border: OutlineInputBorder(),
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 150,
             )
           ],

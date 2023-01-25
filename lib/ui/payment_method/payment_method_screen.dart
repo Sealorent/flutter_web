@@ -16,19 +16,19 @@ class PaymentMethodScreen extends StatefulWidget {
   List<Bayar> bayar;
   Function(Bayar) onSelectPayment;
 
-  PaymentMethodScreen(this.bayar,this.onSelectPayment);
+  PaymentMethodScreen(this.bayar, this.onSelectPayment);
 
   @override
   State<PaymentMethodScreen> createState() => _PaymentMethodScreenState();
 }
 
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
-
   bool bankTransferExpanded = false;
 
   @override
   Widget build(BuildContext context) {
-    var metodes = widget.bayar.map((e) => e.metodeBayar ?? "").toList().toSet().toList();
+    var metodes =
+        widget.bayar.map((e) => e.metodeBayar ?? "").toList().toSet().toList();
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -41,83 +41,125 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         ),
         elevation: 0,
         actions: [
-          IconButton(onPressed: (){
-              Navigator.pop(context);
-          }, icon: Icon(Icons.close,color: MyColors.grey_60,))
+          IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.close,
+                color: MyColors.grey_60,
+              ))
         ],
-        title: Text("Pilih metode pembayaran", style: TextStyle(color: MyColors.grey_50, fontSize: 14),),
+        title: Text(
+          "Pilih metode pembayaran",
+          style: TextStyle(color: MyColors.grey_50, fontSize: 14),
+        ),
       ),
       backgroundColor: Colors.white,
       body: RefreshIndicator(
-        onRefresh: () async {
-
-        },
+        onRefresh: () async {},
         child: TreeView(
           startExpanded: false,
-          children: metodes.map((e) => Column(
-            children: [
-              TreeViewChild(
-                  startExpanded : true,
-                  parent: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: Row(
-                      children: [
-                        InkWell(
-                            onTap: (){
-                              bankTransferExpanded = !bankTransferExpanded;
-                              setState(() {});
-                            },
-                            child: Text(e ?? "", style: TextStyle(fontSize: 18,color: MyColors.primary),)),
-                        Spacer(),
-                        InkWell(
-                            onTap: (){
-                              bankTransferExpanded = !bankTransferExpanded;
-                              setState(() {});
-                            },
-                            child: bankTransferExpanded ? Icon(Icons.keyboard_arrow_down_sharp)
-                                : Icon(Icons.keyboard_arrow_right_sharp)
-                        )
-                      ],
-                    ),
-                  ),
-                  children: widget.bayar.where((element) => element.metodeBayar == e).map((ev) =>  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: InkWell(
-                      onTap: (){
-                        widget.onSelectPayment(ev);
-                        Navigator.pop(context);
-                      },
-                      child: Row(
+          children: metodes
+                  .map((e) => Column(
                         children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            child: Image.network(ev.detail?.metodeBankLogo ?? "", width: 50, errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                              return Center(
-                                child: Container(
-                                  child: Text("No Image", style: TextStyle(fontSize: 7),),
+                          TreeViewChild(
+                              startExpanded: true,
+                              parent: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                child: Row(
+                                  children: [
+                                    InkWell(
+                                        onTap: () {
+                                          bankTransferExpanded =
+                                              !bankTransferExpanded;
+                                          setState(() {});
+                                        },
+                                        child: Text(
+                                          e ?? "",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: MyColors.primary),
+                                        )),
+                                    Spacer(),
+                                    InkWell(
+                                        onTap: () {
+                                          bankTransferExpanded =
+                                              !bankTransferExpanded;
+                                          setState(() {});
+                                        },
+                                        child: bankTransferExpanded
+                                            ? Icon(
+                                                Icons.keyboard_arrow_down_sharp)
+                                            : Icon(Icons
+                                                .keyboard_arrow_right_sharp))
+                                  ],
                                 ),
-                              );
-                            },),
-                          ),
-                          SizedBox(width: 5,),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(ev.detail?.kode ?? "", style: TextStyle(fontSize: 16),),
-                                // Text("Rp.125.000",style: TextStyle(color: MyColors.grey_60),),
-                              ],
-                            ),
-                          ),
+                              ),
+                              children: widget.bayar
+                                  .where((element) => element.metodeBayar == e)
+                                  .map(
+                                    (ev) => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 5),
+                                      child: InkWell(
+                                        onTap: () {
+                                          widget.onSelectPayment(ev);
+                                          Navigator.pop(context);
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: 50,
+                                              height: 50,
+                                              child: Image.network(
+                                                ev.detail?.metodeBankLogo ?? "",
+                                                width: 50,
+                                                errorBuilder: (BuildContext
+                                                        context,
+                                                    Object exception,
+                                                    StackTrace? stackTrace) {
+                                                  return Center(
+                                                    child: Container(
+                                                      child: Text(
+                                                        "No Image",
+                                                        style: TextStyle(
+                                                            fontSize: 7),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    ev.detail?.kode ?? "",
+                                                    style:
+                                                        TextStyle(fontSize: 16),
+                                                  ),
+                                                  // Text("Rp.125.000",style: TextStyle(color: MyColors.grey_60),),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList()),
+                          Divider(),
                         ],
-                      ),
-                    ),
-                  ),).toList()
-              ),
-              Divider(),
-            ],
-          )).toList() ?? [],
+                      ))
+                  .toList() ??
+              [],
         ),
       ),
     );

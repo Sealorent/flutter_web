@@ -1,16 +1,16 @@
 class KonfirmasiModel {
   bool? isCorrect;
-  List<Upload>? upload;
+  List<Data>? data;
   String? message;
 
-  KonfirmasiModel({this.isCorrect, this.upload, this.message});
+  KonfirmasiModel({this.isCorrect, this.data, this.message});
 
   KonfirmasiModel.fromJson(Map<String, dynamic> json) {
     isCorrect = json['is_correct'];
-    if (json['upload'] != null) {
-      upload = <Upload>[];
-      json['upload'].forEach((v) {
-        upload!.add(Upload.fromJson(v));
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(Data.fromJson(v));
       });
     }
     message = json['message'];
@@ -19,21 +19,21 @@ class KonfirmasiModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['is_correct'] = isCorrect;
-    if (upload != null) {
-      data['upload'] = upload!.map((v) => v.toJson()).toList();
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     data['message'] = message;
     return data;
   }
 }
 
-class Upload {
+class Data {
   String? tanggal;
   Detail? detail;
 
-  Upload({this.tanggal, this.detail});
+  Data({this.tanggal, this.detail});
 
-  Upload.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     tanggal = json['tanggal'];
     detail = json['detail'] != null ? Detail.fromJson(json['detail']) : null;
   }

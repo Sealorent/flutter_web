@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:intl/intl.dart';
 
 class EditProfileParam {
   String? student_nis;
@@ -56,8 +55,7 @@ class EditProfileParam {
         'ayah': ayah,
         'ibu': ibu,
         'student_img': await MultipartFile.fromFile(student_img!.path,
-            filename:
-                '$nama_santri${DateFormat("HH:mm:ss").format(DateTime.now())}')
+            filename: student_img!.path)
       });
     }
   }
