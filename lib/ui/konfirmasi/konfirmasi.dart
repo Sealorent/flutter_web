@@ -57,11 +57,8 @@ class _KonfirmasiState extends State<Konfirmasi> {
       body: GetBuilder<KonfirmasiController>(
           initState: (state) => KonfirmasiController.to.getKonfirmasi(),
           builder: (_) {
-            return _.listKonfirmasi.isEmpty
-                ? const Center(
-                    child: Text('Tidak Ada'),
-                  )
-                : _.isLoadingKonfirmasi
+            return _.check
+                ? _.isLoadingKonfirmasi
                     ? ProgressLoading()
                     : ListView(
                         children: [
@@ -161,7 +158,10 @@ class _KonfirmasiState extends State<Konfirmasi> {
                             height: 80,
                           )
                         ],
-                      );
+                      )
+                : const Center(
+                    child: Text('Tidak Ada'),
+                  );
           }),
       bottomSheet: Container(
         color: Colors.white,

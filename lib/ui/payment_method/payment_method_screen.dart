@@ -1,15 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
-import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tree_view/tree_view.dart';
 
-import '../transaction/model/item_filter_model.dart';
 import 'package:pesantren_flutter/network/response/ringkasan_response.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
@@ -34,7 +27,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        systemOverlayStyle: SystemUiOverlayStyle(
+        systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: MyColors.primary,
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.light,
@@ -45,12 +38,12 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.close,
                 color: MyColors.grey_60,
               ))
         ],
-        title: Text(
+        title: const Text(
           "Pilih metode pembayaran",
           style: TextStyle(color: MyColors.grey_50, fontSize: 14),
         ),
@@ -78,11 +71,11 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                         },
                                         child: Text(
                                           e ?? "",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 18,
                                               color: MyColors.primary),
                                         )),
-                                    Spacer(),
+                                    const Spacer(),
                                     InkWell(
                                         onTap: () {
                                           bankTransferExpanded =
@@ -90,9 +83,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                           setState(() {});
                                         },
                                         child: bankTransferExpanded
-                                            ? Icon(
+                                            ? const Icon(
                                                 Icons.keyboard_arrow_down_sharp)
-                                            : Icon(Icons
+                                            : const Icon(Icons
                                                 .keyboard_arrow_right_sharp))
                                   ],
                                 ),
@@ -122,7 +115,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                                     StackTrace? stackTrace) {
                                                   return Center(
                                                     child: Container(
-                                                      child: Text(
+                                                      child: const Text(
                                                         "No Image",
                                                         style: TextStyle(
                                                             fontSize: 7),
@@ -132,7 +125,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                                 },
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 5,
                                             ),
                                             Expanded(
@@ -142,8 +135,8 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                                 children: [
                                                   Text(
                                                     ev.detail?.kode ?? "",
-                                                    style:
-                                                        TextStyle(fontSize: 16),
+                                                    style: const TextStyle(
+                                                        fontSize: 16),
                                                   ),
                                                   // Text("Rp.125.000",style: TextStyle(color: MyColors.grey_60),),
                                                 ],
@@ -155,7 +148,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                     ),
                                   )
                                   .toList()),
-                          Divider(),
+                          const Divider(),
                         ],
                       ))
                   .toList() ??

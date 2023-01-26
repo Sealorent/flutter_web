@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +14,8 @@ class KonfirmasiController extends GetxController {
       : Get.put(KonfirmasiController());
   List<Data> listKonfirmasi = [];
   bool isLoadingKonfirmasi = true;
+  bool check = true;
+  bool isUpload = false;
 
   void getKonfirmasi() async {
     var req = dio.Dio();
@@ -22,7 +23,7 @@ class KonfirmasiController extends GetxController {
     String? kodeSekolah =
         await AuthenticationRepositoryImpl(req).getKodeSekolah();
     try {
-      isLoadingKonfirmasi = true;
+      isLoadingKonfirmasi = false;
       update();
       var data = {
         'nis': nis,
@@ -33,6 +34,8 @@ class KonfirmasiController extends GetxController {
       var res = response.data.runtimeType.toString() == "String"
           ? jsonDecode(response.data)
           : response.data;
+      check = res['is_correct'];
+      update();
       if (res['is_correct']) {
         isLoadingKonfirmasi = false;
         update();
@@ -51,6 +54,8 @@ class KonfirmasiController extends GetxController {
     String? kodeSekolah =
         await AuthenticationRepositoryImpl(req).getKodeSekolah();
     try {
+      isUpload = true;
+      update();
       var data = {
         'nis': nis,
         'kode_sekolah': kodeSekolah,
@@ -64,6 +69,8 @@ class KonfirmasiController extends GetxController {
       var res = response.data.runtimeType.toString() == "String"
           ? jsonDecode(response.data)
           : response.data;
+      isUpload = res['is_correct'];
+      update();
       if (res['is_correct']) {
         Fluttertoast.showToast(
             msg: response.data['message'],
@@ -79,6 +86,8 @@ class KonfirmasiController extends GetxController {
     } catch (e) {
       Fluttertoast.showToast(
           msg: "$e", backgroundColor: Colors.red, textColor: Colors.white);
+      isUpload = false;
+      update();
     }
   }
 }

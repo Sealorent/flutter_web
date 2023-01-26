@@ -1,29 +1,14 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_share/flutter_share.dart';
 // import 'package:flutter_share/flutter_share.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/network/response/information_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
-import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
-import 'package:pesantren_flutter/ui/home/home_bloc.dart';
-import 'package:pesantren_flutter/ui/home/home_event.dart';
-import 'package:pesantren_flutter/ui/home/home_state.dart';
-import 'package:pesantren_flutter/ui/konseling/konseling_screen.dart';
-import 'package:pesantren_flutter/ui/payment/main/payment_screen.dart';
-import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_screen.dart';
-import 'package:pesantren_flutter/ui/saving/saving_screen.dart';
-import 'package:pesantren_flutter/ui/tahfidz/tahfidz_screen.dart';
 import 'package:pesantren_flutter/utils/show_image.dart';
-import 'package:pesantren_flutter/widget/progress_loading.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../utils/my_snackbar.dart';
 import '../../../utils/screen_utils.dart';
 
 class InformationDetailScreen extends StatefulWidget {
@@ -51,7 +36,7 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(
+        systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: MyColors.primary,
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.light,
@@ -60,7 +45,7 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: Colors.black54,
           ),
@@ -70,7 +55,7 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
               onPressed: () {
                 share();
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.share,
                 color: Colors.black54,
               ))
@@ -82,11 +67,11 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
       backgroundColor: Colors.white,
       body: ListView(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: InkWell(
               onTap: () {
                 ScreenUtils(context).navigateTo(ShowImage(
@@ -102,12 +87,12 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
                     image: NetworkImage(widget.informationResponse?.foto ?? ""),
                     fit: BoxFit.cover,
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                 ),
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Padding(
@@ -117,9 +102,10 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
               children: [
                 Text(
                   widget.informationResponse?.judulInfo ?? "",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Text(
@@ -127,9 +113,9 @@ class _InformationDetailScreenState extends State<InformationDetailScreen> {
                           widget.informationResponse?.tanggal ??
                               DateTime.now()) ??
                       "",
-                  style: TextStyle(color: Colors.black54),
+                  style: const TextStyle(color: Colors.black54),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
               ],

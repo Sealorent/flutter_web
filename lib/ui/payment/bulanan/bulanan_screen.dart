@@ -188,8 +188,11 @@ class _BulananScreenState extends State<BulananScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${e.month} ${e.year}",
+                                "${e.month} ${e.year}(${model.startYear}/${model.endYear})",
                                 style: TextStyle(fontSize: 16),
+                              ),
+                              SizedBox(
+                                height: 5,
                               ),
                               Text(
                                 NumberUtils.toRupiah(
@@ -533,7 +536,8 @@ class _BulananScreenState extends State<BulananScreen> {
                                           .successSnackbar("Tidak ada tagihan");
                                       return;
                                     }
-                                    ScreenUtils(context).navigateTo(PayBillsScreen(false));
+                                    ScreenUtils(context)
+                                        .navigateTo(PayBillsScreen(false));
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(

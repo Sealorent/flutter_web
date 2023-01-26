@@ -239,7 +239,7 @@ class _UploadBuktiPageState extends State<UploadBuktiPage> {
                 height: 40,
               ),
               GetBuilder<KonfirmasiController>(builder: (_) {
-                return isLoadingUpload
+                return _.isUpload
                     ? ProgressLoading()
                     : ElevatedButton(
                         style: ButtonStyle(
@@ -252,12 +252,7 @@ class _UploadBuktiPageState extends State<UploadBuktiPage> {
                               MaterialStateProperty.all(MyColors.primary),
                         ),
                         onPressed: () async {
-                          print(image!.path);
                           _.uploadBukti(keterangan.text, File(image!.path));
-                          setState(() {
-                            isLoadingUpload = true;
-                            _.update();
-                          });
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),

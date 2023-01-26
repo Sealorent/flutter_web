@@ -186,7 +186,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         InkWell(
                           onTap: () {
                             Get.to(const PresensiScreen());
-                            Get.back();
                           },
                           child: Column(
                             children: [
@@ -212,7 +211,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onTap: () {
                                     _.getKonfirmasi();
                                     Get.to(const Konfirmasi());
-                                    Get.back();
                                   },
                                   child: SizedBox(
                                     width: 95,
