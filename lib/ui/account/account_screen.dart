@@ -367,7 +367,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       width: 10,
                     ),
                     Text(
-                      "v1.0.0",
+                      "v1.0.1",
                       style: TextStyle(color: MyColors.grey_50),
                     ),
                     Spacer(),
@@ -379,26 +379,26 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ),
             ),
-            Divider(),
-            InkWell(
-              onTap: () async {
-                widget.alice?.showInspector();
-              },
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Row(
-                  children: [
-                    Text("Inspeksi API"),
-                    Spacer(),
-                    Icon(
-                      Icons.keyboard_arrow_right,
-                      size: 20,
-                    )
-                  ],
-                ),
-              ),
-            ),
+            // Divider(),
+            // InkWell(
+            //   onTap: () async {
+            //     widget.alice?.showInspector();
+            //   },
+            //   child: Padding(
+            //     padding:
+            //         const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            //     child: Row(
+            //       children: [
+            //         Text("Inspeksi API"),
+            //         Spacer(),
+            //         Icon(
+            //           Icons.keyboard_arrow_right,
+            //           size: 20,
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
             Divider(),
             InkWell(
               onTap: () {
