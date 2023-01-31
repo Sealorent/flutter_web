@@ -120,18 +120,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         .navigateTo(InformationDetailScreen(item));
                   },
                   child: Container(
-                    child: Container(
-                      margin: const EdgeInsets.all(5.0),
-                      child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5.0)),
-                          child: Stack(
-                            children: <Widget>[
-                              Image.network(item.foto ?? "",
-                                  fit: BoxFit.cover, width: 1000.0),
-                            ],
-                          )),
-                    ),
+                    margin: const EdgeInsets.all(5.0),
+                    child: ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5.0)),
+                        child: Stack(
+                          children: <Widget>[
+                            Image.network(item.foto ?? "",
+                                fit: BoxFit.cover, width: Get.width * 0.8),
+                          ],
+                        )),
                   ),
                 ))
             .toList() ??
@@ -542,12 +540,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .navigateTo(const InformationScreen());
                               },
                               child: Row(
-                                children: [
-                                  const Text("Lihat semua"),
-                                  const SizedBox(
+                                children: const [
+                                  Text("Lihat semua"),
+                                  SizedBox(
                                     width: 5,
                                   ),
-                                  const Icon(
+                                  Icon(
                                     Icons.arrow_forward_ios,
                                     color: MyColors.grey_60,
                                     size: 20,
@@ -570,7 +568,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             autoPlayAnimationDuration:
                                 const Duration(seconds: 1),
                             aspectRatio: 2.0,
-                            enlargeCenterPage: true,
+                            // enlargeCenterPage: true,
                             enlargeStrategy: CenterPageEnlargeStrategy.height,
                             onPageChanged: (index, reason) {
                               setState(() {
@@ -658,7 +656,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //           ),
 // =======
                       const SizedBox(
-                        height: 100,
+                        height: 50,
                       )
                     ],
                   ),

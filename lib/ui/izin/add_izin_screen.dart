@@ -38,7 +38,6 @@ class AddIzinScreen extends StatefulWidget {
 }
 
 class _AddIzinScreenState extends State<AddIzinScreen> {
-
   late IzinBloc bloc;
   bool _isLoading = false;
   DateTime _selectedDate = DateTime.now();
@@ -52,7 +51,8 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
   @override
   void initState() {
     bloc = BlocProvider.of<IzinBloc>(context);
-    _dateController = TextEditingController(text: DateFormat("dd MMM yyyy").format(_selectedDate));
+    _dateController = TextEditingController(
+        text: DateFormat("dd MMM yyyy").format(_selectedDate));
     _timeController = TextEditingController();
     super.initState();
   }
@@ -121,22 +121,45 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
       setState(() {
         _selectedDateRange = picked;
       });
-      _dateController.text = "${DateFormat("dd MMM yyyy").format(_selectedDateRange?.start ?? DateTime.now())} - ${DateFormat("dd MMM yyyy").format(_selectedDateRange?.end ?? DateTime.now())}";
+      _dateController.text =
+          "${DateFormat("dd MMM yyyy").format(_selectedDateRange?.start ?? DateTime.now())} - ${DateFormat("dd MMM yyyy").format(_selectedDateRange?.end ?? DateTime.now())}";
     }
   }
 
   void _selectTime() async {
     TimeRange result = await showTimeRangePicker(
       context: context,
+      labels: [
+        "00.00",
+        "03.00",
+        "06.00",
+        "09.00",
+        "12.00",
+        "15.00",
+        "18.00",
+        "21.00",
+      ].asMap().entries.map((e) {
+        return ClockLabel.fromIndex(idx: e.key, length: 8, text: e.value);
+      }).toList(),
+      labelStyle: const TextStyle(
+          fontSize: 18, color: MyColors.primary, fontWeight: FontWeight.bold),
+      timeTextStyle: TextStyle(
+          color: Colors.orange[700],
+          fontSize: 24,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.bold),
+      activeTimeTextStyle: const TextStyle(
+          color: Colors.orange,
+          fontSize: 26,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.bold),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
             primaryColor: MyColors.primary,
             accentColor: MyColors.primary,
             colorScheme: ColorScheme.light(primary: MyColors.primary),
-            buttonTheme: ButtonThemeData(
-                textTheme: ButtonTextTheme.primary
-            ),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child ?? Container(),
         );
@@ -148,150 +171,166 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
       _selectedTimeEndTime = result.endTime;
     });
 
-
     _timeController.text = getFormatRangeTime();
   }
 
-  String getFormatRangeTime(){
-    var str = "${_selectedTimeStartTime.hour.toString().padLeft(2, '0')}:${_selectedTimeStartTime.minute.toString().padLeft(2, '0')}";
-    var end = "${_selectedTimeEndTime.hour.toString().padLeft(2, '0')}:${_selectedTimeEndTime.minute.toString().padLeft(2, '0')}";
+  String getFormatRangeTime() {
+    var str =
+        "${_selectedTimeStartTime.hour.toString().padLeft(2, '0')}:${_selectedTimeStartTime.minute.toString().padLeft(2, '0')}";
+    var end =
+        "${_selectedTimeEndTime.hour.toString().padLeft(2, '0')}:${_selectedTimeEndTime.minute.toString().padLeft(2, '0')}";
     return "$str-$end";
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<IzinBloc, IzinState>(
-        listener: listener,
-        child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              ),
+      listener: listener,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
             ),
-            centerTitle: true,
-            elevation: 0,
-            title: Text(widget.isIzinKeluar ? "Izin Keluar" : "Izin Pulang", style: TextStyle(color: Colors.white),),
           ),
-          backgroundColor: Colors.white,
-          body: ListView(
-            children: [
-              SizedBox(height: 20,),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _dateController,
-                      readOnly: true,
-                      onTap: (){
-                        FocusScope.of(context).unfocus();
-                        if(widget.isIzinKeluar){
-                          _selectDate(context);
-                        }else{
-                          _selectDateRange(context);
-                        }
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Pilih Tanggal',
-                        border: OutlineInputBorder(),
-                        suffixIcon: Icon(
-                          Icons.calendar_today,
-                          color: MyColors.primary,
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: widget.isIzinKeluar,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 15,
-                          ),
-                          TextFormField(
-                            controller: _timeController,
-                            readOnly: true,
-                            onTap: (){
-                              FocusScope.of(context).unfocus();
-                              _selectTime();
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Pilih Jam',
-                              border: OutlineInputBorder(),
-                              suffixIcon: Icon(
-                                Icons.access_time_rounded,
-                                color: MyColors.primary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 3,
-                      controller: _keperluanController,
-                      decoration: InputDecoration(
-                        labelText: 'Keperluan',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    _isLoading ? ProgressLoading() : ElevatedButton(
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0)
-                              )
-                          )
-                      ),
-                      onPressed: () async{
-                        if(widget.isIzinKeluar){
-                          var izinParam = IzinKeluarParam(
-                            tanggalIzin: DateFormat("yyyy-MM-dd").format(_selectedDate),
-                            waktuIzin: getFormatRangeTime(),
-                            keperluanIzin: _keperluanController.text.toString()
-                          );
-                          bloc.add(AddIzinKeluar(izinParam));
-                        }else{
-                          var izinPulang = IzinPulangParam(
-                            tanggalPulang: DateFormat("yyyy-MM-dd").format(_selectedDateRange?.start ?? DateTime.now()),
-                            hariPulang: _selectedDateRange?.start.difference(_selectedDateRange?.end ?? DateTime.now() ).inDays.toString().replaceAll("-", ""),
-                            keperluanPulang: _keperluanController.text.toString()
-                          );
-                          bloc.add(AddIzinPulang(izinPulang));
-                        }
-                      },
-                      child:  Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Ajukan Izin",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.apply(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-            ],
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            widget.isIzinKeluar ? "Izin Keluar" : "Izin Pulang",
+            style: TextStyle(color: Colors.white),
           ),
         ),
+        backgroundColor: Colors.white,
+        body: ListView(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _dateController,
+                    readOnly: true,
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                      if (widget.isIzinKeluar) {
+                        _selectDate(context);
+                      } else {
+                        _selectDateRange(context);
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Pilih Tanggal',
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(
+                        Icons.calendar_today,
+                        color: MyColors.primary,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: widget.isIzinKeluar,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 15,
+                        ),
+                        TextFormField(
+                          controller: _timeController,
+                          readOnly: true,
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
+                            _selectTime();
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Pilih Jam',
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(
+                              Icons.access_time_rounded,
+                              color: MyColors.primary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 3,
+                    controller: _keperluanController,
+                    decoration: InputDecoration(
+                      labelText: 'Keperluan',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _isLoading
+                      ? ProgressLoading()
+                      : ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(18.0)))),
+                          onPressed: () async {
+                            if (widget.isIzinKeluar) {
+                              var izinParam = IzinKeluarParam(
+                                  tanggalIzin: DateFormat("yyyy-MM-dd")
+                                      .format(_selectedDate),
+                                  waktuIzin: getFormatRangeTime(),
+                                  keperluanIzin:
+                                      _keperluanController.text.toString());
+                              bloc.add(AddIzinKeluar(izinParam));
+                            } else {
+                              var izinPulang = IzinPulangParam(
+                                  tanggalPulang: DateFormat("yyyy-MM-dd")
+                                      .format(_selectedDateRange?.start ??
+                                          DateTime.now()),
+                                  hariPulang: _selectedDateRange?.start
+                                      .difference(_selectedDateRange?.end ??
+                                          DateTime.now())
+                                      .inDays
+                                      .toString()
+                                      .replaceAll("-", ""),
+                                  keperluanPulang:
+                                      _keperluanController.text.toString());
+                              bloc.add(AddIzinPulang(izinPulang));
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Ajukan Izin",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      ?.apply(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
