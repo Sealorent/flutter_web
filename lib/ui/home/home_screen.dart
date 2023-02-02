@@ -106,7 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     bloc = BlocProvider.of<HomeBloc>(context);
     _getData();
-    _getUser();
     _getPesantren();
     Get.put(KonfirmasiController());
     super.initState();
@@ -247,6 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _getUser();
     final size = MediaQuery.of(context).size;
     return BlocListener<HomeBloc, HomeState>(
       listener: listener,
@@ -256,8 +256,6 @@ class _HomeScreenState extends State<HomeScreen> {
           body: RefreshIndicator(
             onRefresh: () async {
               _getData();
-              await _getUser();
-              await _getPesantren();
             },
             child: _isLoading
                 ? ProgressLoading()

@@ -39,25 +39,27 @@ class DioClient {
 }
 
 class ApiInterceptors extends Interceptor {
-
   BuildContext context;
-
 
   ApiInterceptors(this.context);
 
-  void _savePesantrenInfo(PesantrenLoginResponse? pesantrenLoginResponse) async {
+  void _savePesantrenInfo(
+      PesantrenLoginResponse? pesantrenLoginResponse) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(PrefData.pesantren, jsonEncode(pesantrenLoginResponse?.toJson()));
+    prefs.setString(
+        PrefData.pesantren, jsonEncode(pesantrenLoginResponse?.toJson()));
   }
 
   void _saveUserInfo(StudentLoginResponse? studentLoginResponse) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(PrefData.student, jsonEncode(studentLoginResponse?.toJson()));
+    prefs.setString(
+        PrefData.student, jsonEncode(studentLoginResponse?.toJson()));
   }
 
   void _saveTahunAjaran(TahunAjaranResponse? tahunAjaranResponse) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(PrefData.TAHUN_AJARAN, jsonEncode(tahunAjaranResponse?.toJson()));
+    prefs.setString(
+        PrefData.TAHUN_AJARAN, jsonEncode(tahunAjaranResponse?.toJson()));
   }
 
   void _saveSettingInfo(SettingResponse? settingResponse) async {
@@ -70,7 +72,6 @@ class ApiInterceptors extends Interceptor {
     prefs.clear();
   }
 
-
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     super.onResponse(response, handler);
@@ -79,7 +80,8 @@ class ApiInterceptors extends Interceptor {
         _savePesantrenInfo(PesantrenLoginResponse.fromJson(response.data));
       }
 
-      if (response.realUri.path.contains(Constant.loginStudent)) {
+      if (response.realUri.path.contains(Constant.loginStudent) ||
+          response.realUri.path.contains(Constant.profile)) {
         _saveUserInfo(StudentLoginResponse.fromJson(response.data));
       }
 

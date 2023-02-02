@@ -54,8 +54,7 @@ class EditProfileParam {
         'gender': gender,
         'ayah': ayah,
         'ibu': ibu,
-        'student_img': await MultipartFile.fromFile(student_img!.path,
-            filename: student_img!.path)
+        'student_img': await MultipartFile.fromFile(student_img!.path)
       });
     }
   }

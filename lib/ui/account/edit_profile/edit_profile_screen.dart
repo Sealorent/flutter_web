@@ -7,12 +7,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/network/param/edit_profile_param.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
+import 'package:pesantren_flutter/ui/account/edit_profile/edit_profil_controller.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_event.dart';
+import 'package:pesantren_flutter/widget/progress_loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../network/response/pesantren_login_response.dart';
@@ -122,7 +125,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       setState(() {
         _selectedTanggalLahir = picked;
       });
-      _dateController.text = DateFormat("dd MMM yyyy")
+      _dateController.text = DateFormat("yyyy-MM-dd")
           .format(_selectedTanggalLahir ?? DateTime.now());
     }
   }
@@ -138,6 +141,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     _getPesantren();
     _getUser();
+    Get.put(ProfilController());
     bloc = BlocProvider.of<LoginBloc>(context);
     super.initState();
   }
@@ -271,8 +275,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       Icons.calendar_today,
                       color: MyColors.primary,
                     ),
-                    onPressed: () {
-                      _selectDate(context);
+                    onPressed: () async {
+                      DateTime? pickdate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1995),
+                          lastDate: DateTime(2322));
+                      if (pickdate != null) {
+                        _dateController.text =
+                            DateFormat('yyyy-MM-dd').format(pickdate);
+                      }
                     },
                   ),
                 ),
@@ -375,56 +387,72 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             )
           ],
         ),
-        bottomSheet: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: ElevatedButton(
-            style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0)))),
-            onPressed: () async {
-              var param = EditProfileParam(
-                  nama_santri: _nameController.text.trim(),
-                  alamat: _addressController.text.trim(),
-                  tempatlahir: _tempatLahirController.text.trim(),
-                  tanggallahir: DateFormat("yyyy-MM-dd")
-                      .format(_selectedTanggalLahir ?? DateTime.now()),
-                  nomorwa: _phoneController.text.trim(),
-                  gender: sexValue == 0 ? "L" : "P",
-                  ayah: _ayahController.text.toString(),
-                  ibu: _ibuController.text.toString(),
-                  student_img: File(studentImagePath!.path));
+        bottomSheet: GetBuilder<ProfilController>(builder: (_) {
+          return Container(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: _.isUpload
+                ? ProgressLoading()
+                : ElevatedButton(
+                    style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(18.0)))),
+                    onPressed: () async {
+                      _.postProfil(
+                          _nameController.text.trim(),
+                          _addressController.text.trim(),
+                          _tempatLahirController.text.trim(),
+                          DateFormat("yyyy-MM-dd").format(DateTime.now()),
+                          _ayahController.text.toString(),
+                          _ibuController.text.toString(),
+                          _phoneController.text.trim(),
+                          sexValue == 0 ? "L" : "P",
+                          File(studentImagePath!.path));
+                      // var param = EditProfileParam(
+                      //     nama_santri: _nameController.text.trim(),
+                      //     alamat: _addressController.text.trim(),
+                      //     tempatlahir: _tempatLahirController.text.trim(),
+                      //     tanggallahir: DateFormat("yyyy-MM-dd")
+                      //         .format(_selectedTanggalLahir ?? DateTime.now()),
+                      //     nomorwa: _phoneController.text.trim(),
+                      //     gender: sexValue == 0 ? "L" : "P",
+                      //     ayah: _ayahController.text.toString(),
+                      //     ibu: _ibuController.text.toString(),
+                      //     student_img: File(studentImagePath!.path));
 
-              _user.nama = _nameController.text.trim();
+                      _user.nama = _nameController.text.trim();
 
-              _user.tempatlahir = _tempatLahirController.text.trim();
-              _user.tanggallahir = _selectedTanggalLahir;
-              _user.phone = _phoneController.text.trim();
-              _user.gender = sexValue == 0 ? "L" : "P";
-              _user.ayah = _ayahController.text.toString();
-              _user.ibu = _ibuController.text.toString();
-              _user.photo = File(studentImagePath!.path).path;
+                      _user.tempatlahir = _tempatLahirController.text.trim();
+                      _user.tanggallahir = _selectedTanggalLahir;
+                      _user.phone = _phoneController.text.trim();
+                      _user.gender = sexValue == 0 ? "L" : "P";
+                      _user.ayah = _ayahController.text.toString();
+                      _user.ibu = _ibuController.text.toString();
+                      _user.photo = studentImagePath!.path;
 
-              bloc.add(EditProfile(param));
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Simpan",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        ?.apply(color: Colors.white),
+                      // bloc.add(EditProfile(param));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Simpan",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                ?.apply(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }

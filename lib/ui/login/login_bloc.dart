@@ -4,8 +4,6 @@ import 'package:pesantren_flutter/network/repository/authentication_repository.d
 import 'login_event.dart';
 import 'login_state.dart';
 
-
-
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   AuthenticationRepository repository;
 
@@ -19,7 +17,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await repository.loginPesantren(event.code);
         yield LoginPesantrenSuccess();
       } catch (e) {
-        yield FailedState("Kode pesantren tidak ditemukan, silahkan periksa kembalii", 0);
+        yield FailedState(
+            "Kode pesantren tidak ditemukan, silahkan periksa kembalii", 0);
       }
     }
 
@@ -29,7 +28,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await repository.loginStudent(event.nis, event.password);
         yield LoginSuccess();
       } catch (e) {
-        yield FailedState("NIS atau password salah, silahkan periksa kembali", 0);
+        yield FailedState(
+            "NIS atau password salah, silahkan periksa kembali", 0);
+      }
+    }
+
+    if (event is RefreshProfile) {
+      try {
+        yield RefreshProfileLoading();
+        await repository.refreshProfile();
+        yield RefreshProfileSuccess();
+      } catch (e) {
+        yield FailedState("Gagal mendapatkan profile", 0);
       }
     }
 
@@ -39,21 +49,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await repository.editProfile(event.param);
         yield EditProfileSuccess();
       } catch (e) {
-
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }
 
-    if(event is ChangePassword){
+    if (event is ChangePassword) {
       try {
         yield ChangePasswordLoading();
-        await repository.changePassword(event.newPass,event.confirmNewPass,event.oldPass);
+        await repository.changePassword(
+            event.newPass, event.confirmNewPass, event.oldPass);
         yield ChangePasswordSuccess();
       } catch (e) {
-
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }
   }
-
 }

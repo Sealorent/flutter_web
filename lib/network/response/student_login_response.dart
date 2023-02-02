@@ -62,18 +62,21 @@ class StudentLoginResponse {
         phone: json["phone"],
         ibu: json["ibu"],
         ayah: json["ayah"],
-        gender: json["gender"],
-        student_madin: json["student_madin"],
-        tempatlahir: json["tempatlahir"],
-        tanggallahir: json["tanggallahir"] == null
-            ? null
-            : DateTime.tryParse(json["tanggallahir"]),
-        kelasId: json["kelas_id"],
-        kelas: json["kelas"],
+        gender: json["gender"] ?? json["student_gender"],
+        student_madin: json["student_madin"] ?? json["student_madin"],
+        tempatlahir: json["tempatlahir"] ?? json["student_born_place"],
+        tanggallahir: (json["tanggallahir"] == null
+                ? null
+                : DateTime.tryParse(json["tanggallahir"])) ??
+            (json["student_born_date"] == null
+                ? null
+                : DateTime.tryParse(json["student_born_date"])),
+        kelasId: json["kelas_id"] ?? json["class_id"],
+        kelas: json["kelas"] ?? json["class_name"],
         majorsId: json["majors_id"],
-        majors: json["majors"],
-        majorsShortName: json["majors_short_name"],
-        photo: json["photo"],
+        majors: json["majors"] ?? json["majors_name"],
+        majorsShortName: json["majors_short_name"] ?? json["majors_s_name"],
+        photo: json["photo"] ?? json["student_img"],
         message: json["message"],
       );
 

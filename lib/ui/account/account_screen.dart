@@ -170,7 +170,6 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   void initState() {
     _getPesantren();
-    _getUser();
     _getSetting();
     super.initState();
   }
@@ -190,6 +189,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _getUser();
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(

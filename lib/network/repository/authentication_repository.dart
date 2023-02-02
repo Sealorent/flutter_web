@@ -23,6 +23,7 @@ abstract class AuthenticationRepository {
   Future<SettingResponse> getSetting();
   Future<Object> changePassword(
       String newPassword, String confirmNewPassword, String oldPassword);
+  Future<Object> refreshProfile();
 }
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
@@ -191,6 +192,36 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
         return SettingResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<Object> refreshProfile() async {
+    var pesantren = await _getPesantren();
+    var user = await _getUser();
+    try {
+      final response = await _dioClient.get(Constant.profile, queryParameters: {
+        "kode_sekolah": pesantren.kodeSekolah,
+        "nis": user.nis
+      });
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        var data = StudentLoginResponse.fromJson(response.data);
+        if (data.isCorrect == true) {
+          return data;
+        } else {
+          throw ClientErrorException(statusMessage, statusCode);
+        }
       } else {
         throw ClientErrorException(statusMessage, statusCode);
       }
