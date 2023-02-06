@@ -13,6 +13,7 @@ class VerifyOtpController extends GetxController {
 
   VerifyOtpModel? verifyOtpModel;
   TextEditingController inputCode = TextEditingController();
+  bool isLoading = false;
 
   // ignore: non_constant_identifier_names
   void GetOtp(String kodeSekolah, String nis) async {
@@ -22,21 +23,29 @@ class VerifyOtpController extends GetxController {
       'kode_sekolah': kodeSekolah,
       'nis': nis,
     };
-
+    isLoading = true;
+    update();
     var response = await req.post('${Constant.baseUrl}${Constant.veriftOtp}',
         data: dio.FormData.fromMap(data));
     var res = response.data.runtimeType.toString() == "String"
         ? jsonDecode(response.data)
         : response.data;
 
+    isLoading = res['is_correct'];
+    update();
     if (res['is_correct'] == true) {
       verifyOtpModel = VerifyOtpModel.fromJson(res);
-      print('nis ${verifyOtpModel?.nis ?? ''}');
+      Get.snackbar("Sukses", res['message'],
+          backgroundColor: Colors.green, colorText: Colors.white);
+      isLoading = false;
+      update();
       Get.offAll(ResetPassword(
           verifyOtpModel?.nis ?? '', verifyOtpModel?.kodeSekolah ?? ''));
     } else {
-      Get.snackbar("Gagal", "Verifikasi Kode Anda Sakah",
-          backgroundColor: Colors.red);
+      Get.snackbar("Gagal", res['message'],
+          backgroundColor: Colors.red, colorText: Colors.white);
+      isLoading = false;
+      update();
     }
   }
 }

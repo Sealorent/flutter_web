@@ -46,6 +46,7 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
   TimeOfDay _selectedTimeEndTime = TimeOfDay.now();
   late TextEditingController _dateController;
   late TextEditingController _timeController;
+  late TextEditingController _timeController1;
   TextEditingController _keperluanController = TextEditingController();
 
   @override
@@ -54,6 +55,7 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
     _dateController = TextEditingController(
         text: DateFormat("dd MMM yyyy").format(_selectedDate));
     _timeController = TextEditingController();
+    _timeController1 = TextEditingController();
     super.initState();
   }
 
@@ -126,9 +128,40 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
     }
   }
 
+  void customTime() async {
+    TimeOfDay? result = await showTimePicker(
+      context: context,
+      initialTime: _selectedTimeStartTime,
+    );
+    if (result != null) {
+      setState(() {
+        _timeController.text = result.format(context);
+      });
+    }
+  }
+
+  void customTime1() async {
+    TimeOfDay? result = await showTimePicker(
+      context: context,
+      initialTime: _selectedTimeStartTime,
+    );
+    if (result != null) {
+      setState(() {
+        _timeController1.text = result.format(context);
+      });
+    }
+  }
+
   void _selectTime() async {
     TimeRange result = await showTimeRangePicker(
       context: context,
+      padding: 50,
+      backgroundWidget: const CircleAvatar(
+        maxRadius: 100,
+        backgroundImage: AssetImage('assets/0x0.jpeg'),
+      ),
+      fromText: "Mulai",
+      toText: "Sampai",
       labels: [
         "00.00",
         "03.00",
@@ -158,8 +191,9 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
           data: ThemeData.light().copyWith(
             primaryColor: MyColors.primary,
             accentColor: MyColors.primary,
-            colorScheme: ColorScheme.light(primary: MyColors.primary),
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            colorScheme: const ColorScheme.light(primary: MyColors.primary),
+            buttonTheme:
+                const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child ?? Container(),
         );
@@ -245,11 +279,42 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
                           controller: _timeController,
                           readOnly: true,
                           onTap: () {
-                            FocusScope.of(context).unfocus();
-                            _selectTime();
+                            // FocusScope.of(context).unfocus();
+                            // _selectTime();
+                            customTime();
                           },
                           decoration: InputDecoration(
-                            labelText: 'Pilih Jam',
+                            labelText: 'Pilih Jam Mulai',
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(
+                              Icons.access_time_rounded,
+                              color: MyColors.primary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Visibility(
+                    visible: widget.isIzinKeluar,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 15,
+                        ),
+                        TextFormField(
+                          controller: _timeController1,
+                          readOnly: true,
+                          onTap: () {
+                            // FocusScope.of(context).unfocus();
+                            // _selectTime();
+                            customTime1();
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Pilih Jam Berakhir',
                             border: OutlineInputBorder(),
                             suffixIcon: Icon(
                               Icons.access_time_rounded,
@@ -289,7 +354,8 @@ class _AddIzinScreenState extends State<AddIzinScreen> {
                               var izinParam = IzinKeluarParam(
                                   tanggalIzin: DateFormat("yyyy-MM-dd")
                                       .format(_selectedDate),
-                                  waktuIzin: getFormatRangeTime(),
+                                  waktuIzin:
+                                      "${_timeController.text}-${_timeController1.text}",
                                   keperluanIzin:
                                       _keperluanController.text.toString());
                               bloc.add(AddIzinKeluar(izinParam));

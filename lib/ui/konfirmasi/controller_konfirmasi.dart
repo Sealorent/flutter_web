@@ -76,6 +76,8 @@ class KonfirmasiController extends GetxController {
             msg: response.data['message'],
             backgroundColor: Colors.green,
             textColor: Colors.white);
+        isUpload = false;
+        update();
         Get.back();
       } else {
         Fluttertoast.showToast(

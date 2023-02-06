@@ -16,6 +16,7 @@ class GetOtpController extends GetxController {
   TextEditingController inputKodeSekolah = TextEditingController();
   TextEditingController inputNis = TextEditingController();
   TextEditingController inputWa = TextEditingController();
+  bool isLoading = false;
 
   // ignore: non_constant_identifier_names
   void GetOtpMethod() async {
@@ -26,19 +27,29 @@ class GetOtpController extends GetxController {
       'nis': inputNis.text,
       'no_wa': inputWa.text,
     };
-
+    isLoading = true;
+    update();
     var response = await req.post('${Constant.baseUrl}${Constant.getOtp}',
         data: dio.FormData.fromMap(data));
     var res = response.data.runtimeType.toString() == "String"
         ? jsonDecode(response.data)
         : response.data;
 
+    isLoading = res['is_correct'];
+    update();
     if (res['is_correct'] == true) {
       getOtpModel = GetOtpModel.fromJson(res);
+      Get.snackbar("Sukses", res['message'],
+          colorText: Colors.white, backgroundColor: Colors.green);
+      isLoading = false;
+      update();
       Get.offAll(
           GetOtp(getOtpModel?.kodeSekolah ?? '', getOtpModel?.nis ?? ''));
     } else {
-      Get.snackbar("Gagal ", "Data Yang Dimasukkan Salah");
+      Get.snackbar("Gagal", res['message'],
+          colorText: Colors.white, backgroundColor: Colors.red);
+      isLoading = false;
+      update();
     }
   }
 }

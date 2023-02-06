@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/konfirmasi/model_konfirmasi.dart';
@@ -116,7 +117,7 @@ class _DetailKOnfirmasiState extends State<DetailKOnfirmasi> {
                             MaterialStateProperty.all(MyColors.primary),
                       ),
                       onPressed: () async {
-                        // Get.to(AddIzin(isIzinKeluar: true));
+                        Get.back();
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -124,7 +125,7 @@ class _DetailKOnfirmasiState extends State<DetailKOnfirmasi> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Upload Bukti",
+                              "Kembali",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText2

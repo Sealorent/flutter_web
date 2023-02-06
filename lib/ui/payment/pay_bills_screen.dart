@@ -139,8 +139,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
         return;
       }
 
-      MySnackbar(context)
-          .errorSnackbar(state.message + " : " + state.code.toString());
+      MySnackbar(context).errorSnackbar("${state.message} : ${state.code}");
     }
   }
 
@@ -488,15 +487,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                                       setState(() {});
                                     },
                                     child: Text(
-                                      (e.detailBulan?.row ?? "")
-                                              .split("/")
-                                              .first +
-                                          "/" +
-                                          (e.detailBulan?.row ?? "")
-                                              .split("/")
-                                              .last
-                                              .split(" ")
-                                              .first,
+                                      "${(e.detailBulan?.row ?? "").split("/").first}/${(e.detailBulan?.row ?? "").split("/").last.split(" ").first}",
                                       style: TextStyle(
                                           fontSize: 18,
                                           color: MyColors.primary),
@@ -527,29 +518,9 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                                               listBulan[i]
                                           ? Text(
                                               i > 5
-                                                  ? (e.detailBulan?.row ?? "")
-                                                          .split("/")
-                                                          .last
-                                                          .split(" ")
-                                                          .last +
-                                                      " " +
-                                                      (e.detailBulan?.row ?? "")
-                                                          .split("/")
-                                                          .last
-                                                          .split(" ")
-                                                          .first
-                                                  : (e.detailBulan?.row ?? "")
-                                                          .split("/")
-                                                          .last
-                                                          .split(" ")
-                                                          .last +
-                                                      " " +
-                                                      (e.detailBulan?.row ?? "")
-                                                          .split("/")
-                                                          .first
-                                                          .split(" ")
-                                                          .last,
-                                              style: TextStyle(
+                                                  ? "${(e.detailBulan?.row ?? "").split("/").last.split(" ").last} ${(e.detailBulan?.row ?? "").split("/").last.split(" ").first}"
+                                                  : "${(e.detailBulan?.row ?? "").split("/").last.split(" ").last} ${(e.detailBulan?.row ?? "").split("/").first.split(" ").last}",
+                                              style: const TextStyle(
                                                   fontSize: 18,
                                                   color: MyColors.primary),
                                             )

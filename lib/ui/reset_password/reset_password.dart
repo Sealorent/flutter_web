@@ -141,7 +141,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       child: Center(
                         child: Column(
                           children: [
-                            isLoading
+                            _.isLoading
                                 ? ProgressLoading()
                                 : ElevatedButton(
                                     style: ButtonStyle(

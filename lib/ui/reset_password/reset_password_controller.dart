@@ -12,23 +12,29 @@ class LupaPasswordController extends GetxController {
           : Get.put(LupaPasswordController());
   TextEditingController inputPasswordBaru = TextEditingController();
   TextEditingController inputPassword = TextEditingController();
+  bool isLoading = false;
 
   // ignore: non_constant_identifier_names
   void ResetPass(String nis, String kodeSekolah) async {
     if (inputPasswordBaru.text.trim().isEmpty) {
       Get.snackbar("Gagal", "Password Baru Wajib Diisi",
           backgroundColor: Colors.red);
+      isLoading = false;
+      update();
       return;
     }
     if (inputPassword.text.trim().isEmpty) {
       Get.snackbar("Gagal", "Konfirmasi Password Wajib Diisi",
           backgroundColor: Colors.red);
+      isLoading = false;
+      update();
       return;
     }
     if (inputPasswordBaru.text != inputPassword.text) {
       Get.snackbar("Gagal", "Password yang anda Masukkan Tidak Sesuai",
           backgroundColor: Colors.red);
-
+      isLoading = false;
+      update();
       return;
     }
     var req = dio.Dio();
@@ -38,6 +44,8 @@ class LupaPasswordController extends GetxController {
       'nis': nis,
       'reset': reset,
     };
+    isLoading = true;
+    update();
     var response = await req.post(
         '${Constant.baseUrl}${Constant.resetPassword}',
         data: dio.FormData.fromMap(data));
@@ -45,13 +53,17 @@ class LupaPasswordController extends GetxController {
     var res = response.data.runtimeType.toString() == "String"
         ? jsonDecode(response.data)
         : response.data;
+    isLoading = res['is_correct'];
+    update();
     if (res['is_correct'] == true) {
-      Get.snackbar("Berhasil", "Password Anda berhasil direset",
-          backgroundColor: Colors.green);
-      Get.offAll( LoginUserScreen());
+      Get.snackbar("Berhasil", res['message'], backgroundColor: Colors.green);
+      isLoading = false;
+      update();
+      Get.offAll(LoginUserScreen());
     } else {
-      Get.snackbar("Gagal", "Data Yang Dimasukkan Salah",
-          backgroundColor: Colors.red);
+      Get.snackbar("Gagal", res['message'], backgroundColor: Colors.red);
+      isLoading = false;
+      update();
     }
   }
 }

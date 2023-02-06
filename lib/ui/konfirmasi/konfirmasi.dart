@@ -57,111 +57,117 @@ class _KonfirmasiState extends State<Konfirmasi> {
       body: GetBuilder<KonfirmasiController>(
           initState: (state) => KonfirmasiController.to.getKonfirmasi(),
           builder: (_) {
-            return _.check
-                ? _.isLoadingKonfirmasi
-                    ? ProgressLoading()
-                    : ListView(
-                        children: [
-                          // ignore: prefer_const_constructors
-                          SizedBox(
-                            height: 10,
-                          ),
-                          ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _.listKonfirmasi.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 10, left: 10, bottom: 7),
-                                  child: Card(
-                                    child: InkWell(
-                                      onTap: () {
-                                        Get.to(DetailKOnfirmasi(
-                                            _.listKonfirmasi[index]));
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: Column(
-                                          children: [
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              children: [
-                                                SvgPicture.asset(
-                                                  iconConfrim[int.parse(_
-                                                          .listKonfirmasi[index]
-                                                          .detail
-                                                          ?.status ??
-                                                      '$def')],
-                                                  width: 24,
-                                                  height: 24,
-                                                ),
-                                                const SizedBox(width: 10),
-                                                Expanded(
-                                                  child: Column(
-                                                    children: [
-                                                      Text(_
-                                                              .listKonfirmasi[
-                                                                  index]
-                                                              .detail
-                                                              ?.catatan ??
-                                                          ''),
-                                                    ],
+            return RefreshIndicator(
+              onRefresh: () async {
+                _.getKonfirmasi();
+              },
+              child: _.check
+                  ? _.isLoadingKonfirmasi
+                      ? ProgressLoading()
+                      : ListView(
+                          children: [
+                            // ignore: prefer_const_constructors
+                            SizedBox(
+                              height: 10,
+                            ),
+                            ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: _.listKonfirmasi.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 10, left: 10, bottom: 7),
+                                    child: Card(
+                                      child: InkWell(
+                                        onTap: () {
+                                          Get.to(DetailKOnfirmasi(
+                                              _.listKonfirmasi[index]));
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Column(
+                                            children: [
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    iconConfrim[int.parse(_
+                                                            .listKonfirmasi[
+                                                                index]
+                                                            .detail
+                                                            ?.status ??
+                                                        '$def')],
+                                                    width: 24,
+                                                    height: 24,
                                                   ),
-                                                ),
-                                                const Spacer(),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
-                                                  children: [
-                                                    Text(DateFormat(
-                                                            "dd MMM yyyy")
-                                                        .format(DateTime.parse((_
+                                                  const SizedBox(width: 10),
+                                                  Expanded(
+                                                    child: Column(
+                                                      children: [
+                                                        Text(_
+                                                                .listKonfirmasi[
+                                                                    index]
+                                                                .detail
+                                                                ?.catatan ??
+                                                            ''),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const Spacer(),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text(DateFormat(
+                                                              "dd MMM yyyy")
+                                                          .format(DateTime.parse((_
+                                                                      .listKonfirmasi[
+                                                                          index]
+                                                                      .tanggal ??
+                                                                  '')
+                                                              .split(' ')
+                                                              .first))),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Text(
+                                                        status[int.parse(_
+                                                                .listKonfirmasi[
+                                                                    index]
+                                                                .detail
+                                                                ?.status ??
+                                                            '$def')],
+                                                        style: TextStyle(
+                                                            color: warna[int.parse(_
                                                                     .listKonfirmasi[
                                                                         index]
-                                                                    .tanggal ??
-                                                                '')
-                                                            .split(' ')
-                                                            .first))),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Text(
-                                                      status[int.parse(_
-                                                              .listKonfirmasi[
-                                                                  index]
-                                                              .detail
-                                                              ?.status ??
-                                                          '$def')],
-                                                      style: TextStyle(
-                                                          color: warna[int.parse(_
-                                                                  .listKonfirmasi[
-                                                                      index]
-                                                                  .detail
-                                                                  ?.status ??
-                                                              '$def')]),
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                                    .detail
+                                                                    ?.status ??
+                                                                '$def')]),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              }),
-                          const SizedBox(
-                            height: 80,
-                          )
-                        ],
-                      )
-                : const Center(
-                    child: Text('Tidak Ada'),
-                  );
+                                  );
+                                }),
+                            const SizedBox(
+                              height: 80,
+                            )
+                          ],
+                        )
+                  : const Center(
+                      child: Text('Tidak Ada'),
+                    ),
+            );
           }),
       bottomSheet: Container(
         color: Colors.white,

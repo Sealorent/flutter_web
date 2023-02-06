@@ -566,11 +566,13 @@ class MainRepositoryImpl extends MainRepository {
     param.student_nis = student.nis;
     param.kode_sekolah = pesantren.kodeSekolah;
     try {
+      print("iki Datane insert $param");
       final response =
           await _dioClient.post(Constant.ipaymu, data: param.toMap());
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
+        print("Coba iki $response");
         // var res = BaseResponse.fromJson(response.data);
         // if(res.isCorrect == true){
         //   return res;

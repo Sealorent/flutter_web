@@ -286,9 +286,9 @@ class _BebasScreenState extends State<BebasScreen> {
                     ),
                     const Spacer(),
                     Text(
-                      bill < paid ? "Belum Lunas" : "Lunas",
+                      bill > paid ? "Belum Lunas" : "Lunas",
                       style: TextStyle(
-                          color: bill < paid ? Colors.red : Colors.green),
+                          color: bill > paid ? Colors.red : Colors.green),
                     ),
                   ],
                 ),
@@ -457,7 +457,7 @@ class _BebasScreenState extends State<BebasScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "TAGIHAN BULANAN",
+                            "TAGIHAN BEBAS",
                             style: TextStyle(color: MyColors.grey_60),
                           ),
                           const SizedBox(

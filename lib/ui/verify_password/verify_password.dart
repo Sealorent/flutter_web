@@ -65,7 +65,7 @@ class _GetOtpState extends State<GetOtp> {
               Center(
                 child: Column(
                   children: [
-                    isLoading
+                    _.isLoading
                         ? ProgressLoading()
                         : ElevatedButton(
                             style: ButtonStyle(

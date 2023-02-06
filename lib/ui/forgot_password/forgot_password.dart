@@ -136,7 +136,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     Center(
                       child: Column(
                         children: [
-                          isLoadingPassword
+                          _.isLoading
                               ? ProgressLoading()
                               : ElevatedButton(
                                   style: ButtonStyle(
@@ -150,7 +150,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                                 BorderRadius.circular(20));
                                       })),
                                   onPressed: () {
-                                    isLoadingPassword = true;
                                     _.GetOtpMethod();
                                   },
                                   child: const Text("Verifikasi")),
