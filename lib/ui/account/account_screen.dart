@@ -17,6 +17,7 @@ import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_pesantren_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_user_screen.dart';
 import 'package:pesantren_flutter/utils/my_snackbar.dart';
+import 'package:pesantren_flutter/utils/webview.dart';
 import 'package:pesantren_flutter/widget/social_media.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -308,7 +309,9 @@ class _AccountScreenState extends State<AccountScreen> {
             Divider(),
             InkWell(
               onTap: () {
-                ScreenUtils(context).navigateTo(TermAndConditionScreen());
+                ScreenUtils(context).navigateTo(CustomWebView(
+                    "https://epesantren.co.id/syarat-ketentuan-mobile-view/",
+                    "Syarat dan Ketentuan"));
               },
               child: Padding(
                 padding:
@@ -328,7 +331,9 @@ class _AccountScreenState extends State<AccountScreen> {
             Divider(),
             InkWell(
               onTap: () {
-                ScreenUtils(context).navigateTo(PrivacyPolicyScreen());
+                ScreenUtils(context).navigateTo(CustomWebView(
+                    "https://epesantren.co.id/kebijakan-privasi-mobile-view/",
+                    "Kebijakan Privasi"));
               },
               child: Padding(
                 padding:

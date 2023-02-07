@@ -8,6 +8,8 @@ import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/konfirmasi/controller_konfirmasi.dart';
 import 'package:pesantren_flutter/widget/progress_loading.dart';
 
+import '../../utils/my_snackbar.dart';
+
 class UploadBuktiPage extends StatefulWidget {
   const UploadBuktiPage({super.key});
 
@@ -239,7 +241,7 @@ class _UploadBuktiPageState extends State<UploadBuktiPage> {
                 height: 40,
               ),
               GetBuilder<KonfirmasiController>(builder: (_) {
-                return isLoadingUpload
+                return _.isUpload
                     ? ProgressLoading()
                     : ElevatedButton(
                         style: ButtonStyle(
@@ -252,10 +254,15 @@ class _UploadBuktiPageState extends State<UploadBuktiPage> {
                               MaterialStateProperty.all(MyColors.primary),
                         ),
                         onPressed: () async {
-                          setState(() {
-                            isLoadingUpload = _.isUpload;
-                          });
-                          _.uploadBukti(keterangan.text, File(image!.path));
+                          if (keterangan.text.isEmpty) {
+                            MySnackbar(context)
+                                .errorSnackbar("Keterangan Masih kosong");
+                          } else if (image == null) {
+                            MySnackbar(context)
+                                .errorSnackbar("Bukti Foto Masih Kosong");
+                          } else {
+                            _.uploadBukti(keterangan.text, File(image!.path));
+                          }
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),

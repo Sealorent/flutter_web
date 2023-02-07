@@ -84,10 +84,14 @@ class KonfirmasiController extends GetxController {
             msg: "Gambar tidak boleh lebih dari 500Kb",
             backgroundColor: Colors.red,
             textColor: Colors.white);
+        isUpload = false;
+        update();
       }
     } catch (e) {
       Fluttertoast.showToast(
-          msg: "$e", backgroundColor: Colors.red, textColor: Colors.white);
+          msg: "Ada Kesalahan Server",
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
       isUpload = false;
       update();
     }

@@ -236,7 +236,7 @@ packages:
       name: flutter_inappwebview
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.7.2+2"
+    version: "5.7.2+3"
   flutter_keyboard_visibility:
     dependency: transitive
     description:
@@ -1072,7 +1072,7 @@ packages:
     source: hosted
     version: "0.2.0"
   webview_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: webview_flutter
       url: "https://pub.dartlang.org"
