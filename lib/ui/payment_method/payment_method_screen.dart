@@ -1,8 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
+import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tree_view/tree_view.dart';
 
+import '../transaction/model/item_filter_model.dart';
 import 'package:pesantren_flutter/network/response/ringkasan_response.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
@@ -21,13 +28,13 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   @override
   Widget build(BuildContext context) {
     var metodes =
-        widget.bayar.map((e) => e.metodeBayar ?? "").toList().toSet().toList();
+        widget.bayar.map((e) => e.metode ?? "").toList().toSet().toList();
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        systemOverlayStyle: const SystemUiOverlayStyle(
+        systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: MyColors.primary,
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.light,
@@ -38,12 +45,12 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.close,
                 color: MyColors.grey_60,
               ))
         ],
-        title: const Text(
+        title: Text(
           "Pilih metode pembayaran",
           style: TextStyle(color: MyColors.grey_50, fontSize: 14),
         ),
@@ -71,11 +78,11 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                         },
                                         child: Text(
                                           e ?? "",
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               fontSize: 18,
                                               color: MyColors.primary),
                                         )),
-                                    const Spacer(),
+                                    Spacer(),
                                     InkWell(
                                         onTap: () {
                                           bankTransferExpanded =
@@ -83,15 +90,15 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                           setState(() {});
                                         },
                                         child: bankTransferExpanded
-                                            ? const Icon(
+                                            ? Icon(
                                                 Icons.keyboard_arrow_down_sharp)
-                                            : const Icon(Icons
+                                            : Icon(Icons
                                                 .keyboard_arrow_right_sharp))
                                   ],
                                 ),
                               ),
                               children: widget.bayar
-                                  .where((element) => element.metodeBayar == e)
+                                  .where((element) => element.metode == e)
                                   .map(
                                     (ev) => Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -107,7 +114,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                               width: 50,
                                               height: 50,
                                               child: Image.network(
-                                                ev.detail?.metodeBankLogo ?? "",
+                                                ev.logo ?? "",
                                                 width: 50,
                                                 errorBuilder: (BuildContext
                                                         context,
@@ -115,7 +122,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                                     StackTrace? stackTrace) {
                                                   return Center(
                                                     child: Container(
-                                                      child: const Text(
+                                                      child: Text(
                                                         "No Image",
                                                         style: TextStyle(
                                                             fontSize: 7),
@@ -125,7 +132,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                                 },
                                               ),
                                             ),
-                                            const SizedBox(
+                                            SizedBox(
                                               width: 5,
                                             ),
                                             Expanded(
@@ -134,9 +141,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    ev.detail?.kode ?? "",
-                                                    style: const TextStyle(
-                                                        fontSize: 16),
+                                                    ev.kode ?? "",
+                                                    style:
+                                                        TextStyle(fontSize: 16),
                                                   ),
                                                   // Text("Rp.125.000",style: TextStyle(color: MyColors.grey_60),),
                                                 ],
@@ -148,7 +155,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                     ),
                                   )
                                   .toList()),
-                          const Divider(),
+                          Divider(),
                         ],
                       ))
                   .toList() ??

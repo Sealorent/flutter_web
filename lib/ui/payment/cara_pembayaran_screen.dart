@@ -24,17 +24,17 @@ import 'package:tree_view/tree_view.dart';
 import '../../utils/my_snackbar.dart';
 import '../transaction/model/item_filter_model.dart';
 import 'package:collection/collection.dart';
+
 class CaraPembayaranScreen extends StatefulWidget {
   IpaymuParam? ipaymuParam;
   Bayar? _selectedPayment;
-  CaraPembayaranScreen(this.ipaymuParam,this._selectedPayment);
+  CaraPembayaranScreen(this.ipaymuParam, this._selectedPayment);
 
   @override
   State<CaraPembayaranScreen> createState() => _PaymentDetailScreenState();
 }
 
 class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
-
   late PaymentBloc bloc;
   bool _isLoading = true;
   CaraPembayaranResponse? _response;
@@ -46,7 +46,7 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
     super.initState();
   }
 
-  void getData(){
+  void getData() {
     bloc.add(GetCaraPembayaran(widget.ipaymuParam));
   }
 
@@ -60,14 +60,13 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
         _isLoading = false;
         _response = state.response;
       });
-
     } else if (state is FailedState) {
       setState(() {
         _isLoading = false;
       });
       if (state.code == 401 || state.code == 0) {
-        MySnackbar(context)
-            .errorSnackbar("Terjadi kesalahan, respon API tidak dapat terbaca.");
+        MySnackbar(context).errorSnackbar(
+            "Terjadi kesalahan, respon API tidak dapat terbaca.");
         return;
       }
 
@@ -82,20 +81,23 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
       listener: listener,
       child: WillPopScope(
         onWillPop: () async {
-          Navigator.pushAndRemoveUntil(context,
-              MaterialPageRoute(builder: (BuildContext context) => DashboardScreen(null)),
-                  (Route<dynamic> route) => route is DashboardScreen
-          );
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => DashboardScreen(null)),
+              (Route<dynamic> route) => route is DashboardScreen);
           return true;
         },
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.pushAndRemoveUntil(context,
-                    MaterialPageRoute(builder: (BuildContext context) => DashboardScreen(null)),
-                        (Route<dynamic> route) => route is DashboardScreen
-                );
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            DashboardScreen(null)),
+                    (Route<dynamic> route) => route is DashboardScreen);
                 // Navigator.pop(context);
               },
               icon: Icon(
@@ -105,122 +107,180 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
             ),
             centerTitle: true,
             elevation: 0,
-            title: Text("Cara Pembayaran", style: TextStyle(color: Colors.white),),
+            title: Text(
+              "Cara Pembayaran",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
           backgroundColor: Colors.white,
-          body: _isLoading ? ProgressLoading() : ListView(
-            children: [
-              SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          body: _isLoading
+              ? ProgressLoading()
+              : ListView(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             children: [
-                              Text(_response?.bank?.toUpperCase() ?? "", style: TextStyle(fontSize: 20),),
-                              Text(_response?.bayarVia ?? "",),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      _response?.bank?.toUpperCase() ?? "",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    Text(
+                                      _response?.bayarVia ?? "",
+                                    ),
+                                  ],
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                ),
+                              ),
+                              Image.network(widget._selectedPayment?.logo ?? "",
+                                  width: 50, errorBuilder:
+                                      (BuildContext context, Object exception,
+                                          StackTrace? stackTrace) {
+                                return Center(
+                                  child: Container(
+                                    child: Text(
+                                      "No Image",
+                                      style: TextStyle(fontSize: 7),
+                                    ),
+                                  ),
+                                );
+                              }),
                             ],
-                            crossAxisAlignment: CrossAxisAlignment.start,
                           ),
-                        ),
-                        Image.network(widget._selectedPayment?.detail?.metodeBankLogo ?? "", width: 50, errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                          return Center(
-                            child: Container(
-                              child: Text("No Image", style: TextStyle(fontSize: 7),),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "No Virtual Account",
+                                    ),
+                                    Text(
+                                      _response?.va ?? "Tidak ada data",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  ],
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                ),
+                              ),
+                              Text(
+                                "Salin",
+                                style: TextStyle(color: MyColors.primary),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "Total Pembayaran",
+                                    ),
+                                    Text(
+                                      "Tidak ada data",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  ],
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                ),
+                              ),
+                              Text(
+                                "Salin",
+                                style: TextStyle(color: MyColors.primary),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "Bayar Sebelum",
+                                    ),
+                                    Text(
+                                      _response?.expired ?? "",
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.red),
+                                    ),
+                                  ],
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "Petunjuk Pembayaran",
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Html(
+                            data:
+                                _response?.carabayar?.firstOrNull?.bayar ?? "-",
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0)))),
+                            onPressed: () async {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          DashboardScreen(null)),
+                                  (Route<dynamic> route) =>
+                                      route is DashboardScreen);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Kembali ke Home",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2
+                                        ?.apply(color: Colors.white),
+                                  ),
+                                ],
+                              ),
                             ),
-                          );
-                        }),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text("No Virtual Account",),
-                              Text(_response?.va ?? "Tidak ada data", style: TextStyle(fontSize: 20),),
-                            ],
-                            crossAxisAlignment: CrossAxisAlignment.start,
                           ),
-                        ),
-                        Text("Salin", style: TextStyle(color: MyColors.primary),)
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text("Total Pembayaran",),
-                              Text( "Tidak ada data", style: TextStyle(fontSize: 20),),
-                            ],
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                          ),
-                        ),
-                        Text("Salin", style: TextStyle(color: MyColors.primary),)
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text("Bayar Sebelum",),
-                              Text( _response?.expired ?? "", style: TextStyle(fontSize: 20,color: Colors.red),),
-                            ],
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Text("Petunjuk Pembayaran",),
-                    SizedBox(height: 20,),
-                    Html(
-                      data: _response?.carabayar?.firstOrNull?.bayar ?? "-",
-                    ),
-                    SizedBox(height: 40,),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all<
-                              RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(18.0)))),
-                      onPressed: () async {
-                        Navigator.pushAndRemoveUntil(context,
-                            MaterialPageRoute(builder: (BuildContext context) => DashboardScreen(null)),
-                                (Route<dynamic> route) => route is DashboardScreen
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Kembali ke Home",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.apply(color: Colors.white),
-                            ),
-                          ],
-                        ),
+                        ],
                       ),
-                    ),
+                    )
                   ],
                 ),
-              )
-            ],
-          ),
         ),
       ),
     );

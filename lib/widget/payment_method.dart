@@ -14,11 +14,11 @@ class PaymentMethod extends StatelessWidget {
   Function continueClicked;
   bool isLoading;
 
-  PaymentMethod(this.context, this.bayar, this.selectedPembayaran,this.onSelectPayment,this.continueClicked,this.isLoading );
+  PaymentMethod(this.context, this.bayar, this.selectedPembayaran,
+      this.onSelectPayment, this.continueClicked, this.isLoading);
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -26,70 +26,94 @@ class PaymentMethod extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           Divider(),
           Text("Pilih metode pembayaran"),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           InkWell(
-            onTap: (){
-              ScreenUtils(context).navigateTo(PaymentMethodScreen(bayar, (payment){
+            onTap: () {
+              ScreenUtils(context)
+                  .navigateTo(PaymentMethodScreen(bayar, (payment) {
                 onSelectPayment(payment);
               }));
             },
-            child: selectedPembayaran == null ? Row(
-              children: [
-                Text("Pilih"),
-                Spacer(),
-                Icon(Icons.keyboard_arrow_right_sharp)
-              ],
-            ) : Row(
-              children: [
-                Image.network(selectedPembayaran?.detail?.metodeBankLogo ?? "", width: 50, errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                  return Center(
-                    child: Container(
-                      child: Text("No Image", style: TextStyle(fontSize: 7),),
-                    ),
-                  );
-                }),
-                SizedBox(width: 10,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(selectedPembayaran?.detail?.kode ?? "", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),),
-                    Text(selectedPembayaran?.metodeBayar ?? "", style: TextStyle(color: MyColors.grey_60),),
-                  ],
-                ),
-                Spacer(),
-                Icon(Icons.keyboard_arrow_right_sharp)
-              ],
-            ),
+            child: selectedPembayaran == null
+                ? Row(
+                    children: [
+                      Text("Pilih"),
+                      Spacer(),
+                      Icon(Icons.keyboard_arrow_right_sharp)
+                    ],
+                  )
+                : Row(
+                    children: [
+                      Image.network(selectedPembayaran?.logo ?? "", width: 50,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                        return Center(
+                          child: Container(
+                            child: Text(
+                              "No Image",
+                              style: TextStyle(fontSize: 7),
+                            ),
+                          ),
+                        );
+                      }),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            selectedPembayaran?.kode ?? "",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 20),
+                          ),
+                          Text(
+                            selectedPembayaran?.metode ?? "",
+                            style: TextStyle(color: MyColors.grey_60),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      Icon(Icons.keyboard_arrow_right_sharp)
+                    ],
+                  ),
           ),
-          SizedBox(height: 10,),
-          isLoading ? ProgressLoading() : ElevatedButton(
-            style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0)
-                    )
-                )
-            ),
-            onPressed: () async{
-              continueClicked();
-            },
-            child:  Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Lanjutkan",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      ?.apply(color: Colors.white),
-                ),
-              ],
-            ),
+          SizedBox(
+            height: 10,
           ),
-          SizedBox(height: 20,),
+          isLoading
+              ? ProgressLoading()
+              : ElevatedButton(
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0)))),
+                  onPressed: () async {
+                    continueClicked();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Lanjutkan",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            ?.apply(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+          SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
