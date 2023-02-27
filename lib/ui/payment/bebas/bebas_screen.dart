@@ -482,11 +482,13 @@ class _BebasScreenState extends State<BebasScreen> {
                                                   BorderRadius.circular(
                                                       18.0)))),
                                   onPressed: () async {
-                                    // if(total == 0){
-                                    //   MySnackbar(context).successSnackbar("Tidak ada tagihan");
-                                    //   return;
-                                    // }
-                                    // ScreenUtils(context).navigateTo(PayBillsScreen(true));
+                                    if (total == 0) {
+                                      MySnackbar(context)
+                                          .successSnackbar("Tidak ada tagihan");
+                                      return;
+                                    }
+                                    ScreenUtils(context)
+                                        .navigateTo(PayBillsScreen(true));
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(

@@ -211,17 +211,20 @@ class _SavingScreenState extends State<SavingScreen> {
           ),
           actions: [
             PopupMenuButton<String>(
-              onSelected: (test){
-
-              },
+              onSelected: (test) {},
               itemBuilder: (BuildContext context) {
                 return {'Cetak buku tabungan'}.map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice,
                     child: Row(
                       children: [
-                        Icon(Icons.download, color: Colors.black26,),
-                        SizedBox(width: 5,),
+                        Icon(
+                          Icons.download,
+                          color: Colors.black26,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
                         Text(choice),
                       ],
                     ),
@@ -250,23 +253,30 @@ class _SavingScreenState extends State<SavingScreen> {
                           Text("Tanggal"),
                           Spacer(),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
                             child: FilterChip(
-                              label: timeRange != null ? Text(
-                                "${DateFormat("d MMM yyyy").format(timeRange!.start)}-${DateFormat("d MMM yyyy").format(timeRange!.end)}",
-                                style: TextStyle(color: MyColors.primary),
-                              ) : Icon(Icons.calendar_month,color: MyColors.primary),
+                              label: timeRange != null
+                                  ? Text(
+                                      "${DateFormat("d MMM yyyy").format(timeRange!.start)}-${DateFormat("d MMM yyyy").format(timeRange!.end)}",
+                                      style: TextStyle(color: MyColors.primary),
+                                    )
+                                  : Icon(Icons.calendar_month,
+                                      color: MyColors.primary),
                               selected: timeRange != null,
                               backgroundColor: Color(0xffEBF6F3),
                               shape: StadiumBorder(
                                   side: BorderSide(color: MyColors.grey_20)),
                               selectedColor: MyColors.primary.withOpacity(0.3),
                               checkmarkColor: MyColors.primary,
-                              onSelected: (val)  async {
-                                DateTimeRange? result = await showDateRangePicker(
+                              onSelected: (val) async {
+                                DateTimeRange? result =
+                                    await showDateRangePicker(
                                   context: context,
-                                  firstDate: DateTime(2022, 1, 1), // the earliest allowable
-                                  lastDate: DateTime(2050, 12, 31), // the latest allowable
+                                  firstDate: DateTime(
+                                      2022, 1, 1), // the earliest allowable
+                                  lastDate: DateTime(
+                                      2050, 12, 31), // the latest allowable
                                   currentDate: DateTime.now(),
                                   saveText: 'Done',
                                 );
@@ -361,9 +371,11 @@ class _SavingScreenState extends State<SavingScreen> {
                                                       BorderRadius.circular(
                                                           18.0)))),
                                       onPressed: () async {
-                                        // ScreenUtils(context).navigateTo(SavingTopUpScreen(), listener: (val){
-                                        //   if(val == 200) getData();
-                                        // });
+                                        ScreenUtils(context)
+                                            .navigateTo(SavingTopUpScreen(),
+                                                listener: (val) {
+                                          if (val == 200) getData();
+                                        });
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -414,13 +426,16 @@ class _SavingScreenState extends State<SavingScreen> {
               var curDate = element.tanggal;
               var start = timeRange?.start;
               var end = timeRange?.end;
-              
-              if(curDate != null && start != null && end != null){
-                return (curDate.isAfter(start) && curDate.isBefore(end)) || curDate.isAtSameMomentAs(start) || curDate.isAtSameMomentAs(end);
+
+              if (curDate != null && start != null && end != null) {
+                return (curDate.isAfter(start) && curDate.isBefore(end)) ||
+                    curDate.isAtSameMomentAs(start) ||
+                    curDate.isAtSameMomentAs(end);
               }
-              
+
               return true;
-            }).map((e) => InkWell(
+            })
+            .map((e) => InkWell(
                   onTap: () {
                     _detailBottomSheet(e);
                   },
