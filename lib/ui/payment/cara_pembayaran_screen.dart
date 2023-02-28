@@ -194,8 +194,13 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                                     ),
                                     Text(
                                       NumberUtils.toRupiah(double.parse(
-                                          _response?.nominal ??
-                                              "Tidak ada data")),
+                                              _response?.nominal ?? "0") -
+                                          double.parse(_response?.fee ?? "0")),
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    Text(
+                                      NumberUtils.toRupiah(
+                                          double.parse(_response?.fee ?? "0")),
                                       style: TextStyle(fontSize: 20),
                                     ),
                                   ],
@@ -223,8 +228,14 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                                       children: [
                                         Text(
                                           (_response?.expired ?? "")
-                                              .split(" ")
-                                              .first,
+                                                  .split(" ")
+                                                  .first +
+                                              " " +
+                                              "Pukul" +
+                                              " " +
+                                              (_response?.expired ?? "")
+                                                  .split(" ")
+                                                  .last,
                                           style: TextStyle(
                                               fontSize: 20, color: Colors.red),
                                         ),

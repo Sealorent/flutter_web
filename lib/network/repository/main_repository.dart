@@ -479,10 +479,11 @@ class MainRepositoryImpl extends MainRepository {
     var student = await _getUser();
     var pesantren = await _getPesantren();
     try {
-      final response = await _dioClient.get(Constant.history, queryParameters: {
-        "kode_sekolah": pesantren.kodeSekolah,
-        "nis": student.nis
-      });
+      final response = await _dioClient.get(Constant.listTransaksi,
+          queryParameters: {
+            "kode_sekolah": pesantren.kodeSekolah,
+            "nis": student.nis
+          });
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {

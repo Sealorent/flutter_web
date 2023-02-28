@@ -33,7 +33,7 @@ class Constant {
   static const String changePassword = "/edit_password.php";
   static const String bayarBebas = "/bayar_tagihan_bebas2.php";
   static const String bayarBulanan = "/bayar_tagihan_bulan2.php";
-  static const String history = "/history.php";
+  static const String listTransaksi = "/list_transaksi.php";
   static const String bayar = "/bayar.php";
   static const String bayarBulanan2 = "/tagihan_bulan_bayar.php";
   static const String bayarBebas2 = "/tagihan_bebas_bayar.php";

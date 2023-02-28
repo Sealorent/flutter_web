@@ -18,6 +18,7 @@ class CaraPembayaranResponse {
       this.label,
       this.va,
       this.nominal,
+      this.fee,
       this.payment,
       this.expired,
       this.message,
@@ -29,6 +30,7 @@ class CaraPembayaranResponse {
   String? label;
   String? va;
   String? nominal;
+  String? fee;
   String? payment;
   String? expired;
   String? message;
@@ -42,6 +44,7 @@ class CaraPembayaranResponse {
         label: json["label"],
         va: json["va"],
         nominal: json["nominal"],
+        fee: json["fee"],
         payment: json["payment"],
         expired: json["expired"],
         message: json["message"],
@@ -56,6 +59,7 @@ class CaraPembayaranResponse {
         "label": label,
         "va": va,
         "nominal": nominal,
+        "fee": fee,
         "payment": payment,
         "expired": expired,
         "message": message,
