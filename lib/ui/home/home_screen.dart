@@ -136,20 +136,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> buildInformations() {
-    return _informationResponse?.informasi?.take(3).map((e) {
+    return _informationResponse?.informasi?.map((e) {
           return InkWell(
             onTap: () {
               ScreenUtils(context).navigateTo(InformationDetailScreen(e));
             },
-            child: Container(
-              width: Get.height * 0.35,
-              decoration: BoxDecoration(
-                color: const Color(0xff7c94b6),
-                image: DecorationImage(
-                  image: NetworkImage(e.foto ?? ""),
-                  fit: BoxFit.cover,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Container(
+                width: Get.width * 0.8 - 20 ,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: const Color(0xff7c94b6),
+                  image: DecorationImage(
+                    image: NetworkImage(e.foto ?? ""),
+                    fit: BoxFit.fill,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                 ),
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
               ),
             ),
           );
@@ -554,9 +558,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
                       CarouselSlider(
                           items: buildInformations(),
                           options: CarouselOptions(
@@ -574,9 +578,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               });
                             },
                           )),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
                       Center(
                         child: AnimatedSmoothIndicator(
                             activeIndex: currentIndex,

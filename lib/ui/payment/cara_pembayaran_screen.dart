@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/network/param/ipaymu_param.dart';
 import 'package:pesantren_flutter/network/response/cara_pembayaran_response.dart';
 import 'package:pesantren_flutter/network/response/ringkasan_response.dart';
@@ -14,6 +15,7 @@ import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/payment/payment_bloc.dart';
 import 'package:pesantren_flutter/ui/payment/payment_event.dart';
 import 'package:pesantren_flutter/ui/payment/payment_state.dart';
+import 'package:pesantren_flutter/ui/transaction/controller/list_transaksi_controller.dart';
 import 'package:pesantren_flutter/utils/number_utils.dart';
 import 'package:pesantren_flutter/utils/screen_utils.dart';
 import 'package:pesantren_flutter/widget/payment_method.dart';
@@ -36,6 +38,7 @@ class CaraPembayaranScreen extends StatefulWidget {
 
 class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
   late PaymentBloc bloc;
+   bool sppExpanded = true;
   bool _isLoading = true;
   CaraPembayaranResponse? _response;
 
@@ -146,12 +149,7 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                                       (BuildContext context, Object exception,
                                           StackTrace? stackTrace) {
                                 return Center(
-                                  child: Container(
-                                    child: Text(
-                                      "No Image",
-                                      style: TextStyle(fontSize: 7),
-                                    ),
-                                  ),
+                                  child: SvgPicture.network(widget._selectedPayment?.logo ?? "",height: 20,)
                                 );
                               }),
                             ],
@@ -186,28 +184,57 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                           ),
                           Row(
                             children: [
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "Total Pembayaran",
-                                    ),
-                                    Text(
-                                      NumberUtils.toRupiah(double.parse(
-                                              _response?.nominal ?? "0") -
-                                          double.parse(_response?.fee ?? "0")),
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    Text(
-                                      NumberUtils.toRupiah(
-                                          double.parse(_response?.fee ?? "0")),
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ],
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                ),
-                              ),
+                              Column(
+                                // ignore: sort_child_properties_last
+                                children: [
+                                  Text(
+                                    "Total Pembayaran",
+                                  ),
+                                  TreeViewChild(startExpanded: false,parent: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  sppExpanded = !sppExpanded;
+                                  setState(() {});
+                                },
+                                child: Text(
+                                  NumberUtils.toRupiah(double.parse(
+                                          _response?.nominal ?? "0")),
+                                  style: TextStyle(fontSize: 20),
+                                ),),
+                                SizedBox(height: 40,),
+                              InkWell(
+                                onTap: () {
+                                  sppExpanded = !sppExpanded;
+                                  setState(() {});
+                                },
+                                child: sppExpanded
+                                    ? Icon(Icons.keyboard_arrow_right_sharp)
+                                    : Icon(Icons.keyboard_arrow_down_sharp))
+                            ],
+                          ), children: [Column(crossAxisAlignment: CrossAxisAlignment.start,children: [Row(mainAxisSize: MainAxisSize.max,children: [
+                              Text("Total Item ",style: TextStyle(fontSize: 15),),SizedBox(width: 50,),
                               Text(
+                                      NumberUtils.toRupiah(double.parse(
+                                              _response?.nominal ?? "0")-double.parse(
+                                              _response?.fee ?? "0")),
+                                      style: TextStyle(fontSize: 15)),
+                            ],
+                          ),Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                               Text("Biaya Admin",style: TextStyle(fontSize: 15),),SizedBox(width: 50,),
+                              Text(
+                                      NumberUtils.toRupiah(double.parse(
+                                              _response?.fee ?? "0")),
+                                      style: TextStyle(fontSize: 15)),
+                            ],
+                          )],)]),                        
+                                ],
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                              ),
+                              Spacer(),
+                              const Text(
                                 "Salin",
                                 style: TextStyle(color: MyColors.primary),
                               )
@@ -227,12 +254,11 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                                     Row(
                                       children: [
                                         Text(
-                                          (_response?.expired ?? "")
+                                          "Tanggal "+DateFormat("dd MMM yyyy").format(DateTime.parse( (_response?.expired ?? "")
                                                   .split(" ")
-                                                  .first +
-                                              " " +
-                                              "Pukul" +
-                                              " " +
+                                                  .first))
+                                          +
+                                              ", Pukul " +
                                               (_response?.expired ?? "")
                                                   .split(" ")
                                                   .last,
@@ -278,6 +304,7 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                                           DashboardScreen(null)),
                                   (Route<dynamic> route) =>
                                       route is DashboardScreen);
+                                      ListTransaksiController.to.getHistory();
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),

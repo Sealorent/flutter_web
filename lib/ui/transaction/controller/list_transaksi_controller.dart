@@ -16,7 +16,7 @@ class ListTransaksiController extends GetxController {
   List<ListTransaksi> listTransaksi = [];
   bool isLoadingHistory = true;
   bool check = true;
-  List<String> status = [""];
+  List<String> status = [];
   var req = dio.Dio();
 
   void getHistory() async {
@@ -46,10 +46,17 @@ class ListTransaksiController extends GetxController {
           : response.data;
       // ignore: avoid_print
       print(res);
+      check = res['is_correct'];
+      update();
       if (res['is_correct']) {
         final laporanHistory = ListTransaksiModel.fromJson(res);
         listHistory = laporanHistory.history ?? [];
         listTransaksi = laporanHistory.listTransaksi ?? [];
+        isLoadingHistory = false;
+        update();
+      }else{
+        isLoadingHistory = false;
+        update();
       }
       isLoadingHistory = false;
       update();

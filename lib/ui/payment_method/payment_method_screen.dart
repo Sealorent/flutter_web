@@ -121,13 +121,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                                     Object exception,
                                                     StackTrace? stackTrace) {
                                                   return Center(
-                                                    child: Container(
-                                                      child: Text(
-                                                        "No Image",
-                                                        style: TextStyle(
-                                                            fontSize: 7),
-                                                      ),
-                                                    ),
+                                                    child: SvgPicture.network(ev.logo ?? "",height: 50,)
                                                   );
                                                 },
                                               ),

@@ -49,4 +49,5 @@ class Constant {
   static const String konfirmasi = "/info_upload_pembayaran.php";
   static const String tahunAjaran = "/tahun_ajaran.php";
   static const String uploadBukti = "/upload_bukti_bayar.php";
+  static const String detailTransaksi = "/detail_transaksi.php";
 }
