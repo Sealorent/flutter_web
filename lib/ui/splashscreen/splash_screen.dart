@@ -12,7 +12,6 @@ import '../../utils/screen_utils.dart';
 import '../../widget/progress_loading.dart';
 
 class SplashScreen extends StatefulWidget {
-
   Alice? alice;
 
   SplashScreen(this.alice);
@@ -28,9 +27,14 @@ class _SplashScreenState extends State<SplashScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool isLoggedIn = prefs.containsKey(PrefData.student);
       if (isLoggedIn) {
-        ScreenUtils(context).navigateTo(DashboardScreen(widget.alice), replaceScreen: true);
+        ScreenUtils(context)
+            .navigateTo(DashboardScreen(widget.alice), replaceScreen: true);
       } else {
-        ScreenUtils(context).navigateTo(LoginUserScreen(alice: widget.alice,), replaceScreen: true);
+        ScreenUtils(context).navigateTo(
+            LoginUserScreen(
+              alice: widget.alice,
+            ),
+            replaceScreen: true);
       }
     }
 
@@ -48,14 +52,14 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               Image.asset(
                 "assets/logo.png",
-                width: 120,
+                width: 200,
               ),
               SizedBox(
                 height: 50,
               ),
               ProgressLoading(
-                size: 10,
-                stroke: 1,
+                size: 30,
+                stroke: 3,
               )
             ],
           ),
