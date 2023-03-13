@@ -38,7 +38,7 @@ class CaraPembayaranScreen extends StatefulWidget {
 
 class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
   late PaymentBloc bloc;
-   bool sppExpanded = true;
+  bool sppExpanded = true;
   bool _isLoading = true;
   CaraPembayaranResponse? _response;
 
@@ -73,8 +73,7 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
         return;
       }
 
-      MySnackbar(context)
-          .errorSnackbar(state.message + " : " + state.code.toString());
+      MySnackbar(context).errorSnackbar("${state.message} : ${state.code}");
     }
   }
 
@@ -103,14 +102,14 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                     (Route<dynamic> route) => route is DashboardScreen);
                 // Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.white,
               ),
             ),
             centerTitle: true,
             elevation: 0,
-            title: Text(
+            title: const Text(
               "Cara Pembayaran",
               style: TextStyle(color: Colors.white),
             ),
@@ -120,7 +119,7 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
               ? ProgressLoading()
               : ListView(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Padding(
@@ -132,16 +131,16 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                             children: [
                               Expanded(
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       _response?.bank?.toUpperCase() ?? "",
-                                      style: TextStyle(fontSize: 20),
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                     Text(
                                       _response?.bayarVia ?? "",
                                     ),
                                   ],
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                 ),
                               ),
                               Image.network(widget._selectedPayment?.logo ?? "",
@@ -149,37 +148,59 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                                       (BuildContext context, Object exception,
                                           StackTrace? stackTrace) {
                                 return Center(
-                                  child: SvgPicture.network(widget._selectedPayment?.logo ?? "",height: 20,)
-                                );
+                                    child: SvgPicture.network(
+                                  widget._selectedPayment?.logo ?? "",
+                                  height: 20,
+                                ));
                               }),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
                             children: [
                               Expanded(
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       "No Virtual Account",
                                     ),
                                     Text(
-                                      _response?.va ?? "Tidak ada data",
-                                      style: TextStyle(fontSize: 20),
+                                      _response?.va
+                                              ?.replaceAllMapped(
+                                                  RegExp(r".{4}"),
+                                                  (match) =>
+                                                      "${match.group(0)} ")
+                                              .trim() ??
+                                          "Tidak ada data",
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ],
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                 ),
                               ),
-                              Text(
-                                "Salin",
-                                style: TextStyle(color: MyColors.primary),
-                              )
+                              GestureDetector(
+                                onTap: () {
+                                  Clipboard.setData(
+                                      ClipboardData(text: _response?.va));
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Nomor VA berhasil disalin!'),
+                                      backgroundColor: MyColors.primary,
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  "Salin",
+                                  style: TextStyle(
+                                      color: MyColors.primary, fontSize: 17),
+                                ),
+                              ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
@@ -187,107 +208,139 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                               Column(
                                 // ignore: sort_child_properties_last
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Total Pembayaran",
                                   ),
-                                  TreeViewChild(startExpanded: false,parent: Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  sppExpanded = !sppExpanded;
-                                  setState(() {});
-                                },
-                                child: Text(
-                                  NumberUtils.toRupiah(double.parse(
-                                          _response?.nominal ?? "0")),
-                                  style: TextStyle(fontSize: 20),
-                                ),),
-                                SizedBox(height: 40,),
-                              InkWell(
-                                onTap: () {
-                                  sppExpanded = !sppExpanded;
-                                  setState(() {});
-                                },
-                                child: sppExpanded
-                                    ? Icon(Icons.keyboard_arrow_right_sharp)
-                                    : Icon(Icons.keyboard_arrow_down_sharp))
-                            ],
-                          ), children: [Column(crossAxisAlignment: CrossAxisAlignment.start,children: [Row(mainAxisSize: MainAxisSize.max,children: [
-                              Text("Total Item ",style: TextStyle(fontSize: 15),),SizedBox(width: 50,),
-                              Text(
-                                      NumberUtils.toRupiah(double.parse(
-                                              _response?.nominal ?? "0")-double.parse(
-                                              _response?.fee ?? "0")),
-                                      style: TextStyle(fontSize: 15)),
-                            ],
-                          ),Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                               Text("Biaya Admin",style: TextStyle(fontSize: 15),),SizedBox(width: 50,),
-                              Text(
-                                      NumberUtils.toRupiah(double.parse(
-                                              _response?.fee ?? "0")),
-                                      style: TextStyle(fontSize: 15)),
-                            ],
-                          )],)]),                        
+                                  TreeViewChild(
+                                      startExpanded: false,
+                                      parent: Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              sppExpanded = !sppExpanded;
+                                              setState(() {});
+                                            },
+                                            child: Text(
+                                              NumberUtils.toRupiah(double.parse(
+                                                  _response?.nominal ?? "0")),
+                                              style:
+                                                  const TextStyle(fontSize: 20),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 40,
+                                          ),
+                                          InkWell(
+                                              onTap: () {
+                                                sppExpanded = !sppExpanded;
+                                                setState(() {});
+                                              },
+                                              child: sppExpanded
+                                                  ? const Icon(Icons
+                                                      .keyboard_arrow_right_sharp)
+                                                  : const Icon(Icons
+                                                      .keyboard_arrow_down_sharp))
+                                        ],
+                                      ),
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                const Text(
+                                                  "Total Item ",
+                                                  style:
+                                                      TextStyle(fontSize: 15),
+                                                ),
+                                                const SizedBox(
+                                                  width: 50,
+                                                ),
+                                                Text(
+                                                    NumberUtils.toRupiah(
+                                                        double.parse(_response
+                                                                    ?.nominal ??
+                                                                "0") -
+                                                            double.parse(
+                                                                _response
+                                                                        ?.fee ??
+                                                                    "0")),
+                                                    style: const TextStyle(
+                                                        fontSize: 15)),
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                const Text(
+                                                  "Biaya Admin",
+                                                  style:
+                                                      TextStyle(fontSize: 15),
+                                                ),
+                                                const SizedBox(
+                                                  width: 50,
+                                                ),
+                                                Text(
+                                                    NumberUtils.toRupiah(
+                                                        double.parse(
+                                                            _response?.fee ??
+                                                                "0")),
+                                                    style: const TextStyle(
+                                                        fontSize: 15)),
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ]),
                                 ],
                                 crossAxisAlignment: CrossAxisAlignment.start,
                               ),
-                              Spacer(),
-                              const Text(
-                                "Salin",
-                                style: TextStyle(color: MyColors.primary),
-                              )
+                              const Spacer(),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
                             children: [
                               Expanded(
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      "Bayar Sebelum",
+                                    const Text(
+                                      "Bayar sebelum Jatuh Tempo!",
                                     ),
                                     Row(
                                       children: [
                                         Text(
-                                          "Tanggal "+DateFormat("dd MMM yyyy").format(DateTime.parse( (_response?.expired ?? "")
-                                                  .split(" ")
-                                                  .first))
-                                          +
-                                              ", Pukul " +
-                                              (_response?.expired ?? "")
-                                                  .split(" ")
-                                                  .last,
-                                          style: TextStyle(
+                                          "Tanggal ${DateFormat("dd MMM yyyy").format(DateTime.parse((_response?.expired ?? "").split(" ").first))}, Pukul ${(_response?.expired ?? "").split(" ").last}",
+                                          style: const TextStyle(
                                               fontSize: 20, color: Colors.red),
                                         ),
                                       ],
                                     ),
                                   ],
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            "Petunjuk Pembayaran",
+                          const Text(
+                            "Petunjuk Pembayaran:",
                           ),
-                          SizedBox(
-                            height: 20,
+                          const SizedBox(
+                            height: 1,
                           ),
                           Html(
                             data:
                                 _response?.carabayar?.firstOrNull?.bayar ?? "-",
                           ),
-                          SizedBox(
-                            height: 40,
+                          const SizedBox(
+                            height: 30,
                           ),
                           ElevatedButton(
                             style: ButtonStyle(
@@ -304,7 +357,7 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                                           DashboardScreen(null)),
                                   (Route<dynamic> route) =>
                                       route is DashboardScreen);
-                                      ListTransaksiController.to.getHistory();
+                              ListTransaksiController.to.getHistory();
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
