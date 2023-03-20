@@ -13,7 +13,7 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+    flutterVersionCode = '2'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
@@ -54,7 +54,7 @@ android {
        release {
            keyAlias 'epesantren'
            keyPassword 'epesantren2020'
-           storeFile file('../keystore_ep.jks')
+           storeFile file('/Volumes/Bank Data/MobileDeveloper/epesantren-wali/keystore_ep.jks')
            storePassword 'epesantren2020'
        }
     }

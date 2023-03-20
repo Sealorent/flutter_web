@@ -372,7 +372,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       width: 10,
                     ),
                     Text(
-                      "v1.0.1",
+                      "v1.0.4",
                       style: TextStyle(color: MyColors.grey_50),
                     ),
                     Spacer(),
