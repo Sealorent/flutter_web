@@ -19,7 +19,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         var response = await repository.getPayments(event.periodIds);
         yield GetPaymentSuccess(response);
       } catch (e) {
-        yield FailedState("Login gagal, silahkan coba lagi", 0);
+        yield FailedState("error : get payment", 0);
       }
     }
 
@@ -29,7 +29,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         var response = await repository.getPaymentBebas(event.periodIds);
         yield GetPaymentBebasSuccess(response);
       } catch (e) {
-        yield FailedState("Login gagal, silahkan coba lagi", 0);
+        yield FailedState("error : GetPaymentBebas", 0);
       }
     }
 
@@ -39,7 +39,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         var response = await repository.getBayarBebas(event.periodIds);
         yield GetDetailBayarSuccess(response);
       } catch (e) {
-        yield FailedState("Login gagal, silahkan coba lagi", 0);
+        yield FailedState("error : GetDetailPaymentBebas", 0);
       }
     }
 
@@ -49,7 +49,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         var response = await repository.getBayarBulanan(event.periodIds);
         yield GetDetailBayarSuccess(response);
       } catch (e) {
-        yield FailedState("Login gagal, silahkan coba lagi", 0);
+        yield FailedState("error : GetDetailPaymentBulanan", 0);
       }
     }
 
@@ -59,7 +59,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         var response = await repository.getHistory();
         yield GetHistorySuccess(response);
       } catch (e) {
-        yield FailedState("Login gagal, silahkan coba lagi", 0);
+        yield FailedState("error : GetHistory", 0);
       }
     }
 
@@ -69,6 +69,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         var bayarResponse = await repository.bayar(event.param);
         yield BayarSuccess(bayarResponse);
       } catch (e) {
+        print("error : BayarTagihan");
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }
@@ -79,17 +80,22 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         var response = await repository.getRingkasan(event.noIpaymu,event.removedBebas,event.removedBulanan);
         yield GetRingkasanSuccess(response);
       } catch (e) {
-        yield FailedState("Login gagal, silahkan coba lagi", 0);
+        print("error : GetRingkasan");
+        yield FailedState("error : GetRingkasan", 0);
       }
     }
 
     if (event is InsertIpaymu) {
       try {
         yield InsertIpaymuLoading();
-         await repository.insertIpaymu(event.ipaymu);
+        if(event.isSaving){
+          await repository.insertIpaymuTabungan(event.ipaymu);
+        }else{
+          await repository.insertIpaymu(event.ipaymu);
+        }
         yield InsertIpaymuSuccess();
       } catch (e) {
-        yield FailedState("Login gagal, silahkan coba lagi", 0);
+        yield FailedState("error : InsertIpaymu", 0);
       }
     }
 
@@ -98,13 +104,14 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         yield GetCaraPembayaranLoading();
         var ipaymu = event.ipaymu;
         if(ipaymu != null){
-          var resp = await repository.getCaraPemabayaran(ipaymu);
+          var resp = await repository.getCaraPemabayaran(ipaymu, event.isSaving);
           yield GetCaraPembayaranSuccess(resp);
         }else{
-          yield FailedState("Login gagal, silahkan coba lagi", 0);
+          yield FailedState("error : cara pembayaran 2", 0);
         }
       } catch (e) {
-        yield FailedState("Login gagal, silahkan coba lagi", 0);
+        print("error: ${e}");
+        yield FailedState("error : GetCaraPembayaran ${e}", 0);
       }
     }
 
@@ -114,7 +121,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         var resp = await repository.topUpTabungan(event.param);
         yield TopUpTabunganSuccess(resp);
       } catch (e) {
-        yield FailedState("Login gagal, silahkan coba lagi", 0);
+        yield FailedState("error : TopUpTabungan", 0);
       }
     }
 

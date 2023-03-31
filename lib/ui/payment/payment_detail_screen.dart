@@ -64,7 +64,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
         _insertIsLoading = true;
       });
       ScreenUtils(context)
-          .navigateTo(CaraPembayaranScreen(_ipaymuParam, _selectedPayment));
+          .navigateTo(CaraPembayaranScreen(_ipaymuParam, _selectedPayment,false));
     } else if (state is InsertIpaymuSuccess) {
       setState(() {
         _insertIsLoading = false;
@@ -302,12 +302,12 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
 
           if (param.isValid()) {
             _ipaymuParam = param;
-            bloc.add(InsertIpaymu(param));
+            bloc.add(InsertIpaymu(param,false));
           } else {
             MySnackbar(context).errorSnackbar(
                 "Data tidak valid, pilih metode pembayaran atau cek data lainnya.");
           }
-        }, _insertIsLoading),
+        }, _insertIsLoading, false),
       ),
     );
   }
