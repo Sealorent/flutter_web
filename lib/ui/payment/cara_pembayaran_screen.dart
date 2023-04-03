@@ -31,7 +31,7 @@ class CaraPembayaranScreen extends StatefulWidget {
   IpaymuParam? ipaymuParam;
   Bayar? _selectedPayment;
   bool isSaving;
-  CaraPembayaranScreen(this.ipaymuParam, this._selectedPayment,this.isSaving);
+  CaraPembayaranScreen(this.ipaymuParam, this._selectedPayment, this.isSaving);
 
   @override
   State<CaraPembayaranScreen> createState() => _PaymentDetailScreenState();
@@ -315,8 +315,10 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                                     ),
                                     Row(
                                       children: [
-                                        Text("Tanggal ${DateFormat("dd MMM yyyy").format(DateTime.parse((_response?.expired ?? "").split(" ").first))}, Pukul ${(_response?.expired ?? "").split(" ").last}",
-                                          style: const TextStyle(fontSize: 20, color: Colors.red),
+                                        Text(
+                                          "Tanggal ${DateFormat("dd MMM yyyy").format(DateTime.tryParse((_response?.expired ?? "").split(" ").first) ?? DateTime.now())}, Pukul ${(_response?.expired ?? "").split(" ").last}",
+                                          style: const TextStyle(
+                                              fontSize: 18, color: Colors.red),
                                         ),
                                       ],
                                     ),
