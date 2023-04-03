@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/payment_method/payment_method_screen.dart';
 import 'package:pesantren_flutter/utils/my_snackbar.dart';
@@ -55,18 +56,20 @@ class PaymentMethod extends StatelessWidget {
                   )
                 : Row(
                     children: [
-                      Image.network(selectedPembayaran?.logo ?? "", width: 50,
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                        return Center(
-                          child: Container(
-                            child: Text(
-                              "No Image",
-                              style: TextStyle(fontSize: 7),
+                      SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Image.network(selectedPembayaran?.logo ?? "",
+                            width: 50, errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                          return Center(
+                            child: SvgPicture.network(
+                              selectedPembayaran?.logo ?? "",
+                              height: 50,
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        }),
+                      ),
                       SizedBox(
                         width: 10,
                       ),
@@ -79,7 +82,7 @@ class PaymentMethod extends StatelessWidget {
                                 fontWeight: FontWeight.w500, fontSize: 20),
                           ),
                           Text(
-                            selectedPembayaran?.metode ?? "",
+                            selectedPembayaran?.bank ?? "",
                             style: TextStyle(color: MyColors.grey_60),
                           ),
                         ],
