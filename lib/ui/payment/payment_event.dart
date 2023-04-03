@@ -70,20 +70,22 @@ class GetRingkasan extends PaymentEvent {
 
 class InsertIpaymu extends PaymentEvent {
   IpaymuParam ipaymu;
+  bool isSaving;
 
   @override
   List<Object> get props => [];
 
-  InsertIpaymu(this.ipaymu);
+  InsertIpaymu(this.ipaymu,this.isSaving);
 }
 
 class GetCaraPembayaran extends PaymentEvent {
   IpaymuParam? ipaymu;
+  bool isSaving;
 
   @override
   List<Object> get props => [];
 
-  GetCaraPembayaran(this.ipaymu);
+  GetCaraPembayaran(this.ipaymu,this.isSaving);
 }
 
 class TopUpTabungan extends PaymentEvent {

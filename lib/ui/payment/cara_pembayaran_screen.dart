@@ -30,7 +30,8 @@ import 'package:collection/collection.dart';
 class CaraPembayaranScreen extends StatefulWidget {
   IpaymuParam? ipaymuParam;
   Bayar? _selectedPayment;
-  CaraPembayaranScreen(this.ipaymuParam, this._selectedPayment);
+  bool isSaving;
+  CaraPembayaranScreen(this.ipaymuParam, this._selectedPayment,this.isSaving);
 
   @override
   State<CaraPembayaranScreen> createState() => _PaymentDetailScreenState();
@@ -50,7 +51,7 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
   }
 
   void getData() {
-    bloc.add(GetCaraPembayaran(widget.ipaymuParam));
+    bloc.add(GetCaraPembayaran(widget.ipaymuParam, widget.isSaving));
   }
 
   void listener(BuildContext context, PaymentState state) async {
@@ -69,7 +70,7 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
       });
       if (state.code == 401 || state.code == 0) {
         MySnackbar(context).errorSnackbar(
-            "Terjadi kesalahan, respon API tidak dapat terbaca.");
+            "Terjadi kesalahan, respon API tidak dapat terbaca. Cara Pembayaran");
         return;
       }
 
@@ -314,10 +315,8 @@ class _PaymentDetailScreenState extends State<CaraPembayaranScreen> {
                                     ),
                                     Row(
                                       children: [
-                                        Text(
-                                          "Tanggal ${DateFormat("dd MMM yyyy").format(DateTime.parse((_response?.expired ?? "").split(" ").first))}, Pukul ${(_response?.expired ?? "").split(" ").last}",
-                                          style: const TextStyle(
-                                              fontSize: 20, color: Colors.red),
+                                        Text("Tanggal ${DateFormat("dd MMM yyyy").format(DateTime.parse((_response?.expired ?? "").split(" ").first))}, Pukul ${(_response?.expired ?? "").split(" ").last}",
+                                          style: const TextStyle(fontSize: 20, color: Colors.red),
                                         ),
                                       ],
                                     ),

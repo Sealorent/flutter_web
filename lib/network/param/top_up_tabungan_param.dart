@@ -6,19 +6,30 @@ class TopUpTabunganParam {
   String? nominal;
   String? catatan;
 
-
-  TopUpTabunganParam({this.student_nis, this.kode_sekolah, this.nominal, this.catatan});
+  TopUpTabunganParam(
+      {this.student_nis, this.kode_sekolah, this.nominal, this.catatan});
 
   FormData? toFormData() {
-      return FormData.fromMap({
-        'student_nis': student_nis,
-        'kode_sekolah': kode_sekolah,
-        'nominal' : nominal,
-        'catatan' :catatan
-      });
+    return FormData.fromMap({
+      'nis': student_nis,
+      'kode_sekolah': kode_sekolah,
+      'nominal': nominal,
+      "bayar": "Bayar",
+      'catatan': catatan
+    });
   }
 
-  bool isValid(){
+  Map<String,dynamic> toMap(){
+    return {
+      'nis': student_nis,
+      'kode_sekolah': kode_sekolah,
+      'nominal': nominal,
+      "bayar": "Bayar",
+      'catatan': catatan
+    };
+  }
+
+  bool isValid() {
     return nominal?.isNotEmpty == true;
   }
 }

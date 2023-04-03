@@ -43,7 +43,7 @@ class CaraPembayaranResponse {
         bank: json["bank"],
         label: json["label"],
         va: json["va"],
-        nominal: json["nominal"],
+        nominal: json["nominal"].toString(),
         fee: json["fee"],
         payment: json["payment"],
         expired: json["expired"],

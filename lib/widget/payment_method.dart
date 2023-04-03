@@ -14,9 +14,10 @@ class PaymentMethod extends StatelessWidget {
   Function(Bayar) onSelectPayment;
   Function continueClicked;
   bool isLoading;
+  bool isSaving;
 
   PaymentMethod(this.context, this.bayar, this.selectedPembayaran,
-      this.onSelectPayment, this.continueClicked, this.isLoading);
+      this.onSelectPayment, this.continueClicked, this.isLoading, this.isSaving);
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +38,13 @@ class PaymentMethod extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              ScreenUtils(context)
-                  .navigateTo(PaymentMethodScreen(bayar, (payment) {
-                onSelectPayment(payment);
-              }));
+              if(isSaving == false){
+                ScreenUtils(context)
+                    .navigateTo(PaymentMethodScreen(bayar, (payment) {
+                  onSelectPayment(payment);
+                }));
+              }
+
             },
             child: selectedPembayaran == null
                 ? Row(

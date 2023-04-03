@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pesantren_flutter/network/param/ipaymu_param.dart';
 import 'package:pesantren_flutter/network/param/top_up_tabungan_param.dart';
 import 'package:pesantren_flutter/network/response/ringkasan_response.dart';
+import 'package:pesantren_flutter/network/response/top_up_tabungan_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/payment/cara_pembayaran_screen.dart';
@@ -22,6 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tree_view/tree_view.dart';
 
 import '../../utils/my_snackbar.dart';
+import '../payment_method/payment_method_screen.dart';
 import '../transaction/model/item_filter_model.dart';
 
 class SavingTopUpScreen extends StatefulWidget {
@@ -36,7 +38,7 @@ class _PaymentDetailScreenState extends State<SavingTopUpScreen> {
 
   late PaymentBloc bloc;
   bool _isLoading = false;
-  RingkasanResponse? _response;
+
   Bayar? _selectedPayment;
   bool _insertIsLoading = false;
   IpaymuParam? _ipaymuParam;
@@ -47,16 +49,33 @@ class _PaymentDetailScreenState extends State<SavingTopUpScreen> {
     super.initState();
   }
 
+  TopUpTabunganResponse? _topUpTabunganResponse;
+
   void listener(BuildContext context, PaymentState state) async {
     if (state is TopUpTabunganLoading) {
       setState(() {
         _isLoading = true;
       });
+    }if (state is InsertIpaymuLoading) {
+      setState(() {
+        _insertIsLoading = true;
+      });
+    }if (state is InsertIpaymuSuccess) {
+      setState(() {
+        _insertIsLoading = false;
+      });
+      ScreenUtils(context)
+          .navigateTo(CaraPembayaranScreen(_ipaymuParam, _selectedPayment,true));
     } else if (state is TopUpTabunganSuccess) {
       setState(() {
         _isLoading = false;
+        _topUpTabunganResponse = state.response;
       });
-      Navigator.pop(context,200);
+      var bayar = _topUpTabunganResponse?.metode?.map((e) => e.toBayar()).toList() ?? [];
+      ScreenUtils(context)
+          .navigateTo(PaymentMethodScreen(bayar, (payment) {
+            _selectedPayment = payment;
+      }));
     } else if (state is FailedState) {
       setState(() {
         _isLoading = false;
@@ -64,7 +83,7 @@ class _PaymentDetailScreenState extends State<SavingTopUpScreen> {
       });
       if (state.code == 401 || state.code == 0) {
         MySnackbar(context)
-            .errorSnackbar("Terjadi kesalahan, respon API tidak dapat terbaca.");
+            .errorSnackbar("Terjadi kesalahan, respon API tidak dapat terbaca. Saving. ${state.message}");
         return;
       }
 
@@ -73,12 +92,6 @@ class _PaymentDetailScreenState extends State<SavingTopUpScreen> {
     }
   }
 
-  double getTotal(){
-    var totalBebas = (_response?.bebas?.map((e) => int.tryParse(e.nominal ?? "") ?? 0).toList() ?? []).reduce((a, b) => a + b);
-    var totalBulan = (_response?.bulan?.map((e) => int.tryParse(e.nominal ?? "") ?? 0).toList() ?? []).reduce((a, b) => a + b);
-
-    return totalBebas.toDouble() + totalBulan.toDouble();
-  }
 
   TextEditingController _nominalController = TextEditingController();
   TextEditingController _notesController = TextEditingController();
@@ -139,25 +152,56 @@ class _PaymentDetailScreenState extends State<SavingTopUpScreen> {
             )
           ],
         ),
-        bottomSheet: PaymentMethod(context,_response?.bayar ?? [],_selectedPayment, (selected){
-          setState(() {
-            _selectedPayment = selected;
-          });
-        }, (){
-          var param = TopUpTabunganParam(
-            nominal: _nominalController.text,
-            catatan: _nominalController.text,
-          );
+        bottomSheet: InkWell(
+          onTap: (){
+            if(_nominalController.text.isEmpty){
+              MySnackbar(context).errorSnackbar("Nominal tidak boleh kosong");
+              return;
+            }
+            if(_notesController.text.isEmpty){
+              MySnackbar(context).errorSnackbar("Catatan tidak boleh kosong");
+              return;
+            }
+            processTopUp();
+          },
+          child: PaymentMethod(context,_topUpTabunganResponse?.metode?.map((e) => e.toBayar()).toList() ?? [],_selectedPayment, (selected){
+            setState(() {
+              _selectedPayment = selected;
+            });
+          }, (){
+            if(_nominalController.text.isEmpty){
+              MySnackbar(context).errorSnackbar("Nominal tidak boleh kosong");
+              return;
+            }
 
-          if(param.isValid()){
-            bloc.add(TopUpTabungan(param));
-          }else{
-            MySnackbar(context).errorSnackbar("Nominal tidak boleh kosong");
-          }
-        },
-            _isLoading
-         ),
+            if(_notesController.text.isEmpty){
+              MySnackbar(context).errorSnackbar("Note tidak boleh kosong");
+              return;
+            }
+            var param = IpaymuParam(
+              noref: _topUpTabunganResponse?.nomor,
+              nominal: _nominalController.text,
+              ipaymu_no_trans: _topUpTabunganResponse?.noIpaymu,
+              payment_channel: _selectedPayment?.metode
+            );
+            _ipaymuParam = param;
+           bloc.add(InsertIpaymu(param, true));
+          },
+              _insertIsLoading,
+            true
+           ),
+        ),
       ),
     );
+  }
+
+  void processTopUp(){
+    var param = TopUpTabunganParam(
+      nominal: _nominalController.text,
+      catatan: _nominalController.text,
+    );
+    if(param.isValid()){
+      bloc.add(TopUpTabungan(param));
+    }
   }
 }
