@@ -23,17 +23,17 @@ import '../../utils/number_utils.dart';
 class TranscationDetailScreen extends StatefulWidget {
   int id;
   bool isHistory;
-  TranscationDetailScreen(this.id,this.isHistory,{Key? key}) : super(key: key);
+  TranscationDetailScreen(this.id, this.isHistory, {Key? key})
+      : super(key: key);
 
   @override
-  State<TranscationDetailScreen> createState() => _TransactionDetailScreenState();
+  State<TranscationDetailScreen> createState() =>
+      _TransactionDetailScreenState();
 }
 
 class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
-
-   Widget detailHistory() => GetBuilder<ListTransaksiController>(
-      initState: (state) =>
-          ListTransaksiController.to.getHistory(),
+  Widget detailHistory() => GetBuilder<ListTransaksiController>(
+      initState: (state) => ListTransaksiController.to.getHistory(),
       builder: (_) {
         return ListView(children: [
           const SizedBox(
@@ -91,10 +91,10 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                             // ignore: prefer_const_literals_to_create_immutables
                             children: [
                               Text(
-                                _.listHistory[widget.id].bayarVia??"",
+                                _.listHistory[widget.id].bayarVia ?? "",
                                 style: const TextStyle(fontSize: 16),
                               ),
-                              Text(( _.listHistory[widget.id].namaBayar??"")
+                              Text((_.listHistory[widget.id].namaBayar ?? "")
                                   .split('-')
                                   .first)
                             ],
@@ -118,8 +118,8 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                   height: 5,
                 ),
                 Text(
-                  DateFormat("dd MMM yyyy")
-                      .format(DateTime.parse( _.listHistory[widget.id].tanggal??"")),
+                  DateFormat("dd MMM yyyy").format(
+                      DateTime.parse(_.listHistory[widget.id].tanggal ?? "")),
                   style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(
@@ -133,7 +133,7 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                   height: 5,
                 ),
                 Text(
-                   _.listHistory[widget.id].noRef??"",
+                  _.listHistory[widget.id].noRef ?? "",
                   style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(
@@ -176,14 +176,16 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                 Row(
                   children: [
                     Text(
-                        ( _.listHistory[widget.id].namaBayar??"").split(' ').first +
+                        (_.listHistory[widget.id].namaBayar ?? "")
+                                .split(' ')
+                                .first +
                             ' ' +
-                            DateFormat("MMM yyyy").format(
-                                DateTime.parse( _.listHistory[widget.id].tanggal??"")),
+                            DateFormat("MMM yyyy").format(DateTime.parse(
+                                _.listHistory[widget.id].tanggal ?? "")),
                         style: const TextStyle(fontSize: 16)),
                     const Spacer(),
                     Text(
-                      _.listHistory[widget.id].nominal??"",
+                      _.listHistory[widget.id].nominal ?? "",
                       style: const TextStyle(fontSize: 16),
                     )
                   ],
@@ -200,7 +202,7 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                     const Text("TOTAL", style: TextStyle(fontSize: 12)),
                     const Spacer(),
                     Text(
-                       _.listHistory[widget.id].nominal??"",
+                      _.listHistory[widget.id].nominal ?? "",
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.w500),
                     )
@@ -212,7 +214,7 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
         ]);
       });
 
-      Widget detailTransaksi() => GetBuilder<DetailTransaksiController>(
+  Widget detailTransaksi() => GetBuilder<DetailTransaksiController>(
       initState: (state) =>
           DetailTransaksiController.to.detailTransaksi("${widget.id}"),
       builder: (_) {
@@ -250,7 +252,7 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                   height: 5,
                 ),
                 Text(
-                  _.dataRingkasan?.status??"",
+                  _.dataRingkasan?.status ?? "",
                   style: TextStyle(color: Colors.green),
                 ),
                 const SizedBox(
@@ -272,10 +274,10 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                             // ignore: prefer_const_literals_to_create_immutables
                             children: [
                               Text(
-                               _.dataRingkasan?.bayarVia??"",
+                                _.dataRingkasan?.bayarVia ?? "",
                                 style: const TextStyle(fontSize: 16),
                               ),
-                              Text(  _.dataRingkasan?.bank??"")                    
+                              Text(_.dataRingkasan?.bank ?? "")
                             ],
                           ),
                           const Spacer(),
@@ -297,7 +299,7 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                   height: 5,
                 ),
                 Text(
-                  _.dataRingkasan?.expired??"",
+                  _.dataRingkasan?.expired ?? "",
                   style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(
@@ -311,7 +313,7 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                   height: 5,
                 ),
                 Text(
-                   _.dataRingkasan?.noref??"",
+                  _.dataRingkasan?.noref ?? "",
                   style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(
@@ -340,7 +342,9 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                 Row(
                   // ignore: prefer_const_literals_to_create_immutables
                   children: [
-                    Text("Item (${_.ringkasanBulan.length + _.ringkasanBebas.length ?? 0})", style: TextStyle(fontSize: 12)),
+                    Text(
+                        "Item (${_.ringkasanBulan.length + _.ringkasanBebas.length ?? 0})",
+                        style: TextStyle(fontSize: 12)),
                     const Spacer(),
                     const Text(
                       "Jumlah",
@@ -352,85 +356,75 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                   height: 20,
                 ),
                 ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _.ringkasanBulan.length,
-                              itemBuilder: (context, index) {
-                                return _.ringkasanBulan.isNotEmpty
-                                    ? Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 10),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                    _.ringkasanBulan[index]
-                                                            .namaBayar ??
-                                                        ""),
-                                              ),
-                                              const SizedBox(
-                                                width: 30,
-                                              ),
-                                              Text(NumberUtils.toRupiah(
-                                                  double.parse(_
-                                                          .ringkasanBulan[
-                                                              index]
-                                                          .nominal ??
-                                                      ""))),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              
-                                            ],
-                                          ),
-                                          // const Divider(),
-                                        ],
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _.ringkasanBulan.length,
+                    itemBuilder: (context, index) {
+                      return _.ringkasanBulan.isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                            _.ringkasanBulan[index].namaBayar ??
+                                                ""),
                                       ),
-                                    )
-                                    : Container();
-                              }),
-                          ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _.ringkasanBebas.length,
-                              itemBuilder: (context, index) {
-                                return _.ringkasanBebas.isNotEmpty
-                                    ? Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 10),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                    _.ringkasanBebas[index]
-                                                            .namaBayar ??
-                                                        ""),
-                                              ),
-                                              const SizedBox(
-                                                width: 30,
-                                              ),
-                                              Text(NumberUtils.toRupiah(
-                                                  double.parse(_
-                                                          .ringkasanBebas[
-                                                              index]
-                                                          .nominal ??
-                                                      ""))),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                             
-                                            ],
-                                          ),
-                                          // const Divider(),
-                                        ],
+                                      const SizedBox(
+                                        width: 30,
                                       ),
-                                    )
-                                    : Container();
-                              }),
+                                      Text(NumberUtils.toRupiah(double.parse(
+                                          _.ringkasanBulan[index].nominal ??
+                                              ""))),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                    ],
+                                  ),
+                                  // const Divider(),
+                                ],
+                              ),
+                            )
+                          : Container();
+                    }),
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _.ringkasanBebas.length,
+                    itemBuilder: (context, index) {
+                      return _.ringkasanBebas.isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                            _.ringkasanBebas[index].namaBayar ??
+                                                ""),
+                                      ),
+                                      const SizedBox(
+                                        width: 30,
+                                      ),
+                                      Text(NumberUtils.toRupiah(double.parse(
+                                          _.ringkasanBebas[index].nominal ??
+                                              ""))),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                    ],
+                                  ),
+                                  // const Divider(),
+                                ],
+                              ),
+                            )
+                          : Container();
+                    }),
                 // Row(
                 //   children: [
                 //     Text(
@@ -458,12 +452,14 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
                     const Text("TOTAL", style: TextStyle(fontSize: 12)),
                     const Spacer(),
                     Text(
-                       NumberUtils.toRupiah(
-                                                  double.parse("${_.nominal}")),
+                      NumberUtils.toRupiah(double.parse("${_.nominal}")),
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.w500),
                     )
                   ],
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
               ],
             ),
@@ -486,14 +482,15 @@ class _TransactionDetailScreenState extends State<TranscationDetailScreen> {
         ),
         centerTitle: true,
         elevation: 0,
-        title: Text("Detail Transaksi", style: TextStyle(color: Colors.white),),
+        title: Text(
+          "Detail Transaksi",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       backgroundColor: Colors.white,
       body: RefreshIndicator(
-        onRefresh: () async {
-        },
-        child: widget.isHistory ? detailHistory() : detailTransaksi()
-      ),
+          onRefresh: () async {},
+          child: widget.isHistory ? detailHistory() : detailTransaksi()),
     );
   }
 }
