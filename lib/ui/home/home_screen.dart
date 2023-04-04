@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Container(
-                width: Get.width * 0.8 - 20 ,
+                width: Get.width * 0.8 - 20,
                 height: 100,
                 decoration: BoxDecoration(
                   color: const Color(0xff7c94b6),
@@ -578,9 +578,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               });
                             },
                           )),
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
                       Center(
                         child: AnimatedSmoothIndicator(
                             activeIndex: currentIndex,
@@ -598,65 +595,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 6,
                                     borderRadius: BorderRadius.circular(100)))),
                       ),
-// <<<<<<< HEAD
-//                   ),
-//                 ],
-//               ),
-//               SizedBox(height: 50,),
-//               Padding(
-//                 padding: EdgeInsets.symmetric(horizontal: 20),
-//                 child: Row(
-//                   children: [
-//                     Text("Informasi", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-//                     Spacer(),
-//                     // InkWell(
-//                     //   onTap: (){
-//                     //     ScreenUtils(context).navigateTo(InformationScreen());
-//                     //   },
-//                     //   child: Row(
-//                     //     children: [
-//                     //       Text("Lihat semua"),
-//                     //       SizedBox(width: 5,),
-//                     //       Icon(Icons.arrow_forward_ios, color: MyColors.grey_60, size: 20,)
-//                     //     ],
-//                     //   ),
-//                     // )
-//                   ],
-//                 ),
-//               ),
-//               SizedBox(height: 10,),
-//               Container(
-//                 child: CarouselSlider(
-//                   options: CarouselOptions(
-//                     autoPlay: true,
-//                     aspectRatio: 2.0,
-//                     enlargeCenterPage: true,
-//                   ),
-//                   items: buildSliders(),
-//                 ),
-//               ),
-//               // Column(
-//               //   children: buildInformations(),
-//               // ),
-//               SizedBox(height: 20,),
-//               Center(
-//                 child: InkWell(
-//                   onTap: (){
-//                     ScreenUtils(context).navigateTo(InformationScreen());
-//                   },
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       Text("Lihat semua"),
-//                       SizedBox(width: 5,),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//               SizedBox(height: 100,)
-//             ],
-//           ),
-// =======
                       const SizedBox(
                         height: 50,
                       )
