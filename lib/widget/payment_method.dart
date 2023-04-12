@@ -16,8 +16,14 @@ class PaymentMethod extends StatelessWidget {
   bool isLoading;
   bool isSaving;
 
-  PaymentMethod(this.context, this.bayar, this.selectedPembayaran,
-      this.onSelectPayment, this.continueClicked, this.isLoading, this.isSaving);
+  PaymentMethod(
+      this.context,
+      this.bayar,
+      this.selectedPembayaran,
+      this.onSelectPayment,
+      this.continueClicked,
+      this.isLoading,
+      this.isSaving);
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +44,12 @@ class PaymentMethod extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              if(isSaving == false){
+              if (isSaving == false) {
                 ScreenUtils(context)
                     .navigateTo(PaymentMethodScreen(bayar, (payment) {
                   onSelectPayment(payment);
                 }));
               }
-
             },
             child: selectedPembayaran == null
                 ? Row(
@@ -103,7 +108,12 @@ class PaymentMethod extends StatelessWidget {
                           RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0)))),
                   onPressed: () async {
-                    continueClicked();
+                    if (selectedPembayaran?.kode == null) {
+                      MySnackbar(context)
+                          .errorSnackbar("Pilih metode pembayaran");
+                    } else {
+                      continueClicked();
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
