@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:alice_lightweight/alice.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -16,15 +15,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../preferences/pref_data.dart';
 import '../../utils/my_snackbar.dart';
-import '../../utils/screen_utils.dart';
 import '../../widget/progress_loading.dart';
 import 'login_bloc.dart';
 import 'login_state.dart';
 
+// ignore: must_be_immutable
 class LoginUserScreen extends StatefulWidget {
   Alice? alice;
 
-  LoginUserScreen({this.alice});
+  LoginUserScreen({super.key, this.alice});
 
   @override
   State<LoginUserScreen> createState() => _LoginUserScreenState();
@@ -118,7 +117,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
-            systemOverlayStyle: SystemUiOverlayStyle(
+            systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarColor: MyColors.primary,
               statusBarBrightness: Brightness.light,
               statusBarIconBrightness: Brightness.light,
@@ -147,26 +146,27 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                 child: ListView(
                   children: [
                     Image.asset(
-                      "assets/circle_logo.png",
+                      "assets/logo.png",
                       height: 100,
                     ),
-                    SizedBox(
-                      height: 40,
+                    const SizedBox(
+                      height: 20,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Assalamu’alaikum, selamat datang"),
-                        SizedBox(
+                        const Text("Assalamu'alaikum, selamat datang di"),
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          _pesantrenLoginResponse?.namaPesantren ?? "",
-                          style: TextStyle(fontSize: 22),
+                          _pesantrenLoginResponse?.namaPesantren ??
+                              "ePesantren",
+                          style: const TextStyle(fontSize: 22),
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                     TypeAheadFormField(
@@ -202,7 +202,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                         // }
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     TypeAheadFormField(
@@ -238,7 +238,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                         // }
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     TextFormField(
@@ -246,7 +246,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                       obscureText: !_passwordVisible,
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         suffixIcon: IconButton(
                           icon: Icon(
                             // Based on passwordVisible state choose the icon
@@ -266,21 +266,21 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     InkWell(
                         onTap: () {
-                          Get.to(ForgotPassword());
+                          Get.to(const ForgotPassword());
                         },
-                        child: Text(
+                        child: const Text(
                           "Lupa password?",
                           style: TextStyle(
                             color: MyColors.primary,
                           ),
                           textAlign: TextAlign.end,
                         )),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     _isLoading
@@ -327,7 +327,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                               ),
                             ),
                           ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     InkWell(
@@ -336,23 +336,23 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                               await SharedPreferences.getInstance();
                           prefs.clear();
                         },
-                        child: Center(
+                        child: const Center(
                             child: Text(
                           "Hapus riwayat",
                           style: TextStyle(color: MyColors.primary),
                         ))),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Divider(),
-                    SizedBox(
+                    const Divider(),
+                    const SizedBox(
                       height: 20,
                     ),
-                    Center(child: Text("Butuh bantuan?")),
-                    SizedBox(
+                    const Center(child: Text("Butuh bantuan?")),
+                    const SizedBox(
                       height: 5,
                     ),
-                    Center(
+                    const Center(
                         child: Text(
                       "Hubungi admin",
                       style: TextStyle(color: MyColors.primary),
