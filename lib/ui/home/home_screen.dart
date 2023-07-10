@@ -498,30 +498,138 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Expanded(
-                            child: InkWell(
+                          GetBuilder<KonfirmasiController>(
+                              initState: (state) =>
+                                  KonfirmasiController.to.getKonfirmasi(),
+                              builder: (_) {
+                                return InkWell(
+                                    onTap: () {
+                                      _.getKonfirmasi();
+                                      Get.to(const Konfirmasi());
+                                    },
+                                    child: SizedBox(
+                                      width: 95,
+                                      child: Column(children: [
+                                        Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              "assets/ic_tabungan.svg",
+                                              width: 50,
+                                              color: MyColors.primary
+                                                  .withOpacity(0.1),
+                                            ),
+                                            const Icon(
+                                              Icons.account_balance,
+                                              color: Colors.green,
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        const Text('Konfirmasi')
+                                      ]),
+                                    ));
+                              }),
+                          // Expanded(
+                          //   child: InkWell(
+                          //     onTap: () {
+                          //       _otherBottomSheetMenu();
+                          //     },
+                          //     child: Column(
+                          //       children: [
+                          //         const SizedBox(
+                          //           height: 10,
+                          //         ),
+                          //         SvgPicture.asset(
+                          //           "assets/Lainnya-01_fix.svg",
+                          //           width: 35,
+                          //           color: MyColors.primary.withOpacity(0.7),
+                          //         ),
+                          //         const SizedBox(
+                          //           height: 10,
+                          //         ),
+                          //         const Text("Lainnya")
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 17),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            InkWell(
                               onTap: () {
-                                _otherBottomSheetMenu();
+                                Get.to(const PresensiScreen());
                               },
                               child: Column(
                                 children: [
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
                                   SvgPicture.asset(
-                                    "assets/Lainnya-01_fix.svg",
-                                    width: 35,
-                                    color: MyColors.primary.withOpacity(0.7),
+                                    "assets/ic_presensi.svg",
+                                    width: 50,
                                   ),
                                   const SizedBox(
-                                    height: 10,
+                                    height: 5,
                                   ),
-                                  const Text("Lainnya")
+                                  const Text("Presensi")
                                 ],
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              width: 35,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content: Text('On Development')));
+                              },
+                              child: Column(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/ic_donate.svg",
+                                    width: 50,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const Text("Donasi")
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content: Text('On Development')));
+                              },
+                              child: Column(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/ic_hotel.svg",
+                                    width: 50,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const Text("Penginapan")
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 50,
@@ -558,9 +666,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
                       CarouselSlider(
                           items: buildInformations(),
                           options: CarouselOptions(

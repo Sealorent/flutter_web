@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/ui/transaction/model/model_list_transaksi.dart';
 
 import '../../../network/constant.dart';
@@ -54,7 +55,7 @@ class ListTransaksiController extends GetxController {
         listTransaksi = laporanHistory.listTransaksi ?? [];
         isLoadingHistory = false;
         update();
-      }else{
+      } else {
         isLoadingHistory = false;
         update();
       }

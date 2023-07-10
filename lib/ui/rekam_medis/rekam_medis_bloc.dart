@@ -4,8 +4,6 @@ import 'package:pesantren_flutter/network/repository/main_repository.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_event.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_state.dart';
 
-
-
 class RekamMedisBloc extends Bloc<RekamMedisEvent, RekamMedisState> {
   MainRepository repository;
 
@@ -33,5 +31,4 @@ class RekamMedisBloc extends Bloc<RekamMedisEvent, RekamMedisState> {
       }
     }
   }
-
 }

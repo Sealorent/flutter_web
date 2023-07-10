@@ -68,6 +68,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
   Future<void> _getTahunAjaran() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var student = prefs.getString(PrefData.TAHUN_AJARAN);
+    print("student : $student");
     var objectStudent =
         TahunAjaranResponse.fromJson(json.decode(student ?? ""));
 
@@ -642,7 +643,6 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("gilang  : ${selectedYear}");
     return BlocListener<PaymentBloc, PaymentState>(
       listener: listener,
       child: Scaffold(
@@ -711,7 +711,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                                       Visibility(
                                         visible: selectedYear != null,
                                         child: Row(
-                                          children: [
+                                          children: const [
                                             Icon(
                                               Icons.check,
                                               color: MyColors.primary,
@@ -748,7 +748,7 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
                                 ),
                                 selected: item.isFilterActive,
                                 backgroundColor: Color(0xffEBF6F3),
-                                shape: StadiumBorder(
+                                shape: const StadiumBorder(
                                     side: BorderSide(color: MyColors.grey_20)),
                                 selectedColor:
                                     MyColors.primary.withOpacity(0.3),

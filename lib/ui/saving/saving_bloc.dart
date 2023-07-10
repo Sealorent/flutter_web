@@ -4,7 +4,6 @@ import 'package:pesantren_flutter/network/repository/main_repository.dart';
 import 'package:pesantren_flutter/ui/saving/saving_event.dart';
 import 'package:pesantren_flutter/ui/saving/saving_state.dart';
 
-
 class SavingBloc extends Bloc<SavingEvent, SavingState> {
   MainRepository repository;
 
@@ -22,5 +21,4 @@ class SavingBloc extends Bloc<SavingEvent, SavingState> {
       }
     }
   }
-
 }

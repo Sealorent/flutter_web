@@ -60,7 +60,8 @@ abstract class MainRepository {
   Future<RingkasanResponse> getRingkasan(
       String noIpayMu, List<int> removedBebas, List<int> removedBulanan);
   Future<Object> insertIpaymu(IpaymuParam param);
-  Future<CaraPembayaranResponse> getCaraPemabayaran(IpaymuParam param, bool isSaving);
+  Future<CaraPembayaranResponse> getCaraPemabayaran(
+      IpaymuParam param, bool isSaving);
   Future<TopUpTabunganResponse> topUpTabungan(TopUpTabunganParam param);
   Future<BaseResponse> unduhTagihan();
   Future<TahunAjaranResponse> getTahunAjaran();
@@ -373,6 +374,7 @@ class MainRepositoryImpl extends MainRepository {
   Future<PresensiResponse> getPresensi(int bulan) async {
     var student = await _getUser();
     var pesantren = await _getPesantren();
+    print("presensi bulan $bulan");
     try {
       final response = await _dioClient.get(Constant.presensi,
           queryParameters: {
@@ -453,6 +455,7 @@ class MainRepositoryImpl extends MainRepository {
   Future<BayarBebasResponse> getBayarBebas(List<int> periodIds) async {
     var student = await _getUser();
     var pesantren = await _getPesantren();
+    // print("period  : ${periodIds.toList()}");
     try {
       final response = await _dioClient.post(Constant.bayarBebas, data: {
         "kode_sekolah": pesantren.kodeSekolah,
@@ -508,8 +511,8 @@ class MainRepositoryImpl extends MainRepository {
     param.student_nis = student.nis;
     param.kode_sekolah = pesantren.kodeSekolah;
     try {
-      final response = await _dioClient.post(Constant.topupTabungan,
-          data: param.toMap());
+      final response =
+          await _dioClient.post(Constant.topupTabungan, data: param.toMap());
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
@@ -532,14 +535,16 @@ class MainRepositoryImpl extends MainRepository {
   }
 
   @override
-  Future<CaraPembayaranResponse> getCaraPemabayaran(IpaymuParam param, bool isSaving) async {
+  Future<CaraPembayaranResponse> getCaraPemabayaran(
+      IpaymuParam param, bool isSaving) async {
     var student = await _getUser();
     var pesantren = await _getPesantren();
     param.student_nis = student.nis;
     param.kode_sekolah = pesantren.kodeSekolah;
     try {
-      final response =
-          await _dioClient.post(isSaving ? Constant.caraBayarTabungan : Constant.caraBayar, data: param.toMap());
+      final response = await _dioClient.post(
+          isSaving ? Constant.caraBayarTabungan : Constant.caraBayar,
+          data: param.toMap());
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
@@ -570,7 +575,7 @@ class MainRepositoryImpl extends MainRepository {
     try {
       print("iki Datane insert $param");
       final response =
-      await _dioClient.post(Constant.ipaymu_tabungan, data: param.toMap());
+          await _dioClient.post(Constant.ipaymu_tabungan, data: param.toMap());
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
@@ -673,6 +678,7 @@ class MainRepositoryImpl extends MainRepository {
       String noIpayMu, List<int> removedBebas, List<int> removedBulanan) async {
     var student = await _getUser();
     var pesantren = await _getPesantren();
+    print(removedBebas.toList());
     try {
       final response = await _dioClient.post(Constant.ringkasan, data: {
         "kode_sekolah": pesantren.kodeSekolah,

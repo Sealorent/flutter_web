@@ -16,13 +16,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       try {
         yield GetInformationLoading();
         var response = await repository.getInformation();
-        await repository.getTahunAjaran();
         yield GetInformationSuccess(response);
+        await repository.getTahunAjaran();
       } catch (e) {
         print("informationerr ${e}");
         yield FailedState("Login gagal, silahkan coba lagi", 0);
       }
     }
   }
-
 }
