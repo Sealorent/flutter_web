@@ -241,7 +241,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
-                  "MADIN",
+                  "KAMAR",
                   style: TextStyle(color: MyColors.grey_60),
                 ),
               ),
