@@ -406,7 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  const Text("Tafidz\n")
+                                  const Text("Tahfidz\n")
                                 ],
                               ),
                             ),
@@ -561,7 +561,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 15,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Expanded(
                             child: InkWell(
@@ -577,7 +576,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  const Text("Presensi")
+                                  const Text("Presensi\n")
                                 ],
                               ),
                             ),
@@ -599,7 +598,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  const Text("Donasi")
+                                  const Text("Donasi\n")
                                 ],
                               ),
                             ),
@@ -621,7 +620,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  const Text("Penginapan")
+                                  const Text("Penginapan\n")
                                 ],
                               ),
                             ),
