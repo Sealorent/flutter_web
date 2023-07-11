@@ -560,12 +560,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(
                         height: 15,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 17),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            InkWell(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: InkWell(
                               onTap: () {
                                 Get.to(const PresensiScreen());
                               },
@@ -582,10 +581,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             ),
-                            const SizedBox(
-                              width: 35,
-                            ),
-                            InkWell(
+                          ),
+                          Expanded(
+                            child: InkWell(
                               onTap: () {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -605,10 +603,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             ),
-                            const SizedBox(
-                              width: 30,
-                            ),
-                            InkWell(
+                          ),
+                          Expanded(
+                            child: InkWell(
                               onTap: () {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -628,9 +625,81 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Expanded(child: Container()),
+                        ],
                       ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 17),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.start,
+                      //     children: [
+                      //       InkWell(
+                      //         onTap: () {
+                      //           Get.to(const PresensiScreen());
+                      //         },
+                      //         child: Column(
+                      //           children: [
+                      //             SvgPicture.asset(
+                      //               "assets/ic_presensi.svg",
+                      //               width: 50,
+                      //             ),
+                      //             const SizedBox(
+                      //               height: 5,
+                      //             ),
+                      //             const Text("Presensi")
+                      //           ],
+                      //         ),
+                      //       ),
+                      //       const SizedBox(
+                      //         width: 35,
+                      //       ),
+                      //       InkWell(
+                      //         onTap: () {
+                      //           ScaffoldMessenger.of(context).showSnackBar(
+                      //               const SnackBar(
+                      //                   backgroundColor: Colors.red,
+                      //                   content: Text('On Development')));
+                      //         },
+                      //         child: Column(
+                      //           children: [
+                      //             SvgPicture.asset(
+                      //               "assets/ic_donate.svg",
+                      //               width: 50,
+                      //             ),
+                      //             const SizedBox(
+                      //               height: 5,
+                      //             ),
+                      //             const Text("Donasi")
+                      //           ],
+                      //         ),
+                      //       ),
+                      //       const SizedBox(
+                      //         width: 30,
+                      //       ),
+                      //       InkWell(
+                      //         onTap: () {
+                      //           ScaffoldMessenger.of(context).showSnackBar(
+                      //               const SnackBar(
+                      //                   backgroundColor: Colors.red,
+                      //                   content: Text('On Development')));
+                      //         },
+                      //         child: Column(
+                      //           children: [
+                      //             SvgPicture.asset(
+                      //               "assets/ic_hotel.svg",
+                      //               width: 50,
+                      //             ),
+                      //             const SizedBox(
+                      //               height: 5,
+                      //             ),
+                      //             const Text("Penginapan")
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       const SizedBox(
                         height: 50,
                       ),
