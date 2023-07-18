@@ -13,6 +13,7 @@ class PaymentMethod extends StatelessWidget {
   Bayar? selectedPembayaran;
   Function(Bayar) onSelectPayment;
   Function continueClicked;
+  Function onSelectClicked;
   bool isLoading;
   bool isSaving;
 
@@ -23,7 +24,9 @@ class PaymentMethod extends StatelessWidget {
       this.onSelectPayment,
       this.continueClicked,
       this.isLoading,
-      this.isSaving);
+      this.isSaving,
+      this.onSelectClicked
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -52,50 +55,60 @@ class PaymentMethod extends StatelessWidget {
               }
             },
             child: selectedPembayaran == null
-                ? Row(
-                    children: [
-                      Text("Pilih"),
-                      Spacer(),
-                      Icon(Icons.keyboard_arrow_right_sharp)
-                    ],
-                  )
-                : Row(
-                    children: [
-                      SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Image.network(selectedPembayaran?.logo ?? "",
-                            width: 50, errorBuilder: (BuildContext context,
-                                Object exception, StackTrace? stackTrace) {
-                          return Center(
-                            child: SvgPicture.network(
-                              selectedPembayaran?.logo ?? "",
-                              height: 50,
+                ? InkWell(
+              onTap: () {
+                onSelectClicked();
+              },
+                  child: Row(
+                      children: [
+                        Text("Pilih"),
+                        Spacer(),
+                        Icon(Icons.keyboard_arrow_right_sharp)
+                      ],
+                    ),
+                )
+                : InkWell(
+              onTap: () {
+                onSelectClicked();
+              },
+                  child: Row(
+                      children: [
+                        SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: Image.network(selectedPembayaran?.logo ?? "",
+                              width: 50, errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                            return Center(
+                              child: SvgPicture.network(
+                                selectedPembayaran?.logo ?? "",
+                                height: 50,
+                              ),
+                            );
+                          }),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              selectedPembayaran?.kode ?? "",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 20),
                             ),
-                          );
-                        }),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            selectedPembayaran?.kode ?? "",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 20),
-                          ),
-                          Text(
-                            selectedPembayaran?.bank ?? "",
-                            style: TextStyle(color: MyColors.grey_60),
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      Icon(Icons.keyboard_arrow_right_sharp)
-                    ],
-                  ),
+                            Text(
+                              selectedPembayaran?.bank ?? "",
+                              style: TextStyle(color: MyColors.grey_60),
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        Icon(Icons.keyboard_arrow_right_sharp)
+                      ],
+                    ),
+                ),
           ),
           SizedBox(
             height: 10,
