@@ -38,6 +38,7 @@ import '../response/login_response.dart';
 import '../response/saving_response.dart';
 import '../response/setting_response.dart';
 import '../response/tahun_ajaran_response.dart';
+import '../response/presensi_pelajaran_response.dart';
 
 abstract class MainRepository {
   Future<InformationResponse?> getInformation();
@@ -52,6 +53,7 @@ abstract class MainRepository {
   Future<Object> postIzinKeluar(IzinKeluarParam param);
   Future<PaymentResponse> getPayments(List<int> periodIds);
   Future<PresensiResponse> getPresensi(int bulan);
+  Future<PresensiPelajaranResponse> getPresensiPelajaran(List<int> periodIds);
   Future<PaymentBebasResponse> getPaymentBebas(List<int> periodIds);
   Future<BayarBulananResponse> getBayarBulanan(List<int> periodIds);
   Future<BayarBebasResponse> getBayarBebas(List<int> periodIds);
@@ -386,6 +388,34 @@ class MainRepositoryImpl extends MainRepository {
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
         return PresensiResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } on DioError catch (ex) {
+      var statusCode = ex.response?.statusCode ?? -4;
+      var statusMessage = ex.message;
+      throw ClientErrorException(statusMessage, statusCode);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<PresensiPelajaranResponse> getPresensiPelajaran(
+      List<int> periodIds) async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.post(Constant.presensiPelajaran, data: {
+        "kode_sekolah": pesantren.kodeSekolah,
+        "nis": student.nis,
+        "period_id": periodIds.toList()
+      });
+      print("pelajaran ${response.data}");
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode) {
+        return PresensiPelajaranResponse.fromJson(response.data);
       } else {
         throw ClientErrorException(statusMessage, statusCode);
       }

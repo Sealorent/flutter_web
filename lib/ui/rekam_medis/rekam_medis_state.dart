@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:pesantren_flutter/network/response/presensi_pelajaran_response.dart';
 import 'package:pesantren_flutter/network/response/presensi_response.dart';
 import 'package:pesantren_flutter/network/response/rekam_medis_response.dart';
 import 'package:pesantren_flutter/network/response/saving_response.dart';
@@ -54,6 +55,22 @@ class GetPresensiSuccess extends RekamMedisState {
 
 class GetPresensiLoading extends RekamMedisState {
   GetPresensiLoading();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GetPresensiPelajaranSuccess extends RekamMedisState {
+  PresensiPelajaranResponse? response;
+
+  GetPresensiPelajaranSuccess(this.response);
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GetPresensiPelajaranLoading extends RekamMedisState {
+  GetPresensiPelajaranLoading();
 
   @override
   List<Object?> get props => [];

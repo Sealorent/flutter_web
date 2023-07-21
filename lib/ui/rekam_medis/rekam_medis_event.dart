@@ -10,7 +10,6 @@ class GetRekamMedis extends RekamMedisEvent {
 }
 
 class GetPresensi extends RekamMedisEvent {
-
   int bulan;
 
   @override
@@ -19,3 +18,10 @@ class GetPresensi extends RekamMedisEvent {
   GetPresensi(this.bulan);
 }
 
+class GetPresensiPelajaran extends RekamMedisEvent {
+  @override
+  List<Object> get props => [];
+  List<int> periodIds;
+
+  GetPresensiPelajaran(this.periodIds);
+}
