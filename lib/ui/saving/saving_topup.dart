@@ -51,11 +51,39 @@ class _PaymentDetailScreenState extends State<SavingTopUpScreen> {
 
   TopUpTabunganResponse? _topUpTabunganResponse;
 
+  BuildContext? dialogContext;
+
   void listener(BuildContext context, PaymentState state) async {
     if (state is TopUpTabunganLoading) {
       setState(() {
         _isLoading = true;
       });
+      showDialog(
+        // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            dialogContext = context;
+            return Dialog(
+              // The background color
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    // The loading indicator
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Some text
+                    Text('Loading...')
+                  ],
+                ),
+              ),
+            );
+          });
     }if (state is InsertIpaymuLoading) {
       setState(() {
         _insertIsLoading = true;
@@ -72,11 +100,17 @@ class _PaymentDetailScreenState extends State<SavingTopUpScreen> {
         _topUpTabunganResponse = state.response;
       });
       var bayar = _topUpTabunganResponse?.metode?.map((e) => e.toBayar()).toList() ?? [];
+      if(dialogContext != null) {
+        Navigator.pop(dialogContext!);
+      }
       ScreenUtils(context)
           .navigateTo(PaymentMethodScreen(bayar, (payment) {
             _selectedPayment = payment;
       }));
     } else if (state is FailedState) {
+      if(dialogContext != null) {
+        Navigator.pop(dialogContext!);
+      }
       setState(() {
         _isLoading = false;
         _insertIsLoading = false;
@@ -188,7 +222,17 @@ class _PaymentDetailScreenState extends State<SavingTopUpScreen> {
            bloc.add(InsertIpaymu(param, true));
           },
               _insertIsLoading,
-            true
+            true, () {
+                if(_nominalController.text.isEmpty){
+                  MySnackbar(context).errorSnackbar("Nominal tidak boleh kosong");
+                  return;
+                }
+                if(_notesController.text.isEmpty){
+                  MySnackbar(context).errorSnackbar("Catatan tidak boleh kosong");
+                  return;
+                }
+                processTopUp();
+              }
            ),
         ),
       ),

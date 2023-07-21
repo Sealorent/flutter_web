@@ -307,7 +307,11 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
             MySnackbar(context).errorSnackbar(
                 "Data tidak valid, pilih metode pembayaran atau cek data lainnya.");
           }
-        }, _insertIsLoading, false),
+        }, _insertIsLoading, false,
+            () {
+
+            }
+        ),
       ),
     );
   }
