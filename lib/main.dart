@@ -8,14 +8,23 @@ import 'package:pesantren_flutter/network/repository/main_repository.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/home/home_bloc.dart';
 import 'package:pesantren_flutter/ui/izin/izin_bloc.dart';
+import 'package:pesantren_flutter/ui/izin/izin_screen.dart';
+import 'package:pesantren_flutter/ui/konfirmasi/konfirmasi.dart';
 import 'package:pesantren_flutter/ui/konseling/konseling_bloc.dart';
+import 'package:pesantren_flutter/ui/konseling/konseling_screen.dart';
 import 'package:pesantren_flutter/ui/login/login_bloc.dart';
 import 'package:pesantren_flutter/ui/mudif/mudif_bloc.dart';
+import 'package:pesantren_flutter/ui/mudif/mudif_screen.dart';
+import 'package:pesantren_flutter/ui/payment/main/payment_screen.dart';
 import 'package:pesantren_flutter/ui/payment/payment_bloc.dart';
+import 'package:pesantren_flutter/ui/presensi/presensi_screen.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_bloc.dart';
+import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_screen.dart';
 import 'package:pesantren_flutter/ui/saving/saving_bloc.dart';
+import 'package:pesantren_flutter/ui/saving/saving_screen.dart';
 import 'package:pesantren_flutter/ui/splashscreen/splash_screen.dart';
 import 'package:pesantren_flutter/ui/tahfidz/tahfidz_bloc.dart';
+import 'package:pesantren_flutter/ui/tahfidz/tahfidz_screen.dart';
 import 'package:shake/shake.dart';
 
 import 'network/dio_client.dart';
@@ -93,6 +102,17 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.red,
       ),
       home: SplashScreen(alice),
+      routes: {
+        '/Bayar': (context) => PaymentScreen(),
+        '/Tabungan': (context) => SavingScreen(),
+        '/Tahfidz': (context) => TahfidzScreen(),
+        '/Konseling': (context) => KonselingScreen(),
+        '/Konfirmasi': (context) => Konfirmasi(),
+        '/Izin': (context) => IzinScreen(),
+        '/Presensi': (context) => PresensiScreen(),
+        '/Rekam Medis': (context) => RekamMedisScreen(),
+        '/Mudif': (context) => MudifScreen(),
+      },
     );
   }
 }
