@@ -57,7 +57,12 @@ class PaymentMethod extends StatelessWidget {
             child: selectedPembayaran == null
                 ? InkWell(
               onTap: () {
+                print("onSelectClicked");
                 onSelectClicked();
+                ScreenUtils(context)
+                    .navigateTo(PaymentMethodScreen(bayar, (payment) {
+                  onSelectPayment(payment);
+                }));
               },
                   child: Row(
                       children: [
@@ -70,6 +75,10 @@ class PaymentMethod extends StatelessWidget {
                 : InkWell(
               onTap: () {
                 onSelectClicked();
+                ScreenUtils(context)
+                    .navigateTo(PaymentMethodScreen(bayar, (payment) {
+                  onSelectPayment(payment);
+                }));
               },
                   child: Row(
                       children: [
