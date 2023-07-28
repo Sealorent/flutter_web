@@ -349,286 +349,347 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(
                         height: 15,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                ScreenUtils(context)
-                                    .navigateTo(const PaymentScreen());
-                              },
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/ic_bayar.svg",
-                                    width: 50,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Text("Bayar\n")
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                ScreenUtils(context)
-                                    .navigateTo(const SavingScreen());
-                              },
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/ic_tabungan.svg",
-                                    width: 50,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Text("Tabungan\n")
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                ScreenUtils(context)
-                                    .navigateTo(const TahfidzScreen());
-                              },
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/ic_tahfidz.svg",
-                                    width: 50,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Text("Tahfidz\n")
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                ScreenUtils(context)
-                                    .navigateTo(const RekamMedisScreen());
-                              },
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/ic_rekam_medis.svg",
-                                    width: 50,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Text("Rekam\nMedis")
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                ScreenUtils(context)
-                                    .navigateTo(const KonselingScreen());
-                              },
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/ic_conseling.svg",
-                                    width: 50,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Text("Konseling")
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                ScreenUtils(context)
-                                    .navigateTo(const IzinScreen());
-                              },
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/ic_izin.svg",
-                                    width: 50,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Text("Izin")
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                ScreenUtils(context)
-                                    .navigateTo(const MudifScreen());
-                              },
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/ic_mudif.svg",
-                                    width: 50,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Text("Mudif")
-                                ],
-                              ),
-                            ),
-                          ),
-                          GetBuilder<KonfirmasiController>(
-                              initState: (state) =>
-                                  KonfirmasiController.to.getKonfirmasi(),
-                              builder: (_) {
-                                return InkWell(
-                                    onTap: () {
-                                      _.getKonfirmasi();
-                                      Get.to(const Konfirmasi());
-                                    },
-                                    child: SizedBox(
-                                      width: 95,
-                                      child: Column(children: [
-                                        Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              "assets/ic_tabungan.svg",
-                                              width: 50,
-                                              color: MyColors.primary
-                                                  .withOpacity(0.1),
-                                            ),
-                                            const Icon(
-                                              Icons.account_balance,
-                                              color: Colors.green,
-                                            )
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text('Konfirmasi')
-                                      ]),
-                                    ));
-                              }),
-                          // Expanded(
-                          //   child: InkWell(
-                          //     onTap: () {
-                          //       _otherBottomSheetMenu();
-                          //     },
-                          //     child: Column(
-                          //       children: [
-                          //         const SizedBox(
-                          //           height: 10,
-                          //         ),
-                          //         SvgPicture.asset(
-                          //           "assets/Lainnya-01_fix.svg",
-                          //           width: 35,
-                          //           color: MyColors.primary.withOpacity(0.7),
-                          //         ),
-                          //         const SizedBox(
-                          //           height: 10,
-                          //         ),
-                          //         const Text("Lainnya")
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                Get.to(const PresensiScreen());
-                              },
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/ic_presensi.svg",
-                                    width: 50,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Text("Presensi\n")
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
+                      GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                        ),
+                        shrinkWrap: true,
+                        itemCount: _user?.navmenu?.length ?? 0,
+                        itemBuilder: (BuildContext context, int index) {
+                          return InkWell(
+                            onTap: () {
+                              if (_user?.navmenu![index].name == "Donasi" ||
+                                  _user?.navmenu![index].name == "Penginapan" ||
+                                  _user?.navmenu![index].name == "Lainnya") {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         backgroundColor: Colors.red,
                                         content: Text('On Development')));
-                              },
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/ic_donate.svg",
-                                    width: 50,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Text("Donasi\n")
-                                ],
-                              ),
+                              } else {
+                                Navigator.pushNamed(
+                                    context, '/${_user?.navmenu![index].name}');
+                              }
+                            },
+                            child: Column(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/menu/${_user?.navmenu![index].icon}",
+                                  width: 50,
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(_user?.navmenu![index].name ?? "")
+                              ],
                             ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        backgroundColor: Colors.red,
-                                        content: Text('On Development')));
-                              },
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/ic_hotel.svg",
-                                    width: 50,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Text("Penginapan\n")
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(child: Container()),
-                        ],
+                          );
+                        },
                       ),
-                      // Padding(
+                      // Row(
+                      //   children: [
+                      //     _user!.navmenu!.any((item) => item.name == "Bayar")
+                      //         ? Expanded(
+                      //             child: InkWell(
+                      //               onTap: () {
+                      //                 ScreenUtils(context)
+                      //                     .navigateTo(const PaymentScreen());
+                      //               },
+                      //               child: Column(
+                      //                 children: [
+                      //                   SvgPicture.asset(
+                      //                     "assets/ic_bayar.svg",
+                      //                     width: 50,
+                      //                   ),
+                      //                   const SizedBox(
+                      //                     height: 5,
+                      //                   ),
+                      //                   const Text("Bayar\n")
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           )
+                      //         : Expanded(child: Container()),
+                      //     _user!.navmenu!.any((item) => item.name == "Tabungan")
+                      //         ? Expanded(
+                      //             child: InkWell(
+                      //               onTap: () {
+                      //                 ScreenUtils(context)
+                      //                     .navigateTo(const SavingScreen());
+                      //               },
+                      //               child: Column(
+                      //                 children: [
+                      //                   SvgPicture.asset(
+                      //                     "assets/ic_tabungan.svg",
+                      //                     width: 50,
+                      //                   ),
+                      //                   const SizedBox(
+                      //                     height: 5,
+                      //                   ),
+                      //                   const Text("Tabungan\n")
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           )
+                      //         : Expanded(child: Container()),
+                      //     _user!.navmenu!.any((item) => item.name == "Tahfidz")
+                      //         ? Expanded(
+                      //             child: InkWell(
+                      //               onTap: () {
+                      //                 ScreenUtils(context)
+                      //                     .navigateTo(const TahfidzScreen());
+                      //               },
+                      //               child: Column(
+                      //                 children: [
+                      //                   SvgPicture.asset(
+                      //                     "assets/ic_tahfidz.svg",
+                      //                     width: 50,
+                      //                   ),
+                      //                   const SizedBox(
+                      //                     height: 5,
+                      //                   ),
+                      //                   const Text("Tahfidz\n")
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           )
+                      //         : Expanded(child: Container()),
+                      //     _user!.navmenu!
+                      //             .any((item) => item.name == "Rekam Medis")
+                      //         ? Expanded(
+                      //             child: InkWell(
+                      //               onTap: () {
+                      //                 ScreenUtils(context)
+                      //                     .navigateTo(const RekamMedisScreen());
+                      //               },
+                      //               child: Column(
+                      //                 children: [
+                      //                   SvgPicture.asset(
+                      //                     "assets/ic_rekam_medis.svg",
+                      //                     width: 50,
+                      //                   ),
+                      //                   const SizedBox(
+                      //                     height: 5,
+                      //                   ),
+                      //                   const Text("Rekam\nMedis")
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           )
+                      //         : Expanded(child: Container()),
+                      //   ],
+                      // ),
+                      // const SizedBox(
+                      //   height: 15,
+                      // ),
+                      // Row(
+                      //   children: [
+                      //     _user!.navmenu!
+                      //             .any((item) => item.name == "Konseling")
+                      //         ? Expanded(
+                      //             child: InkWell(
+                      //               onTap: () {
+                      //                 ScreenUtils(context)
+                      //                     .navigateTo(const KonselingScreen());
+                      //               },
+                      //               child: Column(
+                      //                 children: [
+                      //                   SvgPicture.asset(
+                      //                     "assets/ic_conseling.svg",
+                      //                     width: 50,
+                      //                   ),
+                      //                   const SizedBox(
+                      //                     height: 5,
+                      //                   ),
+                      //                   const Text("Konseling")
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           )
+                      //         : Expanded(child: Container()),
+                      //     _user!.navmenu!.any((item) => item.name == "Izin")
+                      //         ? Expanded(
+                      //             child: InkWell(
+                      //               onTap: () {
+                      //                 ScreenUtils(context)
+                      //                     .navigateTo(const IzinScreen());
+                      //               },
+                      //               child: Column(
+                      //                 children: [
+                      //                   SvgPicture.asset(
+                      //                     "assets/ic_izin.svg",
+                      //                     width: 50,
+                      //                   ),
+                      //                   const SizedBox(
+                      //                     height: 5,
+                      //                   ),
+                      //                   const Text("Izin")
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           )
+                      //         : Expanded(child: Container()),
+                      //     _user!.navmenu!.any((item) => item.name == "Mudif")
+                      //         ? Expanded(
+                      //             child: InkWell(
+                      //               onTap: () {
+                      //                 ScreenUtils(context)
+                      //                     .navigateTo(const MudifScreen());
+                      //               },
+                      //               child: Column(
+                      //                 children: [
+                      //                   SvgPicture.asset(
+                      //                     "assets/ic_mudif.svg",
+                      //                     width: 50,
+                      //                   ),
+                      //                   const SizedBox(
+                      //                     height: 5,
+                      //                   ),
+                      //                   const Text("Mudif")
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           )
+                      //         : Expanded(child: Container()),
+                      //     _user!.navmenu!
+                      //             .any((item) => item.name == "Konfirmasi")
+                      //         ? GetBuilder<KonfirmasiController>(
+                      //             initState: (state) =>
+                      //                 KonfirmasiController.to.getKonfirmasi(),
+                      //             builder: (_) {
+                      //               return InkWell(
+                      //                   onTap: () {
+                      //                     _.getKonfirmasi();
+                      //                     Get.to(const Konfirmasi());
+                      //                   },
+                      //                   child: SizedBox(
+                      //                     width: 95,
+                      //                     child: Column(children: [
+                      //                       Stack(
+                      //                         alignment: Alignment.center,
+                      //                         children: [
+                      //                           SvgPicture.asset(
+                      //                             "assets/ic_tabungan.svg",
+                      //                             width: 50,
+                      //                             color: MyColors.primary
+                      //                                 .withOpacity(0.1),
+                      //                           ),
+                      //                           const Icon(
+                      //                             Icons.account_balance,
+                      //                             color: Colors.green,
+                      //                           )
+                      //                         ],
+                      //                       ),
+                      //                       const SizedBox(
+                      //                         height: 5,
+                      //                       ),
+                      //                       const Text('Konfirmasi')
+                      //                     ]),
+                      //                   ));
+                      //             })
+                      //         : Expanded(child: Container())
+                      //     // Expanded(
+                      //     //   child: InkWell(
+                      //     //     onTap: () {
+                      //     //       _otherBottomSheetMenu();
+                      //     //     },
+                      //     //     child: Column(
+                      //     //       children: [
+                      //     //         const SizedBox(
+                      //     //           height: 10,
+                      //     //         ),
+                      //     //         SvgPicture.asset(
+                      //     //           "assets/Lainnya-01_fix.svg",
+                      //     //           width: 35,
+                      //     //           color: MyColors.primary.withOpacity(0.7),
+                      //     //         ),
+                      //     //         const SizedBox(
+                      //     //           height: 10,
+                      //     //         ),
+                      //     //         const Text("Lainnya")
+                      //     //       ],
+                      //     //     ),
+                      //     //   ),
+                      //     // ),
+                      //   ],
+                      // ),
+                      // const SizedBox(
+                      //   height: 15,
+                      // ),
+                      // Row(
+                      //   children: [
+                      //     // _user!.navmenu!.any((item) => item.name == "Presensi")
+                      //     Expanded(
+                      //         child: InkWell(
+                      //       onTap: () {
+                      //         Get.to(const PresensiScreen());
+                      //       },
+                      //       child: Column(
+                      //         children: [
+                      //           SvgPicture.asset(
+                      //             "assets/ic_presensi.svg",
+                      //             width: 50,
+                      //           ),
+                      //           const SizedBox(
+                      //             height: 5,
+                      //           ),
+                      //           const Text("Presensi\n")
+                      //         ],
+                      //       ),
+                      //     )),
+                      //     _user!.navmenu!.any((item) => item.name == "Donasi")
+                      //         ? Expanded(
+                      //             child: InkWell(
+                      //               onTap: () {
+                      //                 ScaffoldMessenger.of(context)
+                      //                     .showSnackBar(const SnackBar(
+                      //                         backgroundColor: Colors.red,
+                      //                         content: Text('On Development')));
+                      //               },
+                      //               child: Column(
+                      //                 children: [
+                      //                   SvgPicture.asset(
+                      //                     "assets/ic_donate.svg",
+                      //                     width: 50,
+                      //                   ),
+                      //                   const SizedBox(
+                      //                     height: 5,
+                      //                   ),
+                      //                   const Text("Donasi\n")
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           )
+                      //         : Expanded(child: Container()),
+                      //     _user!.navmenu!
+                      //             .any((item) => item.name == "Penginapan")
+                      //         ? Expanded(
+                      //             child: InkWell(
+                      //               onTap: () {
+                      //                 ScaffoldMessenger.of(context)
+                      //                     .showSnackBar(const SnackBar(
+                      //                         backgroundColor: Colors.red,
+                      //                         content: Text('On Development')));
+                      //               },
+                      //               child: Column(
+                      //                 children: [
+                      //                   SvgPicture.asset(
+                      //                     "assets/ic_hotel.svg",
+                      //                     width: 50,
+                      //                   ),
+                      //                   const SizedBox(
+                      //                     height: 5,
+                      //                   ),
+                      //                   const Text("Penginapan\n")
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           )
+                      //         : Expanded(child: Container()),
+                      //     Expanded(child: Container()),
+                      //   ],
+                      // ),
+                      // // Padding(
                       //   padding: const EdgeInsets.symmetric(horizontal: 17),
                       //   child: Row(
                       //     mainAxisAlignment: MainAxisAlignment.start,

@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/network/response/history_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
+import 'package:pesantren_flutter/ui/home/home_screen.dart';
 import 'package:pesantren_flutter/ui/tabungantransaction/tabungantransaction_screen.dart';
 import 'package:pesantren_flutter/ui/transaction/transaction_view/transaction_view.dart';
 import 'package:pesantren_flutter/ui/payment/payment_event.dart';
@@ -217,15 +218,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-          ),
           centerTitle: true,
           elevation: 0,
           title: Text(

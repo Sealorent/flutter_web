@@ -40,6 +40,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
 
     setState(() {
       _user = objectStudent;
+      print("user: ${_user.toJson()}");
     });
   }
 

@@ -31,6 +31,7 @@ class StudentLoginResponse {
     this.majorsShortName,
     this.photo,
     this.message,
+    this.navmenu,
   });
 
   bool? isCorrect;
@@ -52,6 +53,7 @@ class StudentLoginResponse {
   String? majorsShortName;
   String? photo;
   String? message;
+  List<NavMenu>? navmenu;
 
   factory StudentLoginResponse.fromJson(Map<String, dynamic> json) =>
       StudentLoginResponse(
@@ -78,6 +80,8 @@ class StudentLoginResponse {
         majorsShortName: json["majors_short_name"] ?? json["majors_s_name"],
         photo: json["photo"] ?? json["student_img"],
         message: json["message"],
+        navmenu:
+            List<NavMenu>.from(json["navmenu"].map((x) => NavMenu.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -100,5 +104,26 @@ class StudentLoginResponse {
         "majors_short_name": majorsShortName,
         "photo": photo,
         "message": message,
+        "navmenu": List<dynamic>.from(navmenu?.map((x) => x.toJson()) ?? []),
+      };
+}
+
+class NavMenu {
+  NavMenu({
+    this.name,
+    this.icon,
+  });
+
+  String? name;
+  String? icon;
+
+  factory NavMenu.fromJson(Map<String, dynamic> json) => NavMenu(
+        name: json["name"],
+        icon: json["icon"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "icon": icon,
       };
 }

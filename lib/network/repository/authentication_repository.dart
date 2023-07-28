@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
             "nis": nis,
             "password": password
           });
+      print("response login ${response.data}");
       var statusCode = response.statusCode ?? -1;
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode) {
