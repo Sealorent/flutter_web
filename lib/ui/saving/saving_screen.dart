@@ -190,231 +190,239 @@ class _SavingScreenState extends State<SavingScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return BlocListener<SavingBloc, SavingState>(
-      listener: listener,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          title: Text(
-            "Tabungan",
-            style: TextStyle(color: Colors.white),
-          ),
-          actions: [
-            PopupMenuButton<String>(
-              onSelected: (test) {},
-              itemBuilder: (BuildContext context) {
-                return {'Cetak buku tabungan'}.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.download,
-                          color: Colors.black26,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(choice),
-                      ],
-                    ),
-                  );
-                }).toList();
+    return Listener(
+      onPointerDown: (_) {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.focusedChild?.unfocus();
+        }
+      },
+      child: BlocListener<SavingBloc, SavingState>(
+        listener: listener,
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
               },
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              ),
             ),
-          ],
-        ),
-        backgroundColor: Colors.white,
-        body: RefreshIndicator(
-          onRefresh: () async {
-            getData();
-          },
-          child: _isLoading
-              ? ProgressLoading()
-              : ListView(
-                  children: [
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+            centerTitle: true,
+            elevation: 0,
+            title: Text(
+              "Tabungan",
+              style: TextStyle(color: Colors.white),
+            ),
+            actions: [
+              PopupMenuButton<String>(
+                onSelected: (test) {},
+                itemBuilder: (BuildContext context) {
+                  return {'Cetak buku tabungan'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
                       child: Row(
                         children: [
-                          Text("Tanggal"),
-                          Spacer(),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: FilterChip(
-                              label: timeRange != null
-                                  ? Text(
-                                      "${DateFormat("d MMM yyyy").format(timeRange!.start)}-${DateFormat("d MMM yyyy").format(timeRange!.end)}",
-                                      style: TextStyle(color: MyColors.primary),
-                                    )
-                                  : Icon(Icons.calendar_month,
-                                      color: MyColors.primary),
-                              selected: timeRange != null,
-                              backgroundColor: Color(0xffEBF6F3),
-                              shape: StadiumBorder(
-                                  side: BorderSide(color: MyColors.grey_20)),
-                              selectedColor: MyColors.primary.withOpacity(0.3),
-                              checkmarkColor: MyColors.primary,
-                              onSelected: (val) async {
-                                DateTimeRange? result =
-                                    await showDateRangePicker(
-                                  context: context,
-                                  firstDate: DateTime(
-                                      2022, 1, 1), // the earliest allowable
-                                  lastDate: DateTime(
-                                      2050, 12, 31), // the latest allowable
-                                  currentDate: DateTime.now(),
-                                  saveText: 'Done',
-                                );
-                                timeRange = result;
-
-                                setState(() {});
-                              },
-                            ),
-                          )
+                          Icon(
+                            Icons.download,
+                            color: Colors.black26,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(choice),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Card(
-                        elevation: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Saldo",
-                                style: TextStyle(color: MyColors.grey_60),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
+          ),
+          backgroundColor: Colors.white,
+          body: RefreshIndicator(
+            onRefresh: () async {
+              getData();
+            },
+            child: _isLoading
+                ? ProgressLoading()
+                : ListView(
+                    children: [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            Text("Tanggal"),
+                            Spacer(),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: FilterChip(
+                                label: timeRange != null
+                                    ? Text(
+                                        "${DateFormat("d MMM yyyy").format(timeRange!.start)}-${DateFormat("d MMM yyyy").format(timeRange!.end)}",
+                                        style: TextStyle(color: MyColors.primary),
+                                      )
+                                    : Icon(Icons.calendar_month,
+                                        color: MyColors.primary),
+                                selected: timeRange != null,
+                                backgroundColor: Color(0xffEBF6F3),
+                                shape: StadiumBorder(
+                                    side: BorderSide(color: MyColors.grey_20)),
+                                selectedColor: MyColors.primary.withOpacity(0.3),
+                                checkmarkColor: MyColors.primary,
+                                onSelected: (val) async {
+                                  DateTimeRange? result =
+                                      await showDateRangePicker(
+                                    context: context,
+                                    firstDate: DateTime(
+                                        2022, 1, 1), // the earliest allowable
+                                    lastDate: DateTime(
+                                        2050, 12, 31), // the latest allowable
+                                    currentDate: DateTime.now(),
+                                    saveText: 'Done',
+                                  );
+                                  timeRange = result;
+
+                                  setState(() {});
+                                },
                               ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                NumberUtils.toRupiah(
-                                    _savingResponse?.saldo?.toDouble() ?? 0.0),
-                                style: TextStyle(fontSize: 24),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "DEBIT",
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                        Text(
-                                          NumberUtils.toRupiah(_savingResponse
-                                                  ?.getTotalDebit() ??
-                                              0.0),
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                      ],
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Card(
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Saldo",
+                                  style: TextStyle(color: MyColors.grey_60),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  NumberUtils.toRupiah(
+                                      _savingResponse?.saldo?.toDouble() ?? 0.0),
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "DEBIT",
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                          Text(
+                                            NumberUtils.toRupiah(_savingResponse
+                                                    ?.getTotalDebit() ??
+                                                0.0),
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ],
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "KREDIT",
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                        Text(
-                                          NumberUtils.toRupiah(_savingResponse
-                                                  ?.getTotalCredit() ??
-                                              0.0),
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                      ],
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "KREDIT",
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                          Text(
+                                            NumberUtils.toRupiah(_savingResponse
+                                                    ?.getTotalCredit() ??
+                                                0.0),
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ],
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(
-                                          shape: MaterialStateProperty.all<
-                                                  RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          18.0)))),
-                                      onPressed: () async {
-                                        ScreenUtils(context)
-                                            .navigateTo(SavingTopUpScreen(),
-                                                listener: (val) {
-                                          if (val == 200) getData();
-                                        });
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "Setor Tabungan",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText2
-                                                  ?.apply(color: Colors.white),
-                                            ),
-                                          ],
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            18.0)))),
+                                        onPressed: () async {
+                                          ScreenUtils(context)
+                                              .navigateTo(SavingTopUpScreen(),
+                                                  listener: (val) {
+                                            if (val == 200) getData();
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                "Setor Tabungan",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText2
+                                                    ?.apply(color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Container(),
-                                  ),
-                                ],
-                              )
-                            ],
+                                    Expanded(
+                                      child: Container(),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(children: generateList()),
-                    )
-                  ],
-                ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(children: generateList()),
+                      )
+                    ],
+                  ),
+          ),
         ),
       ),
     );

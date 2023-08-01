@@ -106,6 +106,9 @@ class _PaymentDetailScreenState extends State<SavingTopUpScreen> {
       ScreenUtils(context)
           .navigateTo(PaymentMethodScreen(bayar, (payment) {
             _selectedPayment = payment;
+            setState(() {
+
+            });
       }));
     } else if (state is FailedState) {
       if(dialogContext != null) {
@@ -199,6 +202,7 @@ class _PaymentDetailScreenState extends State<SavingTopUpScreen> {
             processTopUp();
           },
           child: PaymentMethod(context,_topUpTabunganResponse?.metode?.map((e) => e.toBayar()).toList() ?? [],_selectedPayment, (selected){
+            print("selectedpayment");
             setState(() {
               _selectedPayment = selected;
             });
