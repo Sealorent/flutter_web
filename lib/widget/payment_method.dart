@@ -47,6 +47,7 @@ class PaymentMethod extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
+              print("onSelectClicked1");
               if (isSaving == false) {
                 ScreenUtils(context)
                     .navigateTo(PaymentMethodScreen(bayar, (payment) {
@@ -58,6 +59,14 @@ class PaymentMethod extends StatelessWidget {
                 ? InkWell(
               onTap: () {
                 onSelectClicked();
+                if (isSaving == false) {
+                  print("onSelectClicked2");
+
+                  ScreenUtils(context)
+                      .navigateTo(PaymentMethodScreen(bayar, (payment) {
+                    onSelectPayment(payment);
+                  }));
+                }
               },
                   child: Row(
                       children: [
@@ -69,7 +78,11 @@ class PaymentMethod extends StatelessWidget {
                 )
                 : InkWell(
               onTap: () {
-                onSelectClicked();
+                // onSelectClicked();
+                ScreenUtils(context)
+                    .navigateTo(PaymentMethodScreen(bayar, (payment) {
+                  onSelectPayment(payment);
+                }));
               },
                   child: Row(
                       children: [
