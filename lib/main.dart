@@ -111,7 +111,7 @@ class MyApp extends StatelessWidget {
         '/Izin': (context) => IzinScreen(),
         '/Presensi': (context) => PresensiScreen(),
         '/Rekam Medis': (context) => RekamMedisScreen(),
-        '/Mudif': (context) => MudifScreen(),
+        '/Kunjungan': (context) => MudifScreen(),
       },
     );
   }
