@@ -99,7 +99,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: MaterialColor(
             MyColors.materialPrimaryColorCode, MyColors.primaryColorCodes),
-        primaryColor: Colors.red,
+        primaryColor: Colors.white,
       ),
       home: SplashScreen(alice),
       routes: {

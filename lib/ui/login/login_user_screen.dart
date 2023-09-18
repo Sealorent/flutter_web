@@ -146,7 +146,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                 child: ListView(
                   children: [
                     Image.asset(
-                      "assets/logo.png",
+                      "assets/logo_esekolah.png",
                       height: 100,
                     ),
                     const SizedBox(
@@ -287,6 +287,9 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                         ? ProgressLoading()
                         : ElevatedButton(
                             style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        MyColors.primary),
                                 shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
