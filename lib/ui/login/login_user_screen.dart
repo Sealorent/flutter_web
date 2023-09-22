@@ -30,11 +30,16 @@ class LoginUserScreen extends StatefulWidget {
 }
 
 class _LoginUserScreenState extends State<LoginUserScreen> {
+
+
   Future<void> _getPesantren() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var pesantren = prefs.getString(PrefData.pesantren);
     var objectpesantren = pesantrenLoginResponseFromJson(pesantren ?? "");
+    // var getFcmToken = prefs.getString(PrefData.fcmToken);
+    // print("pesantren: $getFcmToken");
     setState(() {
+      // fcmToken = getFcmToken;
       _pesantrenLoginResponse = objectpesantren;
     });
   }
@@ -67,7 +72,9 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
     prefs.setStringList(PrefData.nisSantri, kodepesantrens);
   }
 
+  
   PesantrenLoginResponse? _pesantrenLoginResponse;
+  String? fcmToken;
   bool _passwordVisible = false;
   TextEditingController nisController = TextEditingController();
   TextEditingController pesantrenController = TextEditingController();
@@ -360,6 +367,13 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                       "Hubungi admin",
                       style: TextStyle(color: MyColors.primary),
                     )),
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
+                    // Text(
+                    //   fcmToken ?? "",
+                    //   textAlign: TextAlign.center,
+                    // ),
                   ],
                 ),
               ),
