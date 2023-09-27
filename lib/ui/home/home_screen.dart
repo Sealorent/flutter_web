@@ -270,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             width: size.width,
                             child: SvgPicture.asset(
-                                "assets/background_mosque_blue.svg",
+                                "assets/background_mosque.svg",
                                 fit: BoxFit.fill),
                           ),
                           Align(

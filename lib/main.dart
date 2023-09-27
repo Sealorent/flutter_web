@@ -37,7 +37,6 @@ void main() async {
   await Firebase.initializeApp();
   await FirebaseApi().initNotifications();
   await FirebaseApi().initAwesomeNotification();
-
   Alice alice = Alice();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: MyColors.primary,

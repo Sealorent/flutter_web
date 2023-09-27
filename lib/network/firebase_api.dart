@@ -8,20 +8,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
 
-  // Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  //   print('Title : ${message.notification?.title}');
-  //   print('Body : ${message.notification?.body}');
-  //   print('Payload : ${message.data}');
-  //   // instantNotify(message);
-  // }
+  Future<void> handleBackgroundMessage(RemoteMessage message) async {
+    print('Title : ${message.notification?.title}');
+    print('Body : ${message.notification?.body}');
+    print('Payload : ${message.data}');
+    instantNotify(message);
+  }
 
-  // void handleForegroundMessage(RemoteMessage message) {
-  //   print('Foreground Message:');
-  //   print('Title: ${message.notification?.title}');
-  //   print('Body: ${message.notification?.body}');
-  //   print('Payload: ${message.data}');
-  //   instantNotify(message);
-  // }
+  void handleForegroundMessage(RemoteMessage message) {
+    print('Foreground Message:');
+    print('Title: ${message.notification?.title}');
+    print('Body: ${message.notification?.body}');
+    print('Payload: ${message.data}');
+    instantNotify(message);
+  }
 
    
 
@@ -56,7 +56,7 @@ class FirebaseApi {
 
   Future<void> initAwesomeNotification() async {
     AwesomeNotifications().initialize(
-      null, 
+      'resource://drawable/icon',
       [
         NotificationChannel(
           channelKey: 'basic_channel',
@@ -69,14 +69,6 @@ class FirebaseApi {
 
     notificationPermission();
     
-     await AwesomeNotifications().createNotification(
-    content: NotificationContent(
-      id: 0,
-      channelKey: 'basic_channel',
-      title: 'Test Notification',
-      body: 'This is a test notification',
-    ),
-  );
   }
 
   void notificationPermission(){

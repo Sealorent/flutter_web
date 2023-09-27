@@ -35,11 +35,13 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
   Future<void> _getPesantren() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var pesantren = prefs.getString(PrefData.pesantren);
+    var getToken = prefs.getString(PrefData.fcmToken);
+    print("pesantren: $getToken");
     var objectpesantren = pesantrenLoginResponseFromJson(pesantren ?? "");
     // var getFcmToken = prefs.getString(PrefData.fcmToken);
     // print("pesantren: $getFcmToken");
     setState(() {
-      // fcmToken = getFcmToken;
+      fcmToken = getToken;
       _pesantrenLoginResponse = objectpesantren;
     });
   }
@@ -112,6 +114,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
   @override
   void initState() {
     bloc = BlocProvider.of<LoginBloc>(context);
+    
     _getPesantren();
     super.initState();
   }
@@ -153,7 +156,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                 child: ListView(
                   children: [
                     Image.asset(
-                      "assets/logo_esekolah.png",
+                      "assets/logo.png",
                       height: 100,
                     ),
                     const SizedBox(
@@ -367,13 +370,6 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                       "Hubungi admin",
                       style: TextStyle(color: MyColors.primary),
                     )),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
-                    // Text(
-                    //   fcmToken ?? "",
-                    //   textAlign: TextAlign.center,
-                    // ),
                   ],
                 ),
               ),
