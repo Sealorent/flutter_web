@@ -26,10 +26,17 @@ import 'package:pesantren_flutter/ui/splashscreen/splash_screen.dart';
 import 'package:pesantren_flutter/ui/tahfidz/tahfidz_bloc.dart';
 import 'package:pesantren_flutter/ui/tahfidz/tahfidz_screen.dart';
 import 'package:shake/shake.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'network/dio_client.dart';
+import 'network/firebase_api.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseApi().initNotifications();
+  await FirebaseApi().initAwesomeNotification();
   Alice alice = Alice();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: MyColors.primary,
@@ -99,7 +106,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: MaterialColor(
             MyColors.materialPrimaryColorCode, MyColors.primaryColorCodes),
-        primaryColor: Colors.red,
+        primaryColor: Colors.white,
       ),
       home: SplashScreen(alice),
       routes: {

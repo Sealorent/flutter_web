@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "28896504693",
+    "project_id": "fcm-indoweb",
+    "storage_bucket": "fcm-indoweb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28896504693:android:973833a2320304ba69c13c",
+        "android_client_info": {
+          "package_name": "com.pesantren.pesantren_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDVj-8hSXzX_z7-7SZ8D7DF5EZt6a0Wmc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
