@@ -40,7 +40,8 @@ class Constant {
   static const String bayarBebas2 = "/tagihan_bebas_bayar.php";
   static const String setting = "/setting.php";
   static const String ringkasan = "/ringkasan_pembayaran.php";
-  static const String ipaymu = "/insert_ipaymu.php";
+  // static const String ipaymu = "/insert_ipaymu.php";
+  static const String ipaymu = "/insert_ipaymu_allujicoba.php";
   static const String caraBayar = "/cara_pembayaran.php";
   static const String caraBayarTabungan = "/cara_pembayaran_tabungan.php";
   static const String topupTabungan = "/top_up_tabungan.php";
