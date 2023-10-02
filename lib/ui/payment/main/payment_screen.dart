@@ -46,7 +46,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
           title: Text("Info Pembayaran", style: TextStyle(color: Colors.white),),
           bottom: const TabBar(
             unselectedLabelColor: Colors.white,
-            labelColor: Colors.green,
+            labelColor: MyColors.primary,
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: BoxDecoration(
                 borderRadius: BorderRadius.only(

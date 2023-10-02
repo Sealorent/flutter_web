@@ -226,7 +226,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           ),
           bottom: const TabBar(
             unselectedLabelColor: Colors.white,
-            labelColor: Colors.green,
+            labelColor: MyColors.primary,
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: BoxDecoration(
                 borderRadius: BorderRadius.only(

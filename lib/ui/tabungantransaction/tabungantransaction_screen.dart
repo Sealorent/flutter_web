@@ -204,6 +204,7 @@ class _TabunganTransactionState extends State<TabunganTransaction> {
         _listTransaksiPaginate = [];
         _listTransaksiPaginate.addAll(paginationResponse!.data!.toList());
       }
+      print("paginate${paginationResponse!.data!.map((e) => e.idTransaksi)}");
       loader = false;
       setState(() {});
     } else {
@@ -267,265 +268,291 @@ class _TabunganTransactionState extends State<TabunganTransaction> {
                   }
                 }
               }).toList();
+
               setAwal();
-              return SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: true,
-                  // header: WaterDropHeader(),
-                  // footer: const Text('s'),
-                  footer: CustomFooter(
-                    builder: (BuildContext context, mode) {
-                      Widget body;
-                      if (mode == LoadStatus.idle) {
-                        if (endPage) {
-                          body = const Text("No more Data");
-                        } else {
-                          body = const CupertinoActivityIndicator();
-                        }
-                      } else if (mode == LoadStatus.loading) {
-                        body = const CupertinoActivityIndicator();
-                      } else if (mode == LoadStatus.failed) {
-                        _.getHistory();
-                        body = const Text("Load Failed! Click retry!");
-                      } else if (mode == LoadStatus.canLoading) {
-                        body = const CupertinoActivityIndicator();
-                      } else {
-                        body = const Text("No more Data");
-                      }
-                      return SizedBox(
-                        height: 55.0,
-                        child: Center(child: body),
-                      );
-                    },
-                  ),
-                  controller: _refreshController,
-                  onRefresh: _onRefresh,
-                  onLoading: _onLoading,
-                  child: loader
-                      ? ProgressLoading()
-                      : ListView(
-                          children: [
-                            SizedBox(height: 15),
-                            SizedBox(
-                              height: 32,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: listFilter.length,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                itemBuilder: (context, index) {
-                                  var item = listFilter[index];
-                                  if (index == 0) {
-                                    return InkWell(
-                                      onTap: () {
-                                        _modalBottomSheetMenu();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 4.0),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          decoration: BoxDecoration(
-                                            color: selectedYear != null
-                                                ? MyColors.primary
-                                                    .withOpacity(0.3)
-                                                : const Color(0xffEBF6F3),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(16.0)),
-                                            border: Border.all(
-                                              color: MyColors.grey_20,
-                                              width: 1.5,
-                                            ),
-                                          ),
-                                          child: Center(
-                                              child: Row(
-                                            children: [
-                                              Visibility(
-                                                visible: selectedYear != null,
-                                                child: Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.check,
-                                                      color: MyColors.primary,
-                                                      size: 18,
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Text(
-                                                selectedYear?.title ??
-                                                    "Semua Tahun",
-                                                style: const TextStyle(
-                                                    color: MyColors.primary),
-                                              ),
-                                            ],
-                                          )),
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 4.0),
-                                      child: FilterChip(
-                                          label: Text(
-                                            item.name,
-                                            style: const TextStyle(
-                                                color: MyColors.primary),
-                                          ),
-                                          selected: item.isFilterActive,
-                                          backgroundColor:
-                                              const Color(0xffEBF6F3),
-                                          shape: const StadiumBorder(
-                                              side: BorderSide(
-                                                  color: MyColors.grey_20)),
-                                          selectedColor:
-                                              MyColors.primary.withOpacity(0.3),
-                                          checkmarkColor: MyColors.primary,
-                                          onSelected: (_) {
-                                            setState(() => item.isFilterActive =
-                                                !item.isFilterActive);
-                                            listFilter;
-                                            reset();
-                                            setState(() {});
-                                          }),
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
-                            ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: _listTransaksiPaginate.length,
-                                itemBuilder: (context, i) {
-                                  return Padding(
+
+              return _.listTransaksiTabungan.isNotEmpty
+                  ? SmartRefresher(
+                      enablePullDown: true,
+                      enablePullUp: true,
+                      footer: CustomFooter(
+                        builder: (BuildContext context, mode) {
+                          Widget body;
+                          if (mode == LoadStatus.idle) {
+                            if (endPage) {
+                              body = const Text("No more Data");
+                            } else {
+                              body = const CupertinoActivityIndicator();
+                            }
+                          } else if (mode == LoadStatus.loading) {
+                            body = const CupertinoActivityIndicator();
+                          } else if (mode == LoadStatus.failed) {
+                            _.getHistory();
+                            body = const Text("Load Failed! Click retry!");
+                          } else if (mode == LoadStatus.canLoading) {
+                            body = const CupertinoActivityIndicator();
+                          } else {
+                            body = const Text("No more Data");
+                          }
+                          return SizedBox(
+                            height: 55.0,
+                            child: Center(child: body),
+                          );
+                        },
+                      ),
+                      controller: _refreshController,
+                      onRefresh: _onRefresh,
+                      onLoading: _onLoading,
+                      child: loader
+                          ? ProgressLoading()
+                          : ListView(
+                              children: [
+                                SizedBox(height: 15),
+                                SizedBox(
+                                  height: 32,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: listFilter.length,
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 10),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Get.to(TransactionTabunganDetailScreen(
-                                            int.parse(_listTransaksiPaginate[i]
-                                                    .idTransaksi ??
-                                                "")));
-                                      },
-                                      child: Column(
-                                        children: [
-                                          const Divider(),
-                                          const SizedBox(
-                                            height: 14,
-                                          ),
-                                          Row(
-                                            children: [
-                                              const FaIcon(
-                                                FontAwesomeIcons.moneyBill,
-                                                color: Colors.black54,
-                                              ),
-                                              const SizedBox(
-                                                width: 20,
-                                              ),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "No. Trans#${_listTransaksiPaginate[i].idTransaksi ?? "0"}",
-                                                      style: const TextStyle(
-                                                        fontFamily: "Mulish",
-                                                        fontStyle:
-                                                            FontStyle.normal,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 17,
-                                                        color: Color.fromRGBO(
-                                                            0, 0, 0, 0.87),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 1,
-                                                    ),
-                                                    Text(
-                                                      _listTransaksiPaginate[i]
-                                                              .status ??
-                                                          "",
-                                                      style: const TextStyle(
-                                                        fontFamily: 'Mulish',
-                                                        fontStyle:
-                                                            FontStyle.normal,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 13,
-                                                        color: Color.fromRGBO(
-                                                            0, 0, 0, 0.87),
-                                                      ),
-                                                    ),
-                                                  ],
+                                        horizontal: 12),
+                                    itemBuilder: (context, index) {
+                                      var item = listFilter[index];
+                                      if (index == 0) {
+                                        return InkWell(
+                                          onTap: () {
+                                            _modalBottomSheetMenu();
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              decoration: BoxDecoration(
+                                                color: selectedYear != null
+                                                    ? MyColors.primary
+                                                        .withOpacity(0.3)
+                                                    : const Color(0xffEBF6F3),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(16.0)),
+                                                border: Border.all(
+                                                  color: MyColors.grey_20,
+                                                  width: 1.5,
                                                 ),
                                               ),
-                                              const Spacer(),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
+                                              child: Center(
+                                                  child: Row(
                                                 children: [
-                                                  Text(
-                                                    DateFormat("dd MMM yyyy")
-                                                        .format(DateTime.parse(
-                                                            (_listTransaksiPaginate[
-                                                                            i]
-                                                                        .tanggal ??
-                                                                    "")
-                                                                .split(" ")
-                                                                .first)),
-                                                    style: const TextStyle(
-                                                      fontFamily: 'Mulish',
-                                                      fontStyle:
-                                                          FontStyle.normal,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 13,
-                                                      color: Color.fromRGBO(
-                                                          0, 0, 0, 0.87),
+                                                  Visibility(
+                                                    visible:
+                                                        selectedYear != null,
+                                                    child: Row(
+                                                      children: [
+                                                        const Icon(
+                                                          Icons.check,
+                                                          color:
+                                                              MyColors.primary,
+                                                          size: 18,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                   Text(
-                                                    ((_listTransaksiPaginate[i]
-                                                                .tanggal ??
-                                                            "")
-                                                        .split(" ")
-                                                        .last),
+                                                    selectedYear?.title ??
+                                                        "Semua Tahun",
                                                     style: const TextStyle(
-                                                      fontFamily: 'Mulish',
-                                                      fontStyle:
-                                                          FontStyle.normal,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 13,
-                                                      color: Color.fromRGBO(
-                                                          0, 0, 0, 0.87),
+                                                        color:
+                                                            MyColors.primary),
+                                                  ),
+                                                ],
+                                              )),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 4.0),
+                                          child: FilterChip(
+                                              label: Text(
+                                                item.name,
+                                                style: const TextStyle(
+                                                    color: MyColors.primary),
+                                              ),
+                                              selected: item.isFilterActive,
+                                              backgroundColor:
+                                                  const Color(0xffEBF6F3),
+                                              shape: const StadiumBorder(
+                                                  side: BorderSide(
+                                                      color: MyColors.grey_20)),
+                                              selectedColor: MyColors.primary
+                                                  .withOpacity(0.3),
+                                              checkmarkColor: MyColors.primary,
+                                              onSelected: (_) {
+                                                setState(() =>
+                                                    item.isFilterActive =
+                                                        !item.isFilterActive);
+                                                listFilter;
+                                                reset();
+                                                setState(() {});
+                                              }),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                                ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: _listTransaksiPaginate.length,
+                                    itemBuilder: (context, i) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Get.to(
+                                                TransactionTabunganDetailScreen(
+                                                    int.parse(
+                                                        _listTransaksiPaginate[
+                                                                    i]
+                                                                .idTransaksi ??
+                                                            "")));
+                                          },
+                                          child: Column(
+                                            children: [
+                                              const Divider(),
+                                              const SizedBox(
+                                                height: 14,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  const FaIcon(
+                                                    FontAwesomeIcons.moneyBill,
+                                                    color: Colors.black54,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "No. Trans#${_listTransaksiPaginate[i].idTransaksi ?? "0"}",
+                                                          style:
+                                                              const TextStyle(
+                                                            fontFamily:
+                                                                "Mulish",
+                                                            fontStyle: FontStyle
+                                                                .normal,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontSize: 17,
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0.87),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 1,
+                                                        ),
+                                                        Text(
+                                                          _listTransaksiPaginate[
+                                                                      i]
+                                                                  .status ??
+                                                              "",
+                                                          style:
+                                                              const TextStyle(
+                                                            fontFamily:
+                                                                'Mulish',
+                                                            fontStyle: FontStyle
+                                                                .normal,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontSize: 13,
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0.87),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
+                                                  ),
+                                                  const Spacer(),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                        DateFormat(
+                                                                "dd MMM yyyy")
+                                                            .format(DateTime.parse(
+                                                                (_listTransaksiPaginate[i]
+                                                                            .tanggal ??
+                                                                        "")
+                                                                    .split(" ")
+                                                                    .first)),
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Mulish',
+                                                          fontStyle:
+                                                              FontStyle.normal,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 13,
+                                                          color: Color.fromRGBO(
+                                                              0, 0, 0, 0.87),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        ((_listTransaksiPaginate[
+                                                                        i]
+                                                                    .tanggal ??
+                                                                "")
+                                                            .split(" ")
+                                                            .last),
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Mulish',
+                                                          fontStyle:
+                                                              FontStyle.normal,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 13,
+                                                          color: Color.fromRGBO(
+                                                              0, 0, 0, 0.87),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }),
-                            const SizedBox(
-                              height: 6,
-                            ),
-                          ],
-                        ));
-              }
-            
-            ));
+                                        ),
+                                      );
+                                    }),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                              ],
+                            ))
+                  : const Center(
+                      child: Text("Tidak ada data"),
+                    );
+            }));
   }
 }

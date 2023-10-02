@@ -30,11 +30,18 @@ class LoginUserScreen extends StatefulWidget {
 }
 
 class _LoginUserScreenState extends State<LoginUserScreen> {
+
+
   Future<void> _getPesantren() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var pesantren = prefs.getString(PrefData.pesantren);
+    var getToken = prefs.getString(PrefData.fcmToken);
+    print("pesantren: $getToken");
     var objectpesantren = pesantrenLoginResponseFromJson(pesantren ?? "");
+    // var getFcmToken = prefs.getString(PrefData.fcmToken);
+    // print("pesantren: $getFcmToken");
     setState(() {
+      fcmToken = getToken;
       _pesantrenLoginResponse = objectpesantren;
     });
   }
@@ -67,7 +74,9 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
     prefs.setStringList(PrefData.nisSantri, kodepesantrens);
   }
 
+  
   PesantrenLoginResponse? _pesantrenLoginResponse;
+  String? fcmToken;
   bool _passwordVisible = false;
   TextEditingController nisController = TextEditingController();
   TextEditingController pesantrenController = TextEditingController();
@@ -105,6 +114,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
   @override
   void initState() {
     bloc = BlocProvider.of<LoginBloc>(context);
+    
     _getPesantren();
     super.initState();
   }
@@ -287,6 +297,9 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
                         ? ProgressLoading()
                         : ElevatedButton(
                             style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        MyColors.primary),
                                 shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
