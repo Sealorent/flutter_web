@@ -53,7 +53,8 @@ class Constant {
   static const String tahunAjaran = "/tahun_ajaran.php";
   static const String uploadBukti = "/upload_bukti_bayar.php";
   static const String detailTransaksi = "/detail_transaksi.php";
-  static const String ipaymu_tabungan = "/insert_ipaymu_tabungan.php";
+  // static const String ipaymu_tabungan = "/insert_ipaymu_tabungan.php";
+  static const String ipaymu_tabungan = "/insert_ipaymu_tabunganall.php";
   static const String transaksiTabungan = "/list_transaksi_tabungan.php";
   static const String detailtransaksiTabungan =
       "/detail_transaksi_tabungan.php";
