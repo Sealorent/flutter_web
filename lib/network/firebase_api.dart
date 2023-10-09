@@ -4,6 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../preferences/pref_data.dart';
+
 
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -48,7 +50,13 @@ class FirebaseApi {
     final FcmToken = await _firebaseMessaging.getToken();
     print('FcmToken: $FcmToken');
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('FCM_TOKEN', FcmToken ?? '');
+    var getToken = prefs.getString('FCM_TOKEN');
+    
+    if(getToken == null){
+      prefs.setString('FCM_TOKEN', FcmToken ?? '');
+      prefs.getString('FCM_TOKEN');
+    }
+
     FirebaseMessaging.onBackgroundMessage(instantNotify);
     FirebaseMessaging.onMessage.listen(instantNotify);
   }

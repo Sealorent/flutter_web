@@ -64,7 +64,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
   Future getTokenFcm() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var getToken = prefs.getString(PrefData.fcmToken);
+    var getToken = prefs.getString('FCM_TOKEN');
     return getToken;
   }
 
