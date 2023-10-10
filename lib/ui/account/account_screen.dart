@@ -113,7 +113,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           prefs.remove(PrefData.setting);
                           prefs.remove(PrefData.role);
                           prefs.remove(PrefData.TAHUN_AJARAN);
-                          prefs.clear();
+                          // prefs.clear();
 
                           Get.offAll(LoginUserScreen());
                         },
