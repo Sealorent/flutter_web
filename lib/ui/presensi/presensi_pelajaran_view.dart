@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pesantren_flutter/network/response/lesson_response.dart';
+import 'package:pesantren_flutter/network/response/presensi_response_new.dart';
+import 'package:pesantren_flutter/network/response/semester_response.dart';
+import 'package:pesantren_flutter/ui/presensi/bloc/presensi_bloc.dart';
 import 'dart:convert';
 
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_bloc.dart';
@@ -16,6 +20,7 @@ import '../../widget/tahun_ajaran_widget.dart';
 import '../../preferences/pref_data.dart';
 import '../../network/response/tahun_ajaran_response.dart';
 import '../../utils/my_snackbar.dart';
+import '../../model/month.dart';
 
 class PresensiPelajaranView extends StatefulWidget {
   const PresensiPelajaranView({super.key});
@@ -24,69 +29,73 @@ class PresensiPelajaranView extends StatefulWidget {
   State<PresensiPelajaranView> createState() => _PresensiPelajaranViewState();
 }
 
+
+
 class _PresensiPelajaranViewState extends State<PresensiPelajaranView> {
-  TahunAjaranResponse? _tahunAjaranResponse;
+  
   bool _isLoading = true;
-  PresensiPelajaranResponse? _presensiPelajaranResponse;
-  late RekamMedisBloc bloc;
-  List<Tahunajaran> selectedYear = [];
 
-  Future<void> _getTahunAjaran() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var student = prefs.getString(PrefData.TAHUN_AJARAN);
-    print("student : $student");
-    var objectStudent =
-        TahunAjaranResponse.fromJson(json.decode(student ?? ""));
+  late PresensiBloc bloc;
 
-    setState(() {
-      print(student);
-      _tahunAjaranResponse = objectStudent;
-      setAllPeriods();
-    });
-    getData();
-  }
+  List<Lesson>? _lessonResponse;
 
-  void setAllPeriods() {
-    setState(() {
-      selectedPeriods = _tahunAjaranResponse?.tahunajaran
-              ?.map((e) => int.tryParse(e.id ?? "0") ?? 0)
-              .toList() ??
-          [];
-    });
-  }
+  List<Semester>? _semesterResponse;
 
-  List<int> selectedPeriods = [];
+  List<Tahunajaran>? _tahunAjaranResponse;
 
-  void getData() {
-    bloc.add(GetPresensiPelajaran(selectedPeriods));
-  }
+  List<LaporanNew>? _laporanResponse;
+
+  List<Month> months = [
+    Month(value: "JUNI", label: "Juni"),
+    Month(value: "JULI", label: "Juli"),
+    Month(value: "AGUSTUS", label: "Agustus"),
+    Month(value: "SEPTEMBER", label: "September"),
+    Month(value: "OKTOBER", label: "Oktober"),
+    Month(value: "NOVEMBER", label: "November"),
+    Month(value: "DESEMBER", label: "Desember"),
+    Month(value: "JANUARI", label: "Januari"),
+    Month(value: "FEBRUARI", label: "Februari"),
+    Month(value: "MARET", label: "Maret"),
+  ];
+
+
+  // make list month from juni to juli
+
+
+  String? _lessonValue;
+  String? _semesterValue;
+  String? _tahunAjaranValue;
+  String? _monthValue;
+
+
 
   @override
   void initState() {
-    bloc = BlocProvider.of<RekamMedisBloc>(context);
-    _getTahunAjaran();
+    bloc = BlocProvider.of<PresensiBloc>(context);
+    getData();
     super.initState();
   }
 
-  void listener(BuildContext context, RekamMedisState state) async {
-    if (state is GetPresensiPelajaranLoading) {
-      print('load');
+  void getData(){
+    bloc.add(GetLesson());
+    bloc.add(GetSemester());
+    bloc.add(GetTahunAjaran());
+  }
+
+  void listener(BuildContext context, PresensiState state){
+    if(state is Loading){
+      
 
       setState(() {
         _isLoading = true;
       });
-    } else if (state is GetPresensiPelajaranSuccess) {
-      setState(() {
-        _isLoading = false;
-        print('success');
-        _presensiPelajaranResponse = state.response;
-      });
-    } else if (state is FailedState) {
-      _presensiPelajaranResponse = null;
+
+    }else if (state is Error){
 
       setState(() {
         _isLoading = false;
       });
+
       if (state.code == 401 || state.code == 0) {
         // MySnackbar(context)
         //     .errorSnackbar("Terjadi kesalahan");
@@ -95,163 +104,155 @@ class _PresensiPelajaranViewState extends State<PresensiPelajaranView> {
 
       MySnackbar(context)
           .errorSnackbar(state.message + " : " + state.code.toString());
+
+    }else if (state is LessonSuccess){
+      setState(() {
+        _isLoading = false;
+        _lessonResponse = state.response?.lessons; 
+      });
+
+    }else if (state is SemesterSuccess){
+      setState(() {
+        _isLoading = false;
+        _semesterResponse = state.response?.semester; 
+      });
+
+    }else if(state is TahunAjaranSuccess){
+      setState(() {
+        _isLoading = false;
+        _tahunAjaranResponse = state.response?.tahunajaran;
+      });
+    }else if(state is PresensiNewSuccess){
+      setState(() {
+        _isLoading = false;
+        _laporanResponse = state.response?.laporan;
+      });
     }
   }
 
-  void _modalBottomSheetMenu() {
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        builder: (builder) {
-          return TahunAjaranWidget(
-            onSelectTahunAjaran: (tahunAjaran) {
-              if (selectedPeriods.length ==
-                  _tahunAjaranResponse?.tahunajaran?.length) {
-                selectedPeriods.clear();
-              }
-              _tahunAjaranResponse?.tahunajaran?.forEach((element) {
-                if (tahunAjaran.id == element.id) {
-                  element.isSelected = !element.isSelected;
-
-                  if (element.isSelected) {
-                    print("add : ${element.id}");
-                    selectedYear.add(tahunAjaran);
-                    selectedPeriods.add(int.tryParse(element.id ?? "0") ?? 0);
-                  } else {
-                    selectedYear.remove(tahunAjaran);
-                    selectedPeriods.removeWhere((inte) =>
-                        inte == (int.tryParse(element.id ?? "0") ?? 0));
-                  }
-                  setState(() {});
-                  print("selectedPeriods : $selectedPeriods");
-                  getData();
-                }
+  void _showAlertDialog() {
+  // final size = MediaQuery.of(context).size;
+  AlertDialog alertDialog = AlertDialog( 
+    
+    title: Text('Filter'),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        DropdownMenu<String>(
+            label: Text('Pelajaran'),
+            // initialSelection: _lessonResponse?[0].id,
+            onSelected: (String? value) {
+              // This is called when the user selects an item.
+              setState(() {
+                _lessonValue = value!;
               });
             },
-            onSelectAll: () {
-              selectedYear.clear();
-              setAllPeriods();
-              getData();
-            },
-            tahunAjaranResponse: _tahunAjaranResponse,
-          );
-        });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return BlocListener<RekamMedisBloc, RekamMedisState>(
-      listener: listener,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: RefreshIndicator(
-          onRefresh: () async {
-            // selectedYear = null;
-            setState(() {});
-            getData();
-          },
-          child: _isLoading
-              ? ProgressLoading()
-              : ListView(
-                  children: [
-                    SizedBox(
-                      height: 15,
-                    ),
-                    SizedBox(
-                      height: 32,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text("Tahun ajaran"),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                _modalBottomSheetMenu();
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  decoration: BoxDecoration(
-                                    color: selectedYear != null
-                                        ? MyColors.primary.withOpacity(0.3)
-                                        : Color(0xffEBF6F3),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(16.0)),
-                                    border: Border.all(
-                                      color: MyColors.grey_20,
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                  child: Center(
-                                      child: Row(
-                                    children: [
-                                      Visibility(
-                                        visible: selectedYear != null,
-                                        child: Row(
-                                          children: const [
-                                            Icon(
-                                              Icons.check,
-                                              color: MyColors.primary,
-                                              size: 18,
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Text(
-                                        selectedYear.isEmpty
-                                            ? "Semua Tahun"
-                                            : selectedYear
-                                                .map((e) => e.getTitle())
-                                                .toString(),
-                                        style:
-                                            TextStyle(color: MyColors.primary),
-                                      ),
-                                    ],
-                                  )),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: generateList().isEmpty
-                          ? Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 100),
-                                child: Text("Tidak ada data"),
-                              ),
-                            )
-                          : Column(children: generateList()),
-                    )
-                  ],
-                ),
+            dropdownMenuEntries: (_lessonResponse ?? []).map<DropdownMenuEntry<String>>((Lesson lesson) {
+                return DropdownMenuEntry<String>(
+                  value: lesson.id, 
+                  label: lesson.lessonName
+                );
+              }).toList(),
         ),
+        SizedBox(
+          height: 10,
+        ),
+        DropdownMenu<String>(
+            label: Text('Tahun Ajaran'),
+            width: 250,
+            // initialSelection: _tahunAjaranResponse?[0].id,
+            onSelected: (String? value) {
+              // This is called when the user selects an item.
+              setState(() {
+                _tahunAjaranValue = value!;
+              });
+            },
+            dropdownMenuEntries: (_tahunAjaranResponse ?? []).map<DropdownMenuEntry<String>>((Tahunajaran ta) {
+                return DropdownMenuEntry<String>(
+                  value: ta.id.toString(), 
+                  // make string 
+                  label: ta.periodStart.toString() + "/" + ta.periodEnd.toString()
+                );
+              }).toList(),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        DropdownMenu<String>(
+            label: Text('Semester'),
+            width: 250,
+            // initialSelection: _semesterResponse?[0].semester,
+            onSelected: (String? value) {
+              // This is called when the user selects an item.
+              setState(() {
+                _semesterValue = value!;
+              });
+            },
+            dropdownMenuEntries: (_semesterResponse ?? []).map<DropdownMenuEntry<String>>((Semester semester) {
+                return DropdownMenuEntry<String>(
+                  value: semester.id, 
+                  label: semester.semester
+                );
+              }).toList(),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        DropdownMenu<String>(
+            label: Text('Bulan'),
+            width: 250,
+            // initialSelection: months[0].value,
+            onSelected: (String? value) {
+              // This is called when the user selects an item.
+              setState(() {
+                _monthValue = value!;
+              });
+            },
+            dropdownMenuEntries: months.map<DropdownMenuEntry<String>>((Month month) {
+                return DropdownMenuEntry<String>(
+                  value: month.value, 
+                  label: month.label
+                );
+              }).toList(),
+        ),
+      ],
+    ),
+    actions: [
+      TextButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Text('Cancel'),
       ),
-    );
-  }
+      TextButton(
+        onPressed: () {
+          
+          if( _lessonValue != null && _semesterValue != null && _monthValue != null && _tahunAjaranValue != null){
+            bloc.add(GetPresensiNew(_lessonValue, _semesterValue, _monthValue, _tahunAjaranValue));
+          }else{
+            // create snackbar
+             MySnackbar(context)
+          .errorSnackbar("lengkapi filter");
 
+          }
+          print('lesson $_lessonValue, semester $_semesterValue, month $_monthValue, TA $_tahunAjaranValue');
+          Navigator.pop(context);
+
+        },
+        child: Text('Filter'),
+      ),
+    ],
+  );
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alertDialog;
+    },
+  );
+}
   List<Widget> generateList() {
-    print("generateList : ${_presensiPelajaranResponse?.laporan?.length}");
-    print(
-        'generateList : ${_presensiPelajaranResponse?.laporan?.map((e) => e.detail?.pelajaran).toList()}');
-    return _presensiPelajaranResponse?.laporan
-            ?.map((e) => InkWell(
+    return _laporanResponse?.map((e) => InkWell(
                   onTap: () {},
                   child: Column(
                     children: [
@@ -262,25 +263,29 @@ class _PresensiPelajaranViewState extends State<PresensiPelajaranView> {
                       Row(
                         children: [
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                e.detail?.pelajaran ?? "",
+                               e.detail.pelajaran,
                                 style: TextStyle(fontSize: 16),
                               ),
-                              Text(
-                                DateFormat("dd MMM yyyy").format(
-                                    e.detail?.tanggal ?? DateTime.now()),
-                                style: TextStyle(fontSize: 12),
+                              SizedBox(
+                                height: 2,
                               ),
+                              Text(
+                                 DateFormat("dd MMM yyyy").format(
+                                    DateTime.parse(e.detail.tanggal as String? ?? DateTime.now().toString()),
+                                  ),
+                                style: TextStyle(fontSize: 12),
+                              )
                             ],
                           ),
+                         
                           Spacer(),
                           Text(
-                            e.detail?.kehadiran == "H" ? "Hadir" : "Absen",
+                            e.detail.kehadiran == "H" ? "Hadir" : "Absen",
                             style: TextStyle(
                                 fontSize: 12,
-                                color: e.detail?.kehadiran == "H"
+                                color: e.detail.kehadiran == "H"
                                     ? Colors.green
                                     : Colors.red),
                           ),
@@ -295,4 +300,67 @@ class _PresensiPelajaranViewState extends State<PresensiPelajaranView> {
             .toList() ??
         [];
   }
+  
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return BlocListener<PresensiBloc, PresensiState>(
+      listener: listener,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            // selectedYear = null;
+          },
+          child: _isLoading
+              ? ProgressLoading()
+              : ListView(
+                children: [
+                  SizedBox(
+                    height: 15,
+                  ),
+                  // Header
+                  SizedBox(
+                      height: 32,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text("Filter"),
+                            ),
+                            IconButton(
+                              onPressed: (){
+                                _showAlertDialog();
+                              }, 
+                              iconSize: 20,
+                              icon: const Icon(Icons.filter_list)
+                            )
+                          ],
+                        ),
+                      ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: generateList().isEmpty
+                          ? Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 100),
+                                child: Text("Tidak ada data"),
+                              ),
+                            )
+                          : Column(children: generateList()),
+                    )
+
+                ],
+              )
+        ),
+      ),
+    );
+  }
+
+  
 }

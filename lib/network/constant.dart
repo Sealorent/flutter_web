@@ -59,4 +59,7 @@ class Constant {
   static const String transaksiTabungan = "/list_transaksi_tabungan.php";
   static const String detailtransaksiTabungan =
       "/detail_transaksi_tabungan.php";
+  static const String lesson = "/lesson.php";
+  static const String semester = "/semester.php";
+  static const String presensiNew = "/presensi_pelajaran2.php";
 }

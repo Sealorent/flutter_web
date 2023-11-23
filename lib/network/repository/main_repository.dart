@@ -12,6 +12,7 @@ import 'package:pesantren_flutter/network/response/history_response.dart';
 import 'package:pesantren_flutter/network/response/information_response.dart';
 import 'package:pesantren_flutter/network/response/izin_response.dart';
 import 'package:pesantren_flutter/network/response/konseling_response.dart';
+import 'package:pesantren_flutter/network/response/lesson_response.dart';
 import 'package:pesantren_flutter/network/response/mudif_response.dart';
 import 'package:pesantren_flutter/network/response/payment_bebas_response.dart';
 import 'package:pesantren_flutter/network/response/payment_response.dart';
@@ -20,10 +21,12 @@ import 'package:pesantren_flutter/network/response/presensi_response.dart';
 import 'package:pesantren_flutter/network/response/pulang_response.dart';
 import 'package:pesantren_flutter/network/response/rekam_medis_response.dart';
 import 'package:pesantren_flutter/network/response/ringkasan_response.dart';
+import 'package:pesantren_flutter/network/response/semester_response.dart';
 import 'package:pesantren_flutter/network/response/student_login_response.dart';
 import 'package:pesantren_flutter/network/response/tahfidz_response.dart';
 import 'package:pesantren_flutter/network/response/top_up_tabungan_response.dart';
 import 'package:pesantren_flutter/preferences/pref_data.dart';
+import 'package:pesantren_flutter/ui/presensi/bloc/presensi_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constant.dart';
@@ -39,9 +42,12 @@ import '../response/saving_response.dart';
 import '../response/setting_response.dart';
 import '../response/tahun_ajaran_response.dart';
 import '../response/presensi_pelajaran_response.dart';
+import '../response/presensi_response_new.dart';
 
 abstract class MainRepository {
   Future<InformationResponse?> getInformation();
+  Future<LessonResponse?> getLesson();
+  Future<SemesterResponse?> getSemester();
   Future<SavingResponse?> getSavings();
   Future<TahfidzResponse?> getTahfidz();
   Future<RekamMedisResponse?> getRekamMedis();
@@ -49,6 +55,7 @@ abstract class MainRepository {
   Future<IzinResponse?> getIzinKeluar();
   Future<PulangResponse?> getIzinPulang();
   Future<MudifResponse?> getMudif();
+  Future<PresensiResponseNew?> getPresensiNew(String? lessonId, String? semesterId, String? month, String? periodId);
   Future<Object> postIzinPulang(IzinPulangParam param);
   Future<Object> postIzinKeluar(IzinKeluarParam param);
   Future<PaymentResponse> getPayments(List<int> periodIds);
@@ -371,6 +378,51 @@ class MainRepositoryImpl extends MainRepository {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<LessonResponse> getLesson() async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.post(Constant.lesson, data : {
+        "kode_sekolah": pesantren.kodeSekolah,
+        "nis": student.nis,
+      });
+      print("lesson ${response.data}");
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode && response.data != null) {
+        return LessonResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<SemesterResponse?> getSemester() async {
+    var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      final response = await _dioClient.post(Constant.semester, data : {
+        "kode_sekolah": pesantren.kodeSekolah,
+        "nis": student.nis,
+      });
+      print("semester ${response.data}");
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode && response.data != null) {
+        return SemesterResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
 
   @override
   Future<PresensiResponse> getPresensi(int bulan) async {
@@ -786,4 +838,46 @@ class MainRepositoryImpl extends MainRepository {
       throw Exception(e);
     }
   }
+  
+  @override
+  Future<PresensiResponseNew?> getPresensiNew(String? lessonId, String? semesterId, String? month, String? periodId) async {
+
+     var student = await _getUser();
+    var pesantren = await _getPesantren();
+    try {
+      Map<String, dynamic> postData = {
+        "nis": student.nis,
+        "kode_sekolah": pesantren.kodeSekolah,
+        "pelajaran": lessonId,
+        "bulan": month,
+        "period": periodId,
+        "semester": semesterId
+      };
+      // Map<String, dynamic> postData = {
+      //   "nis": "10025",
+      //   "kode_sekolah": '2012008',
+      //   "pelajaran": '7',
+      //   "bulan": 'OKTOBER',
+      //   "period": '14',
+      //   "semester": '5'
+      // };
+      final response = await _dioClient.post(Constant.presensiNew, data : postData);
+      // print payload
+      print("Payload $postData");
+
+      print("presensiNew ${response.data}");
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode && response.data != null) {
+        return PresensiResponseNew.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+   
+  }
+  
+  
 }

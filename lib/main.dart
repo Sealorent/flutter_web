@@ -17,6 +17,7 @@ import 'package:pesantren_flutter/ui/mudif/mudif_bloc.dart';
 import 'package:pesantren_flutter/ui/mudif/mudif_screen.dart';
 import 'package:pesantren_flutter/ui/payment/main/payment_screen.dart';
 import 'package:pesantren_flutter/ui/payment/payment_bloc.dart';
+import 'package:pesantren_flutter/ui/presensi/bloc/presensi_bloc.dart';
 import 'package:pesantren_flutter/ui/presensi/presensi_screen.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_bloc.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_screen.dart';
@@ -68,6 +69,11 @@ void main() async {
       create: (context) => RekamMedisBloc(
         MainRepositoryImpl(DioClient().init(alice, context)),
       ),
+    ),
+    BlocProvider<PresensiBloc>(
+      create: (context) =>  PresensiBloc(
+        MainRepositoryImpl(DioClient().init(alice, context))
+      )
     ),
     BlocProvider<KonselingBloc>(
       create: (context) => KonselingBloc(
