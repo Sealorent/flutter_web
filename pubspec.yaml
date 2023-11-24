@@ -50,6 +50,7 @@ dependencies:
   firebase_core: ^2.15.1
   awesome_notifications_fcm: ^0.7.4+1
   awesome_notifications: ^0.7.4+1
+  google_fonts: ^4.0.4
 
 flutter_icons:
   android: "launcher_icon"

@@ -360,7 +360,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           return InkWell(
                             onTap: () {
                               if (_user?.navmenu![index].name == "Donasi" ||
-                                  _user?.navmenu![index].name == "Penginapan" ||
                                   _user?.navmenu![index].name == "Lainnya") {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(

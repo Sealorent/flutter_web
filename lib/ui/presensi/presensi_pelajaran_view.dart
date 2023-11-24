@@ -132,125 +132,129 @@ class _PresensiPelajaranViewState extends State<PresensiPelajaranView> {
 
   void _showAlertDialog() {
   // final size = MediaQuery.of(context).size;
-  AlertDialog alertDialog = AlertDialog( 
-    
-    title: Text('Filter'),
-    content: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        DropdownMenu<String>(
-            label: Text('Pelajaran'),
-            // initialSelection: _lessonResponse?[0].id,
-            onSelected: (String? value) {
-              // This is called when the user selects an item.
-              setState(() {
-                _lessonValue = value!;
-              });
-            },
-            dropdownMenuEntries: (_lessonResponse ?? []).map<DropdownMenuEntry<String>>((Lesson lesson) {
-                return DropdownMenuEntry<String>(
-                  value: lesson.id, 
-                  label: lesson.lessonName
-                );
-              }).toList(),
+    AlertDialog alertDialog = AlertDialog( 
+      
+      title: Text('Filter'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          DropdownMenu<String>(
+              width: 250,
+              label: Text('Pelajaran'),
+              // initialSelection: _lessonResponse?[0].id,
+              onSelected: (String? value) {
+                // This is called when the user selects an item.
+                setState(() {
+                  _lessonValue = value!;
+                });
+              },
+              dropdownMenuEntries: (_lessonResponse ?? []).map<DropdownMenuEntry<String>>((Lesson lesson) {
+                  return DropdownMenuEntry<String>(
+                    value: lesson.id, 
+                    label: lesson.lessonName
+                  );
+                }).toList(),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          DropdownMenu<String>(
+              label: Text('Tahun Ajaran'),
+              width: 250,
+              // initialSelection: _tahunAjaranResponse?[0].id,
+              onSelected: (String? value) {
+                // This is called when the user selects an item.
+                setState(() {
+                  _tahunAjaranValue = value!;
+                });
+              },
+              dropdownMenuEntries: (_tahunAjaranResponse ?? []).map<DropdownMenuEntry<String>>((Tahunajaran ta) {
+                  return DropdownMenuEntry<String>(
+                    value: ta.id.toString(), 
+                    // make string 
+                    label: ta.periodStart.toString() + "/" + ta.periodEnd.toString()
+                  );
+                }).toList(),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          DropdownMenu<String>(
+              label: Text('Semester'),
+              width: 250,
+              // initialSelection: _semesterResponse?[0].semester,
+              onSelected: (String? value) {
+                // This is called when the user selects an item.
+                setState(() {
+                  _semesterValue = value!;
+                });
+              },
+              dropdownMenuEntries: (_semesterResponse ?? []).map<DropdownMenuEntry<String>>((Semester semester) {
+                  return DropdownMenuEntry<String>(
+                    value: semester.id, 
+                    label: semester.semester
+                  );
+                }).toList(),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          DropdownMenu<String>(
+              label: Text('Bulan'),
+              width: 250,
+              // initialSelection: months[0].value,
+              onSelected: (String? value) {
+                // This is called when the user selects an item.
+                setState(() {
+                  _monthValue = value!;
+                });
+              },
+              dropdownMenuEntries: months.map<DropdownMenuEntry<String>>((Month month) {
+                  return DropdownMenuEntry<String>(
+                    value: month.value, 
+                    label: month.label
+                  );
+                }).toList(),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Cancel'),
         ),
-        SizedBox(
-          height: 10,
-        ),
-        DropdownMenu<String>(
-            label: Text('Tahun Ajaran'),
-            width: 250,
-            // initialSelection: _tahunAjaranResponse?[0].id,
-            onSelected: (String? value) {
-              // This is called when the user selects an item.
-              setState(() {
-                _tahunAjaranValue = value!;
-              });
-            },
-            dropdownMenuEntries: (_tahunAjaranResponse ?? []).map<DropdownMenuEntry<String>>((Tahunajaran ta) {
-                return DropdownMenuEntry<String>(
-                  value: ta.id.toString(), 
-                  // make string 
-                  label: ta.periodStart.toString() + "/" + ta.periodEnd.toString()
-                );
-              }).toList(),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        DropdownMenu<String>(
-            label: Text('Semester'),
-            width: 250,
-            // initialSelection: _semesterResponse?[0].semester,
-            onSelected: (String? value) {
-              // This is called when the user selects an item.
-              setState(() {
-                _semesterValue = value!;
-              });
-            },
-            dropdownMenuEntries: (_semesterResponse ?? []).map<DropdownMenuEntry<String>>((Semester semester) {
-                return DropdownMenuEntry<String>(
-                  value: semester.id, 
-                  label: semester.semester
-                );
-              }).toList(),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        DropdownMenu<String>(
-            label: Text('Bulan'),
-            width: 250,
-            // initialSelection: months[0].value,
-            onSelected: (String? value) {
-              // This is called when the user selects an item.
-              setState(() {
-                _monthValue = value!;
-              });
-            },
-            dropdownMenuEntries: months.map<DropdownMenuEntry<String>>((Month month) {
-                return DropdownMenuEntry<String>(
-                  value: month.value, 
-                  label: month.label
-                );
-              }).toList(),
+        TextButton(
+          onPressed: () {
+            
+            if( _lessonValue != null && _semesterValue != null && _monthValue != null && _tahunAjaranValue != null){
+
+              bloc.add(GetPresensiNew(_lessonValue, _semesterValue, _monthValue, _tahunAjaranValue));
+            }else{
+
+              // create snackbar
+              MySnackbar(context).errorSnackbar("Filter Kurang Lengkap");
+            }
+
+            print('lesson $_lessonValue, semester $_semesterValue, month $_monthValue, TA $_tahunAjaranValue');
+
+            Navigator.pop(context);
+
+          },
+          child: Text('Filter'),
         ),
       ],
-    ),
-    actions: [
-      TextButton(
-        onPressed: () {
-          Navigator.pop(context);
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+          return alertDialog;
         },
-        child: Text('Cancel'),
-      ),
-      TextButton(
-        onPressed: () {
-          
-          if( _lessonValue != null && _semesterValue != null && _monthValue != null && _tahunAjaranValue != null){
-            bloc.add(GetPresensiNew(_lessonValue, _semesterValue, _monthValue, _tahunAjaranValue));
-          }else{
-            // create snackbar
-             MySnackbar(context)
-          .errorSnackbar("lengkapi filter");
+    );
+  }
 
-          }
-          print('lesson $_lessonValue, semester $_semesterValue, month $_monthValue, TA $_tahunAjaranValue');
-          Navigator.pop(context);
-
-        },
-        child: Text('Filter'),
-      ),
-    ],
-  );
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alertDialog;
-    },
-  );
-}
   List<Widget> generateList() {
     return _laporanResponse?.map((e) => InkWell(
                   onTap: () {},
@@ -354,7 +358,6 @@ class _PresensiPelajaranViewState extends State<PresensiPelajaranView> {
                             )
                           : Column(children: generateList()),
                     )
-
                 ],
               )
         ),

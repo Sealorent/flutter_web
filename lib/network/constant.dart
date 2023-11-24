@@ -62,4 +62,5 @@ class Constant {
   static const String lesson = "/lesson.php";
   static const String semester = "/semester.php";
   static const String presensiNew = "/presensi_pelajaran2.php";
+  static const String penginapan = "/list_homestay.php";
 }

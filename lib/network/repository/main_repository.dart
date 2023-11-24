@@ -13,6 +13,7 @@ import 'package:pesantren_flutter/network/response/information_response.dart';
 import 'package:pesantren_flutter/network/response/izin_response.dart';
 import 'package:pesantren_flutter/network/response/konseling_response.dart';
 import 'package:pesantren_flutter/network/response/lesson_response.dart';
+import 'package:pesantren_flutter/network/response/list_homestay_response.dart';
 import 'package:pesantren_flutter/network/response/mudif_response.dart';
 import 'package:pesantren_flutter/network/response/payment_bebas_response.dart';
 import 'package:pesantren_flutter/network/response/payment_response.dart';
@@ -26,6 +27,7 @@ import 'package:pesantren_flutter/network/response/student_login_response.dart';
 import 'package:pesantren_flutter/network/response/tahfidz_response.dart';
 import 'package:pesantren_flutter/network/response/top_up_tabungan_response.dart';
 import 'package:pesantren_flutter/preferences/pref_data.dart';
+import 'package:pesantren_flutter/ui/penginapan/bloc/penginapan_bloc.dart';
 import 'package:pesantren_flutter/ui/presensi/bloc/presensi_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,6 +58,7 @@ abstract class MainRepository {
   Future<PulangResponse?> getIzinPulang();
   Future<MudifResponse?> getMudif();
   Future<PresensiResponseNew?> getPresensiNew(String? lessonId, String? semesterId, String? month, String? periodId);
+  Future<PenginapanResponse?> getHomeStay();
   Future<Object> postIzinPulang(IzinPulangParam param);
   Future<Object> postIzinKeluar(IzinKeluarParam param);
   Future<PaymentResponse> getPayments(List<int> periodIds);
@@ -877,6 +880,30 @@ class MainRepositoryImpl extends MainRepository {
       throw Exception(e);
     }
    
+  }
+  
+  @override
+  Future<PenginapanResponse?> getHomeStay() async {
+    var pesantren = await _getPesantren();
+    try {
+      var data = FormData.fromMap({
+        "kode_sekolah": pesantren.kodeSekolah
+      });
+      final response = await _dioClient.post(Constant.penginapan, data : data );
+      // print payload
+      print("Payload ${pesantren.kodeSekolah}");
+      print("response ${response.data}" );
+
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode && response.data != null) {
+        return PenginapanResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
   }
   
   

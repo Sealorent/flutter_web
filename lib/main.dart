@@ -1,3 +1,4 @@
+
 import 'package:alice_lightweight/alice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +18,7 @@ import 'package:pesantren_flutter/ui/mudif/mudif_bloc.dart';
 import 'package:pesantren_flutter/ui/mudif/mudif_screen.dart';
 import 'package:pesantren_flutter/ui/payment/main/payment_screen.dart';
 import 'package:pesantren_flutter/ui/payment/payment_bloc.dart';
+import 'package:pesantren_flutter/ui/penginapan/bloc/penginapan_bloc.dart';
 import 'package:pesantren_flutter/ui/presensi/bloc/presensi_bloc.dart';
 import 'package:pesantren_flutter/ui/presensi/presensi_screen.dart';
 import 'package:pesantren_flutter/ui/rekam_medis/rekam_medis_bloc.dart';
@@ -28,6 +30,7 @@ import 'package:pesantren_flutter/ui/tahfidz/tahfidz_bloc.dart';
 import 'package:pesantren_flutter/ui/tahfidz/tahfidz_screen.dart';
 import 'package:shake/shake.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pesantren_flutter/ui/penginapan/view/penginapan.dart';
 
 import 'network/dio_client.dart';
 import 'network/firebase_api.dart';
@@ -95,6 +98,11 @@ void main() async {
         MainRepositoryImpl(DioClient().init(alice, context)),
       ),
     ),
+    BlocProvider<PenginapanBloc>(
+      create: (context) => PenginapanBloc(
+        MainRepositoryImpl(DioClient().init(alice, context)),
+      ),
+    )
   ], child: MyApp(alice)));
 }
 
@@ -125,6 +133,7 @@ class MyApp extends StatelessWidget {
         '/Presensi': (context) => PresensiScreen(),
         '/Rekam Medis': (context) => RekamMedisScreen(),
         '/Kunjungan': (context) => MudifScreen(),
+        '/Penginapan' : (context) => Penginapan(),
       },
     );
   }
