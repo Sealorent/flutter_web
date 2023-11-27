@@ -12,3 +12,13 @@ class GetPenginapan extends PenginapanEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetDetailPenginapan extends PenginapanEvent {
+
+  String? homestayId;
+  
+  GetDetailPenginapan(this.homestayId);
+
+@override
+List<Object> get props => [];
+}

@@ -33,3 +33,12 @@ class PenginapanSuccess extends PenginapanState {
   @override
   List<Object> get props => [];
 }
+
+class DetailSuccess extends PenginapanState {
+  final DetailPenginapanResponse? response;
+
+  DetailSuccess(this.response);
+
+  @override
+  List<Object> get props => [];
+}

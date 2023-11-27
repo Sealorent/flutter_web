@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pesantren_flutter/network/repository/main_repository.dart';
+import 'package:pesantren_flutter/network/response/detail_penginapan_response.dart';
 import 'package:pesantren_flutter/network/response/list_homestay_response.dart';
 
 part 'penginapan_event.dart';
@@ -17,8 +18,18 @@ class PenginapanBloc extends Bloc<PenginapanEvent, PenginapanState> {
       try {
         yield Loading();
         var response = await repository.getHomeStay();
-        print('res : $response');
         yield PenginapanSuccess(response);
+      } catch (e) {
+        print(e);
+        yield Error('error', 0);
+      }
+    }
+
+    if (event is GetDetailPenginapan ) {
+      try {
+        yield Loading();
+        var response = await repository.getDetailPenginapan(event.homestayId);
+        yield DetailSuccess(response);
       } catch (e) {
         print(e);
         yield Error('error', 0);

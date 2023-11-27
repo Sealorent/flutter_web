@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:pesantren_flutter/network/response/lesson_response.dart';
 import 'package:pesantren_flutter/network/response/presensi_response_new.dart';
@@ -15,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:pesantren_flutter/widget/progress_loading.dart';
 import 'package:tree_view/tree_view.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
+
 
 import '../../widget/tahun_ajaran_widget.dart';
 import '../../preferences/pref_data.dart';
@@ -132,126 +134,269 @@ class _PresensiPelajaranViewState extends State<PresensiPelajaranView> {
 
   void _showAlertDialog() {
   // final size = MediaQuery.of(context).size;
-    AlertDialog alertDialog = AlertDialog( 
-      
-      title: Text('Filter'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          DropdownMenu<String>(
-              width: 250,
-              label: Text('Pelajaran'),
-              // initialSelection: _lessonResponse?[0].id,
-              onSelected: (String? value) {
-                // This is called when the user selects an item.
-                setState(() {
-                  _lessonValue = value!;
-                });
-              },
-              dropdownMenuEntries: (_lessonResponse ?? []).map<DropdownMenuEntry<String>>((Lesson lesson) {
-                  return DropdownMenuEntry<String>(
-                    value: lesson.id, 
-                    label: lesson.lessonName
-                  );
-                }).toList(),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          DropdownMenu<String>(
-              label: Text('Tahun Ajaran'),
-              width: 250,
-              // initialSelection: _tahunAjaranResponse?[0].id,
-              onSelected: (String? value) {
-                // This is called when the user selects an item.
-                setState(() {
-                  _tahunAjaranValue = value!;
-                });
-              },
-              dropdownMenuEntries: (_tahunAjaranResponse ?? []).map<DropdownMenuEntry<String>>((Tahunajaran ta) {
-                  return DropdownMenuEntry<String>(
-                    value: ta.id.toString(), 
-                    // make string 
-                    label: ta.periodStart.toString() + "/" + ta.periodEnd.toString()
-                  );
-                }).toList(),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          DropdownMenu<String>(
-              label: Text('Semester'),
-              width: 250,
-              // initialSelection: _semesterResponse?[0].semester,
-              onSelected: (String? value) {
-                // This is called when the user selects an item.
-                setState(() {
-                  _semesterValue = value!;
-                });
-              },
-              dropdownMenuEntries: (_semesterResponse ?? []).map<DropdownMenuEntry<String>>((Semester semester) {
-                  return DropdownMenuEntry<String>(
-                    value: semester.id, 
-                    label: semester.semester
-                  );
-                }).toList(),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          DropdownMenu<String>(
-              label: Text('Bulan'),
-              width: 250,
-              // initialSelection: months[0].value,
-              onSelected: (String? value) {
-                // This is called when the user selects an item.
-                setState(() {
-                  _monthValue = value!;
-                });
-              },
-              dropdownMenuEntries: months.map<DropdownMenuEntry<String>>((Month month) {
-                  return DropdownMenuEntry<String>(
-                    value: month.value, 
-                    label: month.label
-                  );
-                }).toList(),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            
-            if( _lessonValue != null && _semesterValue != null && _monthValue != null && _tahunAjaranValue != null){
-
-              bloc.add(GetPresensiNew(_lessonValue, _semesterValue, _monthValue, _tahunAjaranValue));
-            }else{
-
-              // create snackbar
-              MySnackbar(context).errorSnackbar("Filter Kurang Lengkap");
-            }
-
-            print('lesson $_lessonValue, semester $_semesterValue, month $_monthValue, TA $_tahunAjaranValue');
-
-            Navigator.pop(context);
-
-          },
-          child: Text('Filter'),
-        ),
-      ],
-    );
-
+    // AlertDialog alertDialog = 
+    final _formKey = GlobalKey<FormState>();
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-          return alertDialog;
+      builder: (context) => StatefulBuilder(
+      builder: (BuildContext context, setStateSB) {
+          return AlertDialog( 
+              title: Text('Filter'),
+              content: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  
+                  children: [
+                    DropdownButtonHideUnderline(
+                        child: DropdownButtonFormField2<String>(
+                          decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          // Add more decoration..
+                        ),
+                        isDense: true, 
+                        isExpanded: true,
+                        hint: Text(
+                          'Pilih Pelajaran',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                        items: (_lessonResponse ?? [])
+                            .map((Lesson item) => DropdownMenuItem<String>(
+                                  value: item.id,
+                                  child: Text(
+                                    item.lessonName,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: _lessonValue,
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Pilih Pelajaran terlebih dahulu.';
+                          }
+                          return null;
+                        },
+                        onChanged: (String? value) {
+                          setStateSB(() {
+                            _lessonValue = value;
+                          });
+                        },
+                        buttonStyleData: const ButtonStyleData(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          height: 40,
+                          width: 140,
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    DropdownButtonHideUnderline(
+                        child: DropdownButtonFormField2<String>(
+                          decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          // Add more decoration..
+                        ),
+                        isDense: true, 
+                        isExpanded: true,
+                        hint: Text(
+                          'Pilih Tahun Ajaran',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                        items: _tahunAjaranResponse
+                            !.map((Tahunajaran item) => DropdownMenuItem<String>(
+                                  value: item.id,
+                                  child: Text(
+                                    item.periodStart.toString() + "/" + item.periodEnd.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: _tahunAjaranValue,
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Pilih Tahun Ajaran terlebih dahulu.';
+                          }
+                          return null;
+                        },
+                        onChanged: (String? value) {
+                          setStateSB(() {
+                            _tahunAjaranValue = value;
+                          });
+                        },
+                        buttonStyleData: const ButtonStyleData(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          height: 40,
+                          width: 140,
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+                    DropdownButtonHideUnderline(
+                        child: DropdownButtonFormField2<String>(
+                          decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          // Add more decoration..
+                        ),
+                        isDense: true, 
+                        isExpanded: true,
+                        hint: Text(
+                          'Pilih Semester',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                        items: (_semesterResponse ?? [])
+                            .map((Semester item) => DropdownMenuItem<String>(
+                                  value: item.id,
+                                  child: Text(
+                                    item.semester,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: _semesterValue,
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Pilih Semester terlebih dahulu.';
+                          }
+                          return null;
+                        },
+                        onChanged: (String? value) {
+                          print('Select Item: $value');
+                          setStateSB(() {
+                            _semesterValue = value;
+                            print('Select Sem: $_semesterValue');
+                          });
+                        },
+                        buttonStyleData: const ButtonStyleData(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          height: 40,
+                          width: 140,
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+                    DropdownButtonHideUnderline(
+                        child: DropdownButtonFormField2<String>(
+                          decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          // Add more decoration..
+                        ),
+                        isDense: true, 
+                        isExpanded: true,
+                        hint: Text(
+                          'Pilih Bulan',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                        items: months.map((Month item) => DropdownMenuItem<String>(
+                                  value: item.value,
+                                  child: Text(
+                                    item.label,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: _monthValue,
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Pilih Bulan terlebih dahulu.';
+                          }
+                          return null;
+                        },
+                        onChanged: (String? value) {
+                          setStateSB(() {
+                            _monthValue = value;
+                          });
+                        },
+                        buttonStyleData: const ButtonStyleData(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          height: 40,
+                          width: 140,
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // _formKey.currentState!.save();
+                      bloc.add(GetPresensiNew(_lessonValue, _semesterValue, _monthValue, _tahunAjaranValue));
+                    }
+
+
+                    
+                    // if( _lessonValue != null && _semesterValue != null && _monthValue != null && _tahunAjaranValue != null){
+
+                    //   bloc.add(GetPresensiNew(_lessonValue, _semesterValue, _monthValue, _tahunAjaranValue));
+                    // }else{
+
+                    //   // create snackbar
+                    //   // MySnackbar(context).errorSnackbar("Filter Kurang Lengkap");
+                    // }
+
+                    // print('lesson $_lessonValue, semester $_semesterValue, month $_monthValue, TA $_tahunAjaranValue');
+
+                    // // Navigator.pop(context);
+
+                  },
+                  child: Text('Filter'),
+                ),
+              ],
+            );
         },
+      ),
     );
   }
 
@@ -365,5 +510,54 @@ class _PresensiPelajaranViewState extends State<PresensiPelajaranView> {
     );
   }
 
+
+// Widget CustomDropdown<T>(
+//   List<T> itemList,
+//   T? selectedValue,
+//   void Function(void Function()) updateState,
+//   String Function(T) itemLabel,
+//   T Function(T) itemValue,
+// ) {
+//   return DropdownButtonHideUnderline(
+//     child: DropdownButton2<T>(
+//       isDense: true,
+//       isExpanded: true,
+//       hint: Text(
+//         'Select Item',
+//         style: TextStyle(
+//           fontSize: 14,
+//           color: Theme.of(context).hintColor,
+//         ),
+//       ),
+//       items: itemList
+//           .map((T item) => DropdownMenuItem<T>(
+//                 value: itemValue(item),
+//                 child: Text(
+//                   itemLabel(item),
+//                   style: const TextStyle(
+//                     fontSize: 14,
+//                   ),
+//                 ),
+//               ))
+//           .toList(),
+//       value: selectedValue,
+//       onChanged: (T? value) {
+//         print('Select Item: $value');
+//         updateState(() {
+//           selectedValue = value;
+//           print('Select Sem: $selectedValue');
+//         });
+//       },
+//       buttonStyleData: const ButtonStyleData(
+//         padding: EdgeInsets.symmetric(horizontal: 16),
+//         height: 40,
+//         width: 140,
+//       ),
+//       menuItemStyleData: const MenuItemStyleData(
+//         height: 40,
+//       ),
+//     ),
+//   );
+// }
   
 }
