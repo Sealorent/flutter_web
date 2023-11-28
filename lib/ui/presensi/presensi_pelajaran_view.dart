@@ -218,8 +218,7 @@ class _PresensiPelajaranViewState extends State<PresensiPelajaranView> {
                             color: Theme.of(context).hintColor,
                           ),
                         ),
-                        items: _tahunAjaranResponse
-                            !.map((Tahunajaran item) => DropdownMenuItem<String>(
+                        items: (_tahunAjaranResponse ?? []).map((Tahunajaran item) => DropdownMenuItem<String>(
                                   value: item.id,
                                   child: Text(
                                     item.periodStart.toString() + "/" + item.periodEnd.toString(),
