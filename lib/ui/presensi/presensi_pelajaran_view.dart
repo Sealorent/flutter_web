@@ -373,6 +373,8 @@ class _PresensiPelajaranViewState extends State<PresensiPelajaranView> {
                     if (_formKey.currentState!.validate()) {
                       // _formKey.currentState!.save();
                       bloc.add(GetPresensiNew(_lessonValue, _semesterValue, _monthValue, _tahunAjaranValue));
+                      Navigator.pop(context);
+
                     }
 
 
@@ -388,7 +390,6 @@ class _PresensiPelajaranViewState extends State<PresensiPelajaranView> {
 
                     // print('lesson $_lessonValue, semester $_semesterValue, month $_monthValue, TA $_tahunAjaranValue');
 
-                    // // Navigator.pop(context);
 
                   },
                   child: Text('Filter'),
