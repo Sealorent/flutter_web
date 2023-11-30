@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pesantren_flutter/network/response/list_homestay_response.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
+import 'package:pesantren_flutter/ui/dashboard/dashboard_screen.dart';
 import 'package:pesantren_flutter/ui/penginapan/bloc/penginapan_bloc.dart';
 import 'package:pesantren_flutter/ui/penginapan/view/detail.dart';
 import 'package:pesantren_flutter/utils/fonts_utils.dart';
@@ -91,7 +92,7 @@ class _PenginapanState extends State<Penginapan> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: (){
-                Navigator.pop(context);
+                ScreenUtils(context).navigateTo(DashboardScreen(null));
               },
               icon: const Icon(
                 Icons.arrow_back_ios,

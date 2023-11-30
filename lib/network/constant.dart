@@ -64,4 +64,5 @@ class Constant {
   static const String presensiNew = "/presensi_pelajaran2.php";
   static const String penginapan = "/list_homestay.php";
   static const String detailPenginapan = "/detail_homestay.php";
+  static const String listDonasi = "/program_donasi.php";
 }

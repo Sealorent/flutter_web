@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:pesantren_flutter/network/repository/authentication_repository.dart';
 import 'package:pesantren_flutter/network/repository/main_repository.dart';
 import 'package:pesantren_flutter/res/my_colors.dart';
+import 'package:pesantren_flutter/ui/donasi/bloc/donasi_bloc.dart';
+import 'package:pesantren_flutter/ui/donasi/view/donasi.dart';
 import 'package:pesantren_flutter/ui/home/home_bloc.dart';
 import 'package:pesantren_flutter/ui/izin/izin_bloc.dart';
 import 'package:pesantren_flutter/ui/izin/izin_screen.dart';
@@ -38,9 +40,9 @@ import 'network/firebase_api.dart';
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await FirebaseApi().initNotifications();
-  await FirebaseApi().initAwesomeNotification();
+  // await Firebase.initializeApp();
+  // await FirebaseApi().initNotifications();
+  // await FirebaseApi().initAwesomeNotification();
   Alice alice = Alice();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: MyColors.primary,
@@ -102,7 +104,12 @@ void main() async {
       create: (context) => PenginapanBloc(
         MainRepositoryImpl(DioClient().init(alice, context)),
       ),
-    )
+    ),
+    BlocProvider<DonasiBloc>(
+      create: (context) => DonasiBloc(
+        MainRepositoryImpl(DioClient().init(alice, context)),
+      ),
+    ),
   ], child: MyApp(alice)));
 }
 
@@ -134,6 +141,7 @@ class MyApp extends StatelessWidget {
         '/Rekam Medis': (context) => RekamMedisScreen(),
         '/Kunjungan': (context) => MudifScreen(),
         '/Penginapan' : (context) => Penginapan(),
+        '/Donasi' : (context) => Donasi(),
       },
     );
   }

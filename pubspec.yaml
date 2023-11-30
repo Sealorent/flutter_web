@@ -52,6 +52,8 @@ dependencies:
   awesome_notifications: ^0.7.4+1
   google_fonts: ^4.0.4
   dropdown_button2: ^2.1.4
+  bloc: ^7.2.1
+  percent_indicator: ^4.2.3
 
 flutter_icons:
   android: "launcher_icon"

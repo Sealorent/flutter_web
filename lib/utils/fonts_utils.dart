@@ -21,6 +21,15 @@ var titleFontBold = GoogleFonts.montserrat(
   ),
 );
 
+var titleAppBarDonasi = GoogleFonts.poppins(
+  textStyle: const TextStyle(
+    fontSize: 22.0,
+    color: Colors.white,
+    fontWeight: FontWeight.w600,
+    decoration: TextDecoration.none,
+  ),
+);
+
 var regularFont = GoogleFonts.mulish(
   textStyle: const TextStyle(
     fontSize: 17.0,

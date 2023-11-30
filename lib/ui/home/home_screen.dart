@@ -359,8 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           return InkWell(
                             onTap: () {
-                              if (_user?.navmenu![index].name == "Donasi" ||
-                                  _user?.navmenu![index].name == "Lainnya") {
+                              if (_user?.navmenu![index].name == "Lainnya") {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         backgroundColor: Colors.red,

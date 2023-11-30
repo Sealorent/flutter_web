@@ -71,15 +71,15 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<StudentLoginResponse?> loginStudent(
       String nis, String password) async {
     var pesantren = await _getPesantren();
-    var fcm_token = await getTokenFcm();
-    print("fcm_token $fcm_token");
+    // var fcm_token = await getTokenFcm();
+    // print("fcm_token $fcm_token");
     try {
       final response = await _dioClient.get(Constant.loginStudent,
           queryParameters: {
             "kode_sekolah": pesantren.kodeSekolah,
             "nis": nis,
             "password": password,
-            "fcm_token": fcm_token ?? "",
+            "fcm_token": "",
           });
       print("response login ${response.data}");
       var statusCode = response.statusCode ?? -1;

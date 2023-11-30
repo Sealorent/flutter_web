@@ -9,6 +9,7 @@ import 'package:pesantren_flutter/network/param/izin_pulang_param.dart';
 import 'package:pesantren_flutter/network/response/base_response.dart';
 import 'package:pesantren_flutter/network/response/bayar_response.dart';
 import 'package:pesantren_flutter/network/response/detail_penginapan_response.dart';
+import 'package:pesantren_flutter/network/response/donasi_response.dart';
 import 'package:pesantren_flutter/network/response/history_response.dart';
 import 'package:pesantren_flutter/network/response/information_response.dart';
 import 'package:pesantren_flutter/network/response/izin_response.dart';
@@ -61,6 +62,7 @@ abstract class MainRepository {
   Future<PresensiResponseNew?> getPresensiNew(String? lessonId, String? semesterId, String? month, String? periodId);
   Future<DetailPenginapanResponse?> getDetailPenginapan(String? homeStayId);
   Future<PenginapanResponse?> getHomeStay();
+  Future<DonasiResponse?> donasi();
   Future<Object> postIzinPulang(IzinPulangParam param);
   Future<Object> postIzinKeluar(IzinKeluarParam param);
   Future<PaymentResponse> getPayments(List<int> periodIds);
@@ -925,6 +927,30 @@ class MainRepositoryImpl extends MainRepository {
       var statusMessage = response.statusMessage ?? "Unknown Error";
       if (statusCode == Constant.successCode && response.data != null) {
         return DetailPenginapanResponse.fromJson(response.data);
+      } else {
+        throw ClientErrorException(statusMessage, statusCode);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+  
+  @override
+  Future<DonasiResponse?> donasi() async {
+    var pesantren = await _getPesantren();
+    try {
+      var data = FormData.fromMap({
+        "kode_sekolah": pesantren.kodeSekolah
+      });
+      final response = await _dioClient.post(Constant.listDonasi, data : data );
+      // print payload
+      print("Payload ${pesantren.kodeSekolah}");
+      print("response ${response.data}" );
+
+      var statusCode = response.statusCode ?? -1;
+      var statusMessage = response.statusMessage ?? "Unknown Error";
+      if (statusCode == Constant.successCode && response.data != null) {
+        return DonasiResponse.fromJson(response.data);
       } else {
         throw ClientErrorException(statusMessage, statusCode);
       }
